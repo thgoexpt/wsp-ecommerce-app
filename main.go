@@ -1,23 +1,17 @@
 package main
 
 import (
-	"html/template"
 	"net/http"
 
 	"github.com/gorilla/mux"
+	"github.com/guitarpawat/wsp-ecommerce/handler"
 )
-
-var t = template.Must(template.ParseGlob("template/*"))
 
 func main() {
 	r := mux.NewRouter()
 	fs := http.StripPrefix("/static/", http.FileServer(http.Dir("static")))
 
 	r.PathPrefix("/static/").Handler(fs)
-	r.HandleFunc("/", hello)
+	r.HandleFunc("/", handler.Hello)
 	http.ListenAndServe(":8000", r)
-}
-
-func hello(w http.ResponseWriter, r *http.Request) {
-	t.ExecuteTemplate(w, "hello.html", nil)
 }
