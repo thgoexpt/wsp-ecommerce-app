@@ -12,6 +12,7 @@ func main() {
 	fs := http.StripPrefix("/static/", http.FileServer(http.Dir("static")))
 
 	r.PathPrefix("/static/").Handler(fs)
-	r.HandleFunc("/", handler.Hello)
+	r.HandleFunc("/", handler.Hello).Methods("GET")
+	r.HandleFunc("/", handler.Regis).Methods("POST")
 	http.ListenAndServe(":8000", r)
 }
