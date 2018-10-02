@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+<body>
+    <h1>Register</h1>
+    <form action="." method="post">
+        <table>
+            <tr><td>Username</td><td><input type="text" name="username"></td></tr>
+            <tr><td>Password</td><td><input type="password" name="password"></td></tr>
+            <tr><td>Full Name</td><td><input type="text" name="name"></td></tr>
+            <tr><td>E-mail</td><td><input type="email" name="email"></td></tr>
+            <tr><td>Phone</td><td><input type="text" name="phone"></td></tr>
+            <tr><td>Address</td><td><input type="text" name="address"></td></tr>
+            <tr><td></td><td><button type="submit">Register</button></td></tr>
+        </table>
+    </form>
+
+    <h1>Users</h1>
+    <table>
+        <tr>
+            <th>ID</th>
+            <th>Username</th>
+            <th>Hash</th>
+            <th>Full Name</th>
+            <th>Email</th>
+            <th>Phone</th>
+            <th>Address</th>
+            <th>Type</th>
+        </tr>
+        {{range .}}
+        <tr>
+            <td>{{.ID}}</td>
+            <td>{{.Username}}</td>
+            <td>{{.Hash}}</td>
+            <td>{{.Fullname}}</td>
+            <td>{{.Email}}</td>
+            <td>{{.Phone}}</td>
+            <td>{{.Address}}</td>
+            <td>{{.Type}}</td>
+        </tr>
+        {{end}}
+    </table>
+</body>
+</html>
