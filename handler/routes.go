@@ -11,6 +11,26 @@ import (
 
 var t = template.Must(template.ParseGlob("template/*"))
 
+func Home(w http.ResponseWriter, r *http.Request) {
+	t.ExecuteTemplate(w, "home.html", nil)
+}
+
+func About(w http.ResponseWriter, r *http.Request) {
+	t.ExecuteTemplate(w, "about.html", nil)
+}
+
+func Contact(w http.ResponseWriter, r *http.Request) {
+	t.ExecuteTemplate(w, "contact.html", nil)
+}
+
+func Cart(w http.ResponseWriter, r *http.Request) {
+	t.ExecuteTemplate(w, "cart.html", nil)
+}
+
+func Product(w http.ResponseWriter, r *http.Request) {
+	t.ExecuteTemplate(w, "product.html", nil)
+}
+
 func Hello(w http.ResponseWriter, r *http.Request) {
 	db, err := db.GetDB()
 	if err != nil {
