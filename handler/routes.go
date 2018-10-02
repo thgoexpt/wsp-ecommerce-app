@@ -31,6 +31,10 @@ func Product(w http.ResponseWriter, r *http.Request) {
 	t.ExecuteTemplate(w, "product.html", nil)
 }
 
+func ProductDetail(w http.ResponseWriter, r *http.Request) {
+	t.ExecuteTemplate(w, "product-detail.html", nil)
+}
+
 func Hello(w http.ResponseWriter, r *http.Request) {
 	db, err := db.GetDB()
 	if err != nil {

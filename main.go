@@ -18,6 +18,7 @@ func main() {
 	r.HandleFunc("/cart/", handler.Cart).Methods("GET")
 	r.HandleFunc("/contact/", handler.Contact).Methods("GET")
 	r.HandleFunc("/product/", handler.Product).Methods("GET")
+	r.HandleFunc("/product-detail/", handler.ProductDetail).Methods("GET")
 
 	r.HandleFunc("/", handler.Regis).Methods("POST")
 	http.ListenAndServe(":8000", r)
