@@ -20,6 +20,7 @@ func main() {
 	r.HandleFunc("/product/", handler.Product).Methods("GET")
 	r.HandleFunc("/product-detail/", handler.ProductDetail).Methods("GET")
 
-	r.HandleFunc("/", handler.Regis).Methods("POST")
+	r.HandleFunc("/regis/", handler.Regis).Methods("POST")
+	r.HandleFunc("/login/", handler.Login).Methods("POST")
 	http.ListenAndServe(":8000", r)
 }

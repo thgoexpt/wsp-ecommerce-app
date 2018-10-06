@@ -1,6 +1,7 @@
 package handler
 
 import (
+	"fmt"
 	"html/template"
 	"net/http"
 
@@ -58,5 +59,17 @@ func Regis(w http.ResponseWriter, r *http.Request) {
 }
 
 func Login(w http.ResponseWriter, r *http.Request) {
+	err := r.ParseForm()
+	if err != nil {
+		w.WriteHeader(http.StatusInternalServerError)
+		return
+	}
 
+	user, err := db.AuthenticateUser(r.PostFormValue("username"), r.PostFormValue("password"))
+	if err != nil {
+		w.WriteHeader(http.StatusInternalServerError)
+		fmt.Fprintln(w, "Invalid username/password")
+		return
+	}
+	fmt.Fprintf(w, "%+v", user)
 }

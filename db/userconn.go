@@ -3,6 +3,7 @@ package db
 import (
 	"errors"
 
+	"github.com/globalsign/mgo/bson"
 	"github.com/guitarpawat/wsp-ecommerce/model"
 )
 
@@ -43,7 +44,7 @@ func AuthenticateUser(username, password string) (model.User, error) {
 	}
 
 	user := model.User{}
-	err = db.C("Users").Find(model.User{Username: username}).One(&user)
+	err = db.C("Users").Find(bson.M{"username": username}).One(&user)
 	if err != nil {
 		return model.User{}, err
 	}
