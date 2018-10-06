@@ -1,4 +1,4 @@
-package model
+package dbmodel
 
 import "github.com/globalsign/mgo/bson"
 import "golang.org/x/crypto/bcrypt"

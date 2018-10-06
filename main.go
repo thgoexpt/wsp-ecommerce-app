@@ -1,6 +1,8 @@
 package main
 
 import (
+	"github.com/guitarpawat/middleware"
+	"log"
 	"net/http"
 
 	"github.com/gorilla/mux"
@@ -12,8 +14,12 @@ func main() {
 	fs := http.StripPrefix("/static/", http.FileServer(http.Dir("static")))
 
 	r.PathPrefix("/static/").Handler(fs)
-	// r.HandleFunc("/", handler.Hello).Methods("GET")
-	r.HandleFunc("/", handler.Home).Methods("GET")
+
+	r.Handle("/", middleware.MakeMiddleware(nil,
+		middleware.DoableFunc(handler.CheckSession),
+		middleware.DoableFunc(handler.Home))).
+		Methods("GET")
+
 	r.HandleFunc("/about/", handler.About).Methods("GET")
 	r.HandleFunc("/cart/", handler.Cart).Methods("GET")
 	r.HandleFunc("/contact/", handler.Contact).Methods("GET")
@@ -21,6 +27,18 @@ func main() {
 	r.HandleFunc("/product-detail/", handler.ProductDetail).Methods("GET")
 
 	r.HandleFunc("/regis/", handler.Regis).Methods("POST")
-	r.HandleFunc("/login/", handler.Login).Methods("POST")
-	http.ListenAndServe(":8000", r)
+
+	r.Handle("/login/", middleware.MakeMiddleware(nil,
+		middleware.DoableFunc(handler.CheckSession),
+		middleware.DoableFunc(handler.Login),
+		middleware.DoableFunc(handler.CheckSession),
+		middleware.DoableFunc(handler.Home))).
+		Methods("POST")
+
+	r.Handle("/logout/", middleware.MakeMiddleware(nil,
+		middleware.DoableFunc(handler.Logout),
+		middleware.DoableFunc(handler.CheckSession),
+		middleware.DoableFunc(handler.Home)))
+
+	log.Fatalln(http.ListenAndServe(":8000", r))
 }
