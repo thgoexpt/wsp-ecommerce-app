@@ -31,7 +31,7 @@ func TestMakeUser(t *testing.T) {
 		t.Errorf("expected user type: %d, but get: %d", usertype, user.Type)
 	}
 
-	err := bcrypt.CompareHashAndPassword([]byte(user.Hash),[]byte(password))
+	err := bcrypt.CompareHashAndPassword([]byte(user.Hash), []byte(password))
 	if err != nil {
 		t.Errorf("error while trying to compare password with hash: %s", err)
 	}

@@ -9,7 +9,7 @@ import (
 func TestRedirectToHTTPS(t *testing.T) {
 	w := httptest.NewRecorder()
 	r := httptest.NewRequest(http.MethodGet, "http://example.com", nil)
-	RedirectToHTTPS(w,r)
+	RedirectToHTTPS(w, r)
 	res := w.Result()
 	if http.StatusPermanentRedirect != res.StatusCode {
 		t.Errorf("expected status code: %d, but get: %d", http.StatusPermanentRedirect, res.StatusCode)
@@ -20,7 +20,7 @@ func TestRedirectToHTTPS(t *testing.T) {
 
 	w = httptest.NewRecorder()
 	r = httptest.NewRequest(http.MethodGet, "http://example.com/", nil)
-	RedirectToHTTPS(w,r)
+	RedirectToHTTPS(w, r)
 	res = w.Result()
 	if http.StatusPermanentRedirect != res.StatusCode {
 		t.Errorf("expected status code: %d, but get: %d", http.StatusPermanentRedirect, res.StatusCode)
@@ -31,7 +31,7 @@ func TestRedirectToHTTPS(t *testing.T) {
 
 	w = httptest.NewRecorder()
 	r = httptest.NewRequest(http.MethodGet, "http://example.com/static/", nil)
-	RedirectToHTTPS(w,r)
+	RedirectToHTTPS(w, r)
 	res = w.Result()
 	if http.StatusPermanentRedirect != res.StatusCode {
 		t.Errorf("expected status code: %d, but get: %d", http.StatusPermanentRedirect, res.StatusCode)
@@ -42,7 +42,7 @@ func TestRedirectToHTTPS(t *testing.T) {
 
 	w = httptest.NewRecorder()
 	r = httptest.NewRequest(http.MethodGet, "http://example.com/static", nil)
-	RedirectToHTTPS(w,r)
+	RedirectToHTTPS(w, r)
 	res = w.Result()
 	if http.StatusPermanentRedirect != res.StatusCode {
 		t.Errorf("expected status code: %d, but get: %d", http.StatusPermanentRedirect, res.StatusCode)
@@ -51,11 +51,9 @@ func TestRedirectToHTTPS(t *testing.T) {
 		t.Errorf("expected redirect location to: %s, but get: %s", "https://example.com:4433/static", res.Header.Get("Location"))
 	}
 
-
-
 	w = httptest.NewRecorder()
 	r = httptest.NewRequest(http.MethodGet, "http://www.example.com", nil)
-	RedirectToHTTPS(w,r)
+	RedirectToHTTPS(w, r)
 	res = w.Result()
 	if http.StatusPermanentRedirect != res.StatusCode {
 		t.Errorf("expected status code: %d, but get: %d", http.StatusPermanentRedirect, res.StatusCode)
@@ -66,7 +64,7 @@ func TestRedirectToHTTPS(t *testing.T) {
 
 	w = httptest.NewRecorder()
 	r = httptest.NewRequest(http.MethodGet, "http://www.example.com/", nil)
-	RedirectToHTTPS(w,r)
+	RedirectToHTTPS(w, r)
 	res = w.Result()
 	if http.StatusPermanentRedirect != res.StatusCode {
 		t.Errorf("expected status code: %d, but get: %d", http.StatusPermanentRedirect, res.StatusCode)
@@ -77,7 +75,7 @@ func TestRedirectToHTTPS(t *testing.T) {
 
 	w = httptest.NewRecorder()
 	r = httptest.NewRequest(http.MethodGet, "http://www.example.com/static/", nil)
-	RedirectToHTTPS(w,r)
+	RedirectToHTTPS(w, r)
 	res = w.Result()
 	if http.StatusPermanentRedirect != res.StatusCode {
 		t.Errorf("expected status code: %d, but get: %d", http.StatusPermanentRedirect, res.StatusCode)
@@ -88,7 +86,7 @@ func TestRedirectToHTTPS(t *testing.T) {
 
 	w = httptest.NewRecorder()
 	r = httptest.NewRequest(http.MethodGet, "http://www.example.com/static", nil)
-	RedirectToHTTPS(w,r)
+	RedirectToHTTPS(w, r)
 	res = w.Result()
 	if http.StatusPermanentRedirect != res.StatusCode {
 		t.Errorf("expected status code: %d, but get: %d", http.StatusPermanentRedirect, res.StatusCode)

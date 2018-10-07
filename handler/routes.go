@@ -11,7 +11,6 @@ import (
 	"net/http"
 )
 
-
 var s = sessions.NewCookieStore([]byte("NOT FOR PRODUCTION"))
 
 var defaultHeader = pagemodel.Menu{
@@ -21,8 +20,6 @@ var defaultHeader = pagemodel.Menu{
 func init() {
 	gob.Register(dbmodel.User{})
 }
-
-
 
 func CheckSession(w http.ResponseWriter, r *http.Request, v *middleware.ValueMap) {
 	session, err := s.Get(r, "user")
