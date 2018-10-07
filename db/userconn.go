@@ -13,7 +13,7 @@ func RegisUser(user dbmodel.User) error {
 		return err
 	}
 
-	count, err := db.C("Users").Find(dbmodel.User{Username: user.Username}).Count()
+	count, err := db.C("Users").Find(bson.M{"username": user.Username}).Count()
 	if err != nil {
 		return err
 	}
@@ -21,7 +21,7 @@ func RegisUser(user dbmodel.User) error {
 		return errors.New("Username already exists")
 	}
 
-	count, err = db.C("Users").Find(dbmodel.User{Email: user.Email}).Count()
+	count, err = db.C("Users").Find(bson.M{"email": user.Email}).Count()
 	if err != nil {
 		return err
 	}

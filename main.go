@@ -18,16 +18,24 @@ func main() {
 	r.Handle("/", middleware.MakeMiddleware(nil,
 		middleware.DoableFunc(handler.CheckSession),
 		middleware.DoableFunc(handler.BuildHeader),
+		middleware.DoableFunc(handler.Home)))
+
+	r.Handle("/about/", middleware.MakeMiddleware(nil,
+		middleware.DoableFunc(handler.CheckSession),
+		middleware.DoableFunc(handler.BuildHeader),
+		middleware.DoableFunc(handler.About)))
+
+	r.HandleFunc("/cart/", handler.Cart)
+	r.HandleFunc("/contact/", handler.Contact)
+	r.HandleFunc("/product/", handler.Product)
+	r.HandleFunc("/product-detail/", handler.ProductDetail)
+
+	r.Handle("/regis/", middleware.MakeMiddleware(nil,
+		middleware.DoableFunc(handler.Regis),
+		middleware.DoableFunc(handler.CheckSession),
+		middleware.DoableFunc(handler.BuildHeader),
 		middleware.DoableFunc(handler.Home))).
-		Methods("GET")
-
-	r.HandleFunc("/about/", handler.About).Methods("GET")
-	r.HandleFunc("/cart/", handler.Cart).Methods("GET")
-	r.HandleFunc("/contact/", handler.Contact).Methods("GET")
-	r.HandleFunc("/product/", handler.Product).Methods("GET")
-	r.HandleFunc("/product-detail/", handler.ProductDetail).Methods("GET")
-
-	r.HandleFunc("/regis/", handler.Regis).Methods("POST")
+		Methods("POST")
 
 	r.Handle("/login/", middleware.MakeMiddleware(nil,
 		middleware.DoableFunc(handler.CheckSession),

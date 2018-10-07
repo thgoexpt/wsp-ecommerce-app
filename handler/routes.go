@@ -16,6 +16,10 @@ var t = template.Must(template.ParseGlob("template/*"))
 
 var s= sessions.NewCookieStore([]byte("NOT FOR PRODUCTION"))
 
+var defaultHeader = pagemodel.Menu{
+						Warning: "Something went wrong",
+					}
+
 func init() {
 	gob.Register(dbmodel.User{})
 }
@@ -54,17 +58,21 @@ func BuildHeader(w http.ResponseWriter, r *http.Request, v *middleware.ValueMap)
 		header.Warning = warning
 	}
 
+	success, ok := v.Get("success").(string)
+	if !ok {
+		header.Success = ""
+	} else {
+		header.Success = success
+	}
+
 	v.Set("header", header)
 	v.Set("next", true)
 }
 
 func Home(w http.ResponseWriter, r *http.Request, v *middleware.ValueMap) {
-
 	header, ok := v.Get("header").(pagemodel.Menu)
 	if !ok {
-		w.WriteHeader(http.StatusInternalServerError)
-		v.Set("next", false)
-		return
+		header = defaultHeader
 	}
 
 	model := pagemodel.Home{
@@ -75,8 +83,18 @@ func Home(w http.ResponseWriter, r *http.Request, v *middleware.ValueMap) {
 	v.Set("next", false)
 }
 
-func About(w http.ResponseWriter, r *http.Request) {
-	t.ExecuteTemplate(w, "about.html", nil)
+func About(w http.ResponseWriter, r *http.Request, v *middleware.ValueMap) {
+	header, ok := v.Get("header").(pagemodel.Menu)
+	if !ok {
+		header = defaultHeader
+	}
+
+	model := pagemodel.About{
+		Menu: header,
+	}
+	t.ExecuteTemplate(w, "about.html", model)
+
+	v.Set("next", false)
 }
 
 func Contact(w http.ResponseWriter, r *http.Request) {
@@ -95,7 +113,7 @@ func ProductDetail(w http.ResponseWriter, r *http.Request) {
 	t.ExecuteTemplate(w, "product-detail.html", nil)
 }
 
-func Regis(w http.ResponseWriter, r *http.Request) {
+func Regis(w http.ResponseWriter, r *http.Request, v *middleware.ValueMap) {
 	err := r.ParseForm()
 	if err != nil {
 		w.WriteHeader(http.StatusInternalServerError)
@@ -105,22 +123,16 @@ func Regis(w http.ResponseWriter, r *http.Request) {
 	user, err := dbmodel.MakeUser(r.PostFormValue("username"), r.PostFormValue("password"),
 		r.PostFormValue("name"), r.PostFormValue("email"), r.PostFormValue("address"), dbmodel.TypeUser)
 	if err != nil {
-		w.WriteHeader(http.StatusInternalServerError)
-		return
+		v.Set("warning", "Something went wrong")
+	} else {
+		err = db.RegisUser(user)
+		if err != nil {
+			v.Set("warning", err.Error())
+		} else {
+			v.Set("success", "User created successful, please login.")
+		}
 	}
-
-	err = db.RegisUser(user)
-	if err != nil {
-		w.WriteHeader(http.StatusInternalServerError)
-		return
-	}
-
-	vm := middleware.ValueMap{}
-	vm.Set("next", true)
-
-	middleware.MakeMiddleware(&vm,
-		middleware.DoableFunc(CheckSession),
-		middleware.DoableFunc(Home)).ServeHTTP(w,r)
+	v.Set("next", true)
 }
 
 func Login(w http.ResponseWriter, r *http.Request, v *middleware.ValueMap) {
@@ -152,6 +164,7 @@ func Login(w http.ResponseWriter, r *http.Request, v *middleware.ValueMap) {
 
 			session.Values["user"] = user
 			session.Save(r,w)
+			v.Set("success", "Login successful")
 		}
 	}
 
@@ -168,5 +181,6 @@ func Logout(w http.ResponseWriter, r *http.Request, v *middleware.ValueMap)  {
 	session.Values["user"] = dbmodel.User{}
 	session.Save(r,w)
 
+	v.Set("success", "Logout successful")
 	v.Set("next", true)
 }
