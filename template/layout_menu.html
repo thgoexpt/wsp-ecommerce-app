@@ -342,5 +342,10 @@
             </ul>
         </nav>
     </div>
+    {{if ne .Warning ""}}
+        <div class="container alert alert-warning alert-dismissible text-center" role="alert">
+            Warning: {{.Warning}}
+        </div>
+    {{end}}
 </header>
 {{end}}

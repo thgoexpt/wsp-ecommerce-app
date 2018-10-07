@@ -17,6 +17,7 @@ func main() {
 
 	r.Handle("/", middleware.MakeMiddleware(nil,
 		middleware.DoableFunc(handler.CheckSession),
+		middleware.DoableFunc(handler.BuildHeader),
 		middleware.DoableFunc(handler.Home))).
 		Methods("GET")
 
@@ -32,12 +33,14 @@ func main() {
 		middleware.DoableFunc(handler.CheckSession),
 		middleware.DoableFunc(handler.Login),
 		middleware.DoableFunc(handler.CheckSession),
+		middleware.DoableFunc(handler.BuildHeader),
 		middleware.DoableFunc(handler.Home))).
 		Methods("POST")
 
 	r.Handle("/logout/", middleware.MakeMiddleware(nil,
 		middleware.DoableFunc(handler.Logout),
 		middleware.DoableFunc(handler.CheckSession),
+		middleware.DoableFunc(handler.BuildHeader),
 		middleware.DoableFunc(handler.Home)))
 
 	log.Fatalln(http.ListenAndServe(":8000", r))

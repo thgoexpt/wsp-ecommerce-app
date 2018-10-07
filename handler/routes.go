@@ -2,7 +2,6 @@ package handler
 
 import (
 	"encoding/gob"
-	"fmt"
 	"github.com/gorilla/sessions"
 	"github.com/guitarpawat/middleware"
 	"github.com/guitarpawat/wsp-ecommerce/db"
@@ -38,18 +37,38 @@ func CheckSession(w http.ResponseWriter, r *http.Request, v *middleware.ValueMap
 	v.Set("next", true)
 }
 
-func Home(w http.ResponseWriter, r *http.Request, v *middleware.ValueMap) {
+func BuildHeader(w http.ResponseWriter, r *http.Request, v *middleware.ValueMap) {
+	header := pagemodel.Menu{}
 
 	user, ok := v.Get("user").(dbmodel.User)
 	if !ok {
+		header.User = ""
+	} else {
+		header.User = user.Email
+	}
+
+	warning, ok := v.Get("warning").(string)
+	if !ok {
+		header.Warning = ""
+	} else {
+		header.Warning = warning
+	}
+
+	v.Set("header", header)
+	v.Set("next", true)
+}
+
+func Home(w http.ResponseWriter, r *http.Request, v *middleware.ValueMap) {
+
+	header, ok := v.Get("header").(pagemodel.Menu)
+	if !ok {
 		w.WriteHeader(http.StatusInternalServerError)
+		v.Set("next", false)
 		return
 	}
 
 	model := pagemodel.Home{
-		Menu: pagemodel.Menu{
-			User: user.Email,
-		},
+		Menu: header,
 	}
 	t.ExecuteTemplate(w, "home.html", model)
 
@@ -122,20 +141,18 @@ func Login(w http.ResponseWriter, r *http.Request, v *middleware.ValueMap) {
 
 		user, err := db.AuthenticateUser(r.PostFormValue("username"), r.PostFormValue("password"))
 		if err != nil {
-			w.WriteHeader(http.StatusInternalServerError)
-			fmt.Fprintln(w, "Invalid username/password")
-			return
-		}
+			v.Set("warning", "Invalid username/password")
+		} else {
+			session, err := s.Get(r, "user")
+			if err != nil {
+				w.WriteHeader(http.StatusInternalServerError)
+				log.Println(3)
+				return
+			}
 
-		session, err := s.Get(r, "user")
-		if err != nil {
-			w.WriteHeader(http.StatusInternalServerError)
-			log.Println(3)
-			return
+			session.Values["user"] = user
+			session.Save(r,w)
 		}
-
-		session.Values["user"] = user
-		session.Save(r,w)
 	}
 
 	v.Set("next", true)
