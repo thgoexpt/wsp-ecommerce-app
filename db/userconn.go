@@ -12,6 +12,7 @@ func RegisUser(user dbmodel.User) error {
 	if err != nil {
 		return err
 	}
+	defer db.Session.Close()
 
 	count, err := db.C("Users").Find(bson.M{"username": user.Username}).Count()
 	if err != nil {
@@ -42,6 +43,7 @@ func AuthenticateUser(username, password string) (dbmodel.User, error) {
 	if err != nil {
 		return dbmodel.User{}, err
 	}
+	defer db.Session.Close()
 
 	user := dbmodel.User{}
 	err = db.C("Users").Find(bson.M{"username": username}).One(&user)
