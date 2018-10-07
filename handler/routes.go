@@ -2,23 +2,24 @@ package handler
 
 import (
 	"encoding/gob"
+	"html/template"
+	"log"
+	"net/http"
+
 	"github.com/gorilla/sessions"
 	"github.com/guitarpawat/middleware"
 	"github.com/guitarpawat/wsp-ecommerce/db"
 	"github.com/guitarpawat/wsp-ecommerce/model/dbmodel"
 	"github.com/guitarpawat/wsp-ecommerce/model/pagemodel"
-	"html/template"
-	"log"
-	"net/http"
 )
 
 var t = template.Must(template.ParseGlob("template/*"))
 
-var s= sessions.NewCookieStore([]byte("NOT FOR PRODUCTION"))
+var s = sessions.NewCookieStore([]byte("NOT FOR PRODUCTION"))
 
 var defaultHeader = pagemodel.Menu{
-						Warning: "Something went wrong",
-					}
+	Warning: "Something went wrong",
+}
 
 func init() {
 	gob.Register(dbmodel.User{})
@@ -48,7 +49,7 @@ func BuildHeader(w http.ResponseWriter, r *http.Request, v *middleware.ValueMap)
 	if !ok {
 		header.User = ""
 	} else {
-		header.User = user.Email
+		header.User = user.Username
 	}
 
 	warning, ok := v.Get("warning").(string)
@@ -206,7 +207,7 @@ func Login(w http.ResponseWriter, r *http.Request, v *middleware.ValueMap) {
 				session.Options.MaxAge = 0
 			}
 			session.Values["user"] = user
-			session.Save(r,w)
+			session.Save(r, w)
 			v.Set("success", "Login successful")
 		}
 	}
@@ -214,7 +215,7 @@ func Login(w http.ResponseWriter, r *http.Request, v *middleware.ValueMap) {
 	v.Set("next", true)
 }
 
-func Logout(w http.ResponseWriter, r *http.Request, v *middleware.ValueMap)  {
+func Logout(w http.ResponseWriter, r *http.Request, v *middleware.ValueMap) {
 	session, err := s.Get(r, "user")
 	if err != nil {
 		w.WriteHeader(http.StatusInternalServerError)
@@ -222,7 +223,7 @@ func Logout(w http.ResponseWriter, r *http.Request, v *middleware.ValueMap)  {
 	}
 
 	session.Values["user"] = dbmodel.User{}
-	session.Save(r,w)
+	session.Save(r, w)
 
 	v.Set("success", "Logout successful")
 	v.Set("next", true)
