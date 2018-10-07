@@ -96,7 +96,10 @@ func Regis(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	Home(w, r, nil)
+	vm := middleware.ValueMap{}
+	vm.Set("next", true)
+
+	Home(w, r, &vm)
 }
 
 func Login(w http.ResponseWriter, r *http.Request, v *middleware.ValueMap) {
