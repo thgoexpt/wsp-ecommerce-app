@@ -51,6 +51,8 @@ func main() {
 	httpr := mux.NewRouter()
 	httpr.PathPrefix("/").HandlerFunc(handler.RedirectToHTTPS)
 
+	handler.Validate()
+
 	go func() {
 		log.Fatalln(http.ListenAndServeTLS(":4433","ssl/server.crt","ssl/server.key",r))
 	}()

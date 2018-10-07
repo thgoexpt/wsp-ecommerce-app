@@ -2,18 +2,15 @@ package handler
 
 import (
 	"encoding/gob"
-	"html/template"
-	"log"
-	"net/http"
-
 	"github.com/gorilla/sessions"
 	"github.com/guitarpawat/middleware"
 	"github.com/guitarpawat/wsp-ecommerce/db"
 	"github.com/guitarpawat/wsp-ecommerce/model/dbmodel"
 	"github.com/guitarpawat/wsp-ecommerce/model/pagemodel"
+	"log"
+	"net/http"
 )
 
-var t = template.Must(template.ParseGlob("template/*"))
 
 var s = sessions.NewCookieStore([]byte("NOT FOR PRODUCTION"))
 
@@ -24,6 +21,8 @@ var defaultHeader = pagemodel.Menu{
 func init() {
 	gob.Register(dbmodel.User{})
 }
+
+
 
 func CheckSession(w http.ResponseWriter, r *http.Request, v *middleware.ValueMap) {
 	session, err := s.Get(r, "user")
@@ -79,9 +78,9 @@ func Home(w http.ResponseWriter, r *http.Request, v *middleware.ValueMap) {
 	model := pagemodel.Home{
 		Menu: header,
 	}
-	t.ExecuteTemplate(w, "home.html", model)
 
 	v.Set("next", false)
+	t.ExecuteTemplate(w, "home.html", model)
 }
 
 func About(w http.ResponseWriter, r *http.Request, v *middleware.ValueMap) {
@@ -93,9 +92,9 @@ func About(w http.ResponseWriter, r *http.Request, v *middleware.ValueMap) {
 	model := pagemodel.About{
 		Menu: header,
 	}
-	t.ExecuteTemplate(w, "about.html", model)
 
 	v.Set("next", false)
+	t.ExecuteTemplate(w, "about.html", model)
 }
 
 func Contact(w http.ResponseWriter, r *http.Request, v *middleware.ValueMap) {
@@ -107,9 +106,9 @@ func Contact(w http.ResponseWriter, r *http.Request, v *middleware.ValueMap) {
 	model := pagemodel.Contact{
 		Menu: header,
 	}
-	t.ExecuteTemplate(w, "contact.html", model)
 
 	v.Set("next", false)
+	t.ExecuteTemplate(w, "contact.html", model)
 }
 
 func Cart(w http.ResponseWriter, r *http.Request, v *middleware.ValueMap) {
@@ -121,9 +120,9 @@ func Cart(w http.ResponseWriter, r *http.Request, v *middleware.ValueMap) {
 	model := pagemodel.Card{
 		Menu: header,
 	}
-	t.ExecuteTemplate(w, "cart.html", model)
 
 	v.Set("next", false)
+	t.ExecuteTemplate(w, "cart.html", model)
 }
 
 func Product(w http.ResponseWriter, r *http.Request, v *middleware.ValueMap) {
@@ -135,9 +134,9 @@ func Product(w http.ResponseWriter, r *http.Request, v *middleware.ValueMap) {
 	model := pagemodel.Product{
 		Menu: header,
 	}
-	t.ExecuteTemplate(w, "product.html", model)
 
 	v.Set("next", false)
+	t.ExecuteTemplate(w, "product.html", model)
 }
 
 func ProductDetail(w http.ResponseWriter, r *http.Request, v *middleware.ValueMap) {
@@ -149,9 +148,9 @@ func ProductDetail(w http.ResponseWriter, r *http.Request, v *middleware.ValueMa
 	model := pagemodel.ProductDetail{
 		Menu: header,
 	}
-	t.ExecuteTemplate(w, "product-detail.html", model)
 
 	v.Set("next", false)
+	t.ExecuteTemplate(w, "product-detail.html", model)
 }
 
 func ComingSoon(w http.ResponseWriter, r *http.Request, v *middleware.ValueMap) {
@@ -163,9 +162,9 @@ func ComingSoon(w http.ResponseWriter, r *http.Request, v *middleware.ValueMap) 
 	model := pagemodel.ProductDetail{
 		Menu: header,
 	}
-	t.ExecuteTemplate(w, "comingsoon.html", model)
 
 	v.Set("next", false)
+	t.ExecuteTemplate(w, "comingsoon.html", model)
 }
 
 func Regis(w http.ResponseWriter, r *http.Request, v *middleware.ValueMap) {
@@ -197,7 +196,8 @@ func Login(w http.ResponseWriter, r *http.Request, v *middleware.ValueMap) {
 		return
 	}
 
-	if user.Email != "" {
+	model := dbmodel.User{}
+	if user != model {
 		v.Set("warning", "You are already logged in")
 	} else {
 		err := r.ParseForm()
