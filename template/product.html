@@ -37,7 +37,7 @@
 
 <body class="animsition">
 
-	{{template "menu"}}
+	{{template "menu" .Menu}}
 
 	<!-- Title Page -->
 	<section class="parallax0 parallax100 bg-title-page p-t-50 p-b-40 flex-col-c-m" style="background-image: url(../static/assets/meat/product/home/product_wall.jpg);">
@@ -592,7 +592,9 @@
 	<div id="dropDownSelect1"></div>
 	<div id="dropDownSelect2"></div>
 
-
+	<!-- Login pop-up -->
+	{{template "login"}}
+	{{template "register"}}
 
 	<!--===============================================================================================-->
 	<script type="text/javascript" src="../static/animate/jquery/jquery-3.2.1.min.js"></script>

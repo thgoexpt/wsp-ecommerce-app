@@ -4,19 +4,18 @@ import "github.com/globalsign/mgo"
 
 var url = "localhost:27017"
 
-var db *mgo.Database = nil
+var session *mgo.Session = nil
 
 func GetDB() (*mgo.Database, error) {
 
-	if db == nil {
-		session, err := mgo.Dial(url)
+	if session == nil {
+		var err error
+		session, err = mgo.Dial(url)
 		if err != nil {
 			return nil, err
 		}
-
-		return session.DB("solid"), nil
 	}
 
-	return db, nil
+	return session.Copy().DB("solid"), nil
 
 }
