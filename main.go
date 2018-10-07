@@ -48,7 +48,13 @@ func main() {
 		middleware.DoableFunc(handler.BuildHeader),
 		middleware.DoableFunc(handler.Home)))
 
-	log.Fatalln(http.ListenAndServe(":8000", r))
+	httpr := mux.NewRouter()
+	httpr.PathPrefix("/").HandlerFunc(handler.RedirectToHTTPS)
+
+	go func() {
+		log.Fatalln(http.ListenAndServeTLS(":4433","ssl/server.crt","ssl/server.key",r))
+	}()
+	log.Fatalln(http.ListenAndServe(":8000",httpr))
 }
 
 func handlePage(df middleware.DoableFunc) http.Handler {
