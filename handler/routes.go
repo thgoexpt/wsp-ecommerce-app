@@ -202,6 +202,9 @@ func Login(w http.ResponseWriter, r *http.Request, v *middleware.ValueMap) {
 				return
 			}
 
+			if r.PostFormValue("remember") != "true" {
+				session.Options.MaxAge = 0
+			}
 			session.Values["user"] = user
 			session.Save(r,w)
 			v.Set("success", "Login successful")
