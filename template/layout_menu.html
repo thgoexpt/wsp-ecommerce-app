@@ -114,38 +114,39 @@
 
             <div class="topbar-child2">
                 <span class="topbar-email">
-                {{if eq .User ""}}
+                    {{if eq .User ""}}
                     Welcome, Guest
-                {{else}}
+                    {{else}}
                     Welcome, {{.User}}
-                {{end}}
+                    {{end}}
                 </span>
 
                 {{if eq .User ""}}
-                    <!--Register-->
-                    <a href="#myModal_regis" class="header-wrapicon1 dis-block m-l-30" data-toggle="modal">
-                        <img src="../static/assets/icon/register.png" class="header-icon1" alt="ICON">
-                    </a>
-                    <!--Login-->
-                    <a href="#myModal" class="header-wrapicon1 dis-block m-l-30" data-toggle="modal">
-                        <img src="../static/assets/icon/login.png" class="header-icon1" alt="ICON">
-                    </a>
+                <!--Register-->
+                <a href="#myModal_regis" class="header-wrapicon1 dis-block m-l-30" data-toggle="modal">
+                    <img src="../static/assets/icon/register.png" class="header-icon1" alt="ICON">
+                </a>
+                <!--Login-->
+                <a href="#myModal" class="header-wrapicon1 dis-block m-l-30" data-toggle="modal">
+                    <img src="../static/assets/icon/login.png" class="header-icon1" alt="ICON">
+                </a>
 
                 {{else}}
-                    <!-- User -->
-                    <a href="#" class="header-wrapicon1 dis-block m-l-30">
-                        <img src="../static/assets/icon/icon-header-01.png" class="header-icon1" alt="ICON">
-                    </a>
-                    <!--Logout-->
-                    <a href="/logout/" class="header-wrapicon1 dis-block m-l-30" data-toggle="modal">
-                        <img src="../static/assets/icon/logout.png" class="header-icon1" alt="ICON">
-                    </a>
+                <!-- User -->
+                <a href="#" class="header-wrapicon1 dis-block m-l-30">
+                    <img src="../static/assets/icon/icon-header-01.png" class="header-icon1" alt="ICON">
+                </a>
+                <!--Logout-->
+                <a href="/logout/" class="header-wrapicon1 dis-block m-l-30">
+                    <img src="../static/assets/icon/logout.png" class="header-icon1" alt="ICON">
+                </a>
                 {{end}}
 
                 <span class="linedivide1"></span>
 
                 <div class="header-wrapicon2 m-r-13">
-                    <img src="../static/assets/icon/icon-header-02.png" class="header-icon1 js-show-header-dropdown" alt="ICON">
+                    <img src="../static/assets/icon/icon-header-02.png" class="header-icon1 js-show-header-dropdown"
+                        alt="ICON">
                     <span class="header-icons-noti">0</span>
 
                     <!-- Header cart noti -->
@@ -216,7 +217,7 @@
     <div class="wrap_header_mobile">
         <!-- Logo moblie -->
         <a href="/" class="logo-mobile">
-            <img src="../static/assets/logo/web_logo.png" alt="IMG-LOGO">
+            <img src="../static/assets/logo/logo2.png" alt="IMG-LOGO">
         </a>
 
         <!-- Button show menu -->
@@ -230,7 +231,8 @@
                 <span class="linedivide2"></span>
 
                 <div class="header-wrapicon2">
-                    <img src="../static/assets/icon/icon-header-02.png" class="header-icon1 js-show-header-dropdown" alt="ICON">
+                    <img src="../static/assets/icon/icon-header-02.png" class="header-icon1 js-show-header-dropdown"
+                        alt="ICON">
                     <span class="header-icons-noti">0</span>
 
                     <!-- Header cart noti -->
