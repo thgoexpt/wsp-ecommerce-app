@@ -1,4 +1,5 @@
 [![Build Status](https://travis-ci.org/guitarpawat/wsp-ecommerce.svg?branch=master)](https://travis-ci.org/guitarpawat/wsp-ecommerce)
+[![Go Report Card](https://goreportcard.com/badge/github.com/guitarpawat/wsp-ecommerce)](https://goreportcard.com/report/github.com/guitarpawat/wsp-ecommerce)
 
 # WSP -- Ecommerce Project
 ## Requirment
