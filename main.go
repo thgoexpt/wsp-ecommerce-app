@@ -15,20 +15,17 @@ func main() {
 
 	r.PathPrefix("/static/").Handler(fs)
 
-	r.Handle("/", middleware.MakeMiddleware(nil,
-		middleware.DoableFunc(handler.CheckSession),
-		middleware.DoableFunc(handler.BuildHeader),
-		middleware.DoableFunc(handler.Home)))
+	r.Handle("/", handlePage(handler.Home))
 
-	r.Handle("/about/", middleware.MakeMiddleware(nil,
-		middleware.DoableFunc(handler.CheckSession),
-		middleware.DoableFunc(handler.BuildHeader),
-		middleware.DoableFunc(handler.About)))
+	r.Handle("/about/", handlePage(handler.About))
 
-	r.HandleFunc("/cart/", handler.Cart)
-	r.HandleFunc("/contact/", handler.Contact)
-	r.HandleFunc("/product/", handler.Product)
-	r.HandleFunc("/product-detail/", handler.ProductDetail)
+	r.Handle("/cart/", handlePage(handler.Cart))
+
+	r.Handle("/contact/", handlePage(handler.Contact))
+
+	r.Handle("/product/", handlePage(handler.Product))
+
+	r.Handle("/product-detail/", handlePage(handler.ProductDetail))
 
 	r.Handle("/regis/", middleware.MakeMiddleware(nil,
 		middleware.DoableFunc(handler.Regis),
@@ -52,4 +49,11 @@ func main() {
 		middleware.DoableFunc(handler.Home)))
 
 	log.Fatalln(http.ListenAndServe(":8000", r))
+}
+
+func handlePage(df middleware.DoableFunc) http.Handler {
+	return middleware.MakeMiddleware(nil,
+		middleware.DoableFunc(handler.CheckSession),
+		middleware.DoableFunc(handler.BuildHeader),
+		middleware.DoableFunc(df))
 }

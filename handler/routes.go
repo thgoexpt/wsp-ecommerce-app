@@ -97,20 +97,60 @@ func About(w http.ResponseWriter, r *http.Request, v *middleware.ValueMap) {
 	v.Set("next", false)
 }
 
-func Contact(w http.ResponseWriter, r *http.Request) {
-	t.ExecuteTemplate(w, "contact.html", nil)
+func Contact(w http.ResponseWriter, r *http.Request, v *middleware.ValueMap) {
+	header, ok := v.Get("header").(pagemodel.Menu)
+	if !ok {
+		header = defaultHeader
+	}
+
+	model := pagemodel.Contact{
+		Menu: header,
+	}
+	t.ExecuteTemplate(w, "contact.html", model)
+
+	v.Set("next", false)
 }
 
-func Cart(w http.ResponseWriter, r *http.Request) {
-	t.ExecuteTemplate(w, "cart.html", nil)
+func Cart(w http.ResponseWriter, r *http.Request, v *middleware.ValueMap) {
+	header, ok := v.Get("header").(pagemodel.Menu)
+	if !ok {
+		header = defaultHeader
+	}
+
+	model := pagemodel.Card{
+		Menu: header,
+	}
+	t.ExecuteTemplate(w, "cart.html", model)
+
+	v.Set("next", false)
 }
 
-func Product(w http.ResponseWriter, r *http.Request) {
-	t.ExecuteTemplate(w, "product.html", nil)
+func Product(w http.ResponseWriter, r *http.Request, v *middleware.ValueMap) {
+	header, ok := v.Get("header").(pagemodel.Menu)
+	if !ok {
+		header = defaultHeader
+	}
+
+	model := pagemodel.Product{
+		Menu: header,
+	}
+	t.ExecuteTemplate(w, "product.html", model)
+
+	v.Set("next", false)
 }
 
-func ProductDetail(w http.ResponseWriter, r *http.Request) {
-	t.ExecuteTemplate(w, "product-detail.html", nil)
+func ProductDetail(w http.ResponseWriter, r *http.Request, v *middleware.ValueMap) {
+	header, ok := v.Get("header").(pagemodel.Menu)
+	if !ok {
+		header = defaultHeader
+	}
+
+	model := pagemodel.ProductDetail{
+		Menu: header,
+	}
+	t.ExecuteTemplate(w, "product-detail.html", model)
+
+	v.Set("next", false)
 }
 
 func Regis(w http.ResponseWriter, r *http.Request, v *middleware.ValueMap) {
