@@ -154,6 +154,20 @@ func ProductDetail(w http.ResponseWriter, r *http.Request, v *middleware.ValueMa
 	v.Set("next", false)
 }
 
+func ComingSoon(w http.ResponseWriter, r *http.Request, v *middleware.ValueMap) {
+	header, ok := v.Get("header").(pagemodel.Menu)
+	if !ok {
+		header = defaultHeader
+	}
+
+	model := pagemodel.ProductDetail{
+		Menu: header,
+	}
+	t.ExecuteTemplate(w, "comingsoon.html", model)
+
+	v.Set("next", false)
+}
+
 func Regis(w http.ResponseWriter, r *http.Request, v *middleware.ValueMap) {
 	err := r.ParseForm()
 	if err != nil {

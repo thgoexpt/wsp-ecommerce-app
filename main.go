@@ -19,13 +19,13 @@ func main() {
 
 	r.Handle("/about/", handlePage(handler.About))
 
-	r.Handle("/cart/", handlePage(handler.Cart))
+	r.Handle("/cart/", handlePage(handler.ComingSoon))
 
-	r.Handle("/contact/", handlePage(handler.Contact))
+	r.Handle("/contact/", handlePage(handler.ComingSoon))
 
 	r.Handle("/product/", handlePage(handler.Product))
 
-	r.Handle("/product-detail/", handlePage(handler.ProductDetail))
+	r.Handle("/product-detail/", handlePage(handler.ComingSoon))
 
 	r.Handle("/regis/", middleware.MakeMiddleware(nil,
 		middleware.DoableFunc(handler.Regis),
