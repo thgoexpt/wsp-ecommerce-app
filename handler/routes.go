@@ -99,7 +99,9 @@ func Regis(w http.ResponseWriter, r *http.Request) {
 	vm := middleware.ValueMap{}
 	vm.Set("next", true)
 
-	Home(w, r, &vm)
+	middleware.MakeMiddleware(&vm,
+		middleware.DoableFunc(CheckSession),
+		middleware.DoableFunc(Home)).ServeHTTP(w,r)
 }
 
 func Login(w http.ResponseWriter, r *http.Request, v *middleware.ValueMap) {
