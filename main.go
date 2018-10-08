@@ -54,9 +54,9 @@ func main() {
 	handler.Validate()
 
 	go func() {
-		log.Fatalln(http.ListenAndServeTLS(":4433","ssl/server.crt","ssl/server.key",r))
+		log.Fatalln(http.ListenAndServeTLS(":4433", "ssl/server.crt", "ssl/server.key", r))
 	}()
-	log.Fatalln(http.ListenAndServe(":8000",httpr))
+	log.Fatalln(http.ListenAndServe(":8000", httpr))
 }
 
 func handlePage(df middleware.DoableFunc) http.Handler {
