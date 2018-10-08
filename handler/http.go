@@ -6,7 +6,7 @@ import (
 )
 
 func RedirectToHTTPS(w http.ResponseWriter, r *http.Request) {
-	host,_, err :=net.SplitHostPort(r.Host)
+	host, _, err := net.SplitHostPort(r.Host)
 	if err != nil {
 		host = r.Host
 	}
