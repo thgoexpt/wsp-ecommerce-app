@@ -1,20 +1,91 @@
 language: go
 
-go:
-  - 1.10.x
-  - 1.11.x
-
 go_import_path: github.com/guitarpawat/wsp-ecommerce
+
+env:
+  global:
+    - JYTHON=false
+    - DISPLAY=':99.0'
 
 branches:
   only:
   - /.*/
 
-before_install:
-  - go get -t -v ./...
+jobs:
+  include:
+    - stage: "Backend Test"
+      name: "go 1.10.x"
+      go: "1.10.x"
+      before_install: skip
+      install:
+        - go get -t -v ./...
+      before_script: skip
+      script: go test -race -coverprofile=coverage.txt -covermode=atomic ./...
+      after_script: skip
+      after_success:
+        - bash <(curl -s https://codecov.io/bash)
 
-script:
-  - go test -race -coverprofile=coverage.txt -covermode=atomic ./...
+    - stage: "Backend Test"
+      name: "go 1.11.x"
+      go: "1.11.x"
+      before_install: skip
+      install:
+        - go get -t -v ./...
+      before_script: skip
+      script: go test -race -coverprofile=coverage.txt -covermode=atomic ./...
+      after_script: skip
+      after_success:
+        - bash <(curl -s https://codecov.io/bash)
+        
+    - stage: "Frontend Test"
+      name: "go 1.10.x"
+      go: "1.10.x"
+      services: mongodb
+      addons:
+        apt:
+          sources:
+            - google-chrome
+          packages:
+            - google-chrome-stable
+      before_install:
+        - CDVERSION=`curl http://chromedriver.storage.googleapis.com/LATEST_RELEASE`
+        - sudo wget --no-verbose http://chromedriver.storage.googleapis.com/$CDVERSION/chromedriver_linux64.zip
+        - sudo unzip chromedriver_linux64.zip
+        - sudo chmod u+x chromedriver
+        - sudo mv chromedriver /usr/bin/
+        - sudo chmod 777 /usr/bin/chromedriver
+      install:
+        - sudo -H pip install -r requirements.txt
+      before_script:
+        - go get -t -v ./...
+        - go run main.go -env=CI &
+        - google-chrome-stable --no-sandbox --ignore-certificate-errors --headless --window-size=1920,1080 --disable-gpu --disable-dev-shm-usage --remote-debugging-port=51232 http://localhost:8000 &
+      script: robot --variable browser:headlesschrome robot/tests.robot
+      after-script: skip
 
-after_success:
-  - bash <(curl -s https://codecov.io/bash)
+    - stage: "Frontend Test"
+      name: "go 1.11.x"
+      go: "1.11.x"
+      services: mongodb
+      addons:
+        apt:
+          sources:
+            - google-chrome
+          packages:
+            - google-chrome-stable
+      before_install:
+        - CDVERSION=`curl http://chromedriver.storage.googleapis.com/LATEST_RELEASE`
+        - sudo wget --no-verbose http://chromedriver.storage.googleapis.com/$CDVERSION/chromedriver_linux64.zip
+        - sudo unzip chromedriver_linux64.zip
+        - sudo chmod u+x chromedriver
+        - sudo mv chromedriver /usr/bin/
+        - sudo chmod 777 /usr/bin/chromedriver
+      install:
+        - sudo -H pip install -r requirements.txt
+      before_script:
+        - go get -t -v ./...
+        - go run main.go -env=CI &
+        - google-chrome-stable --no-sandbox --ignore-certificate-errors --headless --window-size=1920,1080 --disable-gpu --disable-dev-shm-usage --remote-debugging-port=51232 http://localhost:8000 &
+      script: robot --variable browser:headlesschrome robot/tests.robot
+      after-script: skip
+      

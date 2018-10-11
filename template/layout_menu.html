@@ -113,7 +113,7 @@
             </a>
 
             <div class="topbar-child2">
-                <span class="topbar-email">
+                <span class="topbar-email" id="welcomeUser">
                     {{if eq .User ""}}
                     Welcome, Guest
                     {{else}}
@@ -123,21 +123,21 @@
 
                 {{if eq .User ""}}
                 <!--Register-->
-                <a href="#myModal_regis" class="header-wrapicon1 dis-block m-l-30" data-toggle="modal">
+                <a href="#myModal_regis" class="header-wrapicon1 dis-block m-l-30" data-toggle="modal" id="registerIcon">
                     <img src="../static/assets/icon/register.png" class="header-icon1" alt="ICON">
                 </a>
                 <!--Login-->
-                <a href="#myModal" class="header-wrapicon1 dis-block m-l-30" data-toggle="modal">
+                <a href="#myModal" class="header-wrapicon1 dis-block m-l-30" data-toggle="modal" id="loginIcon">
                     <img src="../static/assets/icon/login.png" class="header-icon1" alt="ICON">
                 </a>
 
                 {{else}}
                 <!-- User -->
-                <a href="#" class="header-wrapicon1 dis-block m-l-30">
+                <a href="#" class="header-wrapicon1 dis-block m-l-30" id="userProfileIcon">
                     <img src="../static/assets/icon/icon-header-01.png" class="header-icon1" alt="ICON">
                 </a>
                 <!--Logout-->
-                <a href="/logout/" class="header-wrapicon1 dis-block m-l-30">
+                <a href="/logout/" class="header-wrapicon1 dis-block m-l-30" id="logoutIcon">
                     <img src="../static/assets/icon/logout.png" class="header-icon1" alt="ICON">
                 </a>
                 {{end}}
@@ -342,15 +342,17 @@
             </ul>
         </nav>
     </div>
-    {{if ne .Success ""}}
-    <div class="container alert alert-success alert-dismissible text-center" role="alert">
-        {{.Success}}
+    <div id="alertBox">
+        {{if ne .Success ""}}
+            <div class="container alert alert-success alert-dismissible text-center" role="alert" id="successBox">
+            {{.Success}}
+            </div>
+        {{end}}
+        {{if ne .Warning ""}}
+            <div class="container alert alert-warning alert-dismissible text-center" role="alert" id="warningBox">
+                Warning: {{.Warning}}
+            </div>
+        {{end}}
     </div>
-    {{end}}
-    {{if ne .Warning ""}}
-    <div class="container alert alert-warning alert-dismissible text-center" role="alert">
-        Warning: {{.Warning}}
-    </div>
-    {{end}}
 </header>
 {{end}}

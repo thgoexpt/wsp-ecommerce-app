@@ -1,6 +1,7 @@
 package handler
 
 import (
+	"github.com/guitarpawat/wsp-ecommerce/flagvalue"
 	"net"
 	"net/http"
 )
@@ -10,7 +11,11 @@ func RedirectToHTTPS(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		host = r.Host
 	}
-	target := "https://" + host + ":4433" + r.URL.Path
+	port := ":443"
+	if flagvalue.GetEnv() != "PRODUCTION" {
+		port = ":4433"
+	}
+	target := "https://" + host + port + r.URL.Path
 	if len(r.URL.RawQuery) > 0 {
 		target += "?" + r.URL.RawQuery
 	}
