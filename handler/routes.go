@@ -2,23 +2,26 @@ package handler
 
 import (
 	"encoding/gob"
+	"log"
+	"net/http"
+	"strconv"
+
 	"github.com/gorilla/sessions"
 	"github.com/guitarpawat/middleware"
 	"github.com/guitarpawat/wsp-ecommerce/db"
 	"github.com/guitarpawat/wsp-ecommerce/model/dbmodel"
 	"github.com/guitarpawat/wsp-ecommerce/model/pagemodel"
-	"log"
-	"net/http"
 )
 
 var s = sessions.NewCookieStore([]byte("NOT FOR PRODUCTION"))
 
 var defaultHeader = pagemodel.Menu{
-	Warning: "Something went wrong",
+	Warning: "Something went wrong {defualt}",
 }
 
 func init() {
 	gob.Register(dbmodel.User{})
+	gob.Register(dbmodel.Meat{})
 }
 
 func CheckSession(w http.ResponseWriter, r *http.Request, v *middleware.ValueMap) {
@@ -181,6 +184,54 @@ func Regis(w http.ResponseWriter, r *http.Request, v *middleware.ValueMap) {
 			v.Set("warning", err.Error())
 		} else {
 			v.Set("success", "User created successful, please login.")
+		}
+	}
+	v.Set("next", true)
+}
+
+func MeatTestPage(w http.ResponseWriter, r *http.Request, v *middleware.ValueMap) {
+	// db, err := db.GetDB()
+	// if err != nil {
+	// 	w.WriteHeader(http.StatusInternalServerError)
+	// 	return
+	// }
+
+	// var meat []dbmodel.Meat
+	// err = db.C("Users").Find(nil).All(&meats)
+	// if err != nil {
+	// 	w.WriteHeader(http.StatusInternalServerError)
+	// 	return
+	// }
+
+	v.Set("next", false)
+	t.ExecuteTemplate(w, "add_meat_test.html", nil)
+}
+
+func RegisMeat(w http.ResponseWriter, r *http.Request, v *middleware.ValueMap) {
+	err := r.ParseForm()
+	if err != nil {
+		w.WriteHeader(http.StatusInternalServerError)
+		return
+	}
+
+	priceStr := r.PostFormValue("price")
+	price, err := strconv.ParseFloat(priceStr, 64)
+	if err != nil {
+		v.Set("warning", "Price is not a number.")
+		v.Set("next", true)
+		return
+	}
+
+	meat, err := dbmodel.MakeMeat(r.PostFormValue("name"), r.PostFormValue("type"),
+		r.PostFormValue("grade"), r.PostFormValue("des"), price)
+	if err != nil {
+		v.Set("warning", err.Error())
+	} else {
+		err = db.RegisMeat(meat)
+		if err != nil {
+			v.Set("warning", err.Error())
+		} else {
+			v.Set("success", "You have successfully add meat into the store.")
 		}
 	}
 	v.Set("next", true)
