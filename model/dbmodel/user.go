@@ -22,14 +22,18 @@ func (u User) VerifyHash(password string) bool {
 	return (err == nil)
 }
 
-func MakeUser(username, hash, fullname, email, address string, usertype int) (User, error) {
-	h, err := bcrypt.GenerateFromPassword([]byte(hash), bcrypt.DefaultCost)
+func (u User)IsSame(u2 User) bool {
+	return u.ID == u2.ID
+}
+
+func MakeUser(username, password, fullname, email, address string, usertype int) (User, error) {
+	hash, err := bcrypt.GenerateFromPassword([]byte(password), bcrypt.DefaultCost)
 	if err != nil {
 		return User{}, nil
 	}
 	user := User{
 		Username: username,
-		Hash:     string(h),
+		Hash:     string(hash),
 		Fullname: fullname,
 		Email:    email,
 		Address:  address,
