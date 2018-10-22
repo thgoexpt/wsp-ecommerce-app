@@ -2,6 +2,7 @@ package db
 
 import (
 	"errors"
+	"github.com/guitarpawat/wsp-ecommerce/env"
 
 	"github.com/globalsign/mgo/bson"
 	"github.com/guitarpawat/wsp-ecommerce/model/dbmodel"
@@ -15,7 +16,9 @@ var TestLoginFailUserName = "fail"
 
 
 func init() {
-	Mock()
+	if env.GetEnv() != env.Production {
+		Mock()
+	}
 }
 
 func Mock() {
@@ -42,9 +45,9 @@ func RegisUser(user dbmodel.User) error {
 	}
 	defer db.Session.Close()
 
-	if user.Username == TestRegis.Username && user.Username != TestRegis.Username &&
-		user.Hash != TestRegis.Hash && user.Fullname != TestRegis.Fullname && user.Email != TestRegis.Email &&
-		user.Address != TestRegis.Address && user.Type != TestRegis.Type {
+	if user.Username == TestRegis.Username && (user.Hash != TestRegis.Hash ||
+		user.Fullname != TestRegis.Fullname || user.Email != TestRegis.Email ||
+		user.Address != TestRegis.Address || user.Type != TestRegis.Type) {
 		return errors.New("Username already exists")
 	}
 

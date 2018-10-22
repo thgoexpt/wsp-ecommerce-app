@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"github.com/gorilla/mux"
 	"github.com/guitarpawat/middleware"
+	"github.com/guitarpawat/wsp-ecommerce/db"
 	solidenv "github.com/guitarpawat/wsp-ecommerce/env"
 	"github.com/guitarpawat/wsp-ecommerce/handler"
 	"log"
@@ -85,6 +86,8 @@ func main() {
 		}()
 		log.Fatalln(http.ListenAndServe(":8000", httpr))
 	}
+
+	db.Mock()
 }
 
 func handlePage(df middleware.DoableFunc) http.Handler {
