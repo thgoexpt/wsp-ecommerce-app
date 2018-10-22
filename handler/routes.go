@@ -239,3 +239,8 @@ func Logout(w http.ResponseWriter, r *http.Request, v *middleware.ValueMap) {
 	v.Set("success", "Logout successful")
 	v.Set("next", true)
 }
+
+func Mock(w http.ResponseWriter, r *http.Request, v *middleware.ValueMap) {
+	db.Mock()
+	v.Set("next", true)
+}

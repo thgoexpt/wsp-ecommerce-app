@@ -64,9 +64,21 @@ func main() {
 		}()
 		log.Fatalln(http.ListenAndServe(":80", httpr))
 	} else if env == solidenv.CI {
+		r.Handle("/mock/", middleware.MakeMiddleware(nil,
+			middleware.DoableFunc(handler.Mock),
+			middleware.DoableFunc(handler.CheckSession),
+			middleware.DoableFunc(handler.BuildHeader),
+			middleware.DoableFunc(handler.Home)))
+
 		fmt.Println("Running on port 8000")
 		log.Fatalln(http.ListenAndServe(":8000", r))
 	} else {
+		r.Handle("/mock/", middleware.MakeMiddleware(nil,
+			middleware.DoableFunc(handler.Mock),
+			middleware.DoableFunc(handler.CheckSession),
+			middleware.DoableFunc(handler.BuildHeader),
+			middleware.DoableFunc(handler.Home)))
+
 		fmt.Println("Running on port 8000 and 4433")
 		go func() {
 			log.Fatalln(http.ListenAndServeTLS(":4433", "ssl/server.crt", "ssl/server.key", r))
