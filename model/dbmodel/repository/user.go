@@ -12,7 +12,7 @@ type UserRepository interface {
 	EditUser(user dbmodel.User) error
 	GetUserByID(id string) (dbmodel.User, error)
 	GetUserByUsername(username string) (dbmodel.User, error)
-	CheckDuplicate(username string) error
+	CheckDuplicate(user dbmodel.User) error
 }
 
 type MockUserRepository struct {
@@ -20,7 +20,7 @@ type MockUserRepository struct {
 	users []dbmodel.User
 }
 
-func(mur MockUserRepository) AddUser(user dbmodel.User) error {
+func(mur *MockUserRepository) AddUser(user dbmodel.User) error {
 	err := mur.CheckDuplicate(user)
 	if err != nil {
 		return errors.New("add user: "+err.Error())
@@ -35,11 +35,11 @@ func(mur MockUserRepository) AddUser(user dbmodel.User) error {
 	return nil
 }
 
-func (mur MockUserRepository) EditUser(user dbmodel.User) error {
+func (mur *MockUserRepository) EditUser(user dbmodel.User) error {
 	return errors.New("edit user: not implemented yet")
 }
 
-func (mur MockUserRepository) GetUserByID(id string) (dbmodel.User, error) {
+func (mur *MockUserRepository) GetUserByID(id string) (dbmodel.User, error) {
 	user := dbmodel.User{ID:bson.ObjectId(id)}
 	for _,v := range mur.users {
 		if v.IsSame(user) {
@@ -50,7 +50,7 @@ func (mur MockUserRepository) GetUserByID(id string) (dbmodel.User, error) {
 	return dbmodel.User{}, errors.New("get user by id: not found")
 }
 
-func (mur MockUserRepository) GetUserByUsername(username string) (dbmodel.User, error) {
+func (mur *MockUserRepository) GetUserByUsername(username string) (dbmodel.User, error) {
 	for _,v := range mur.users {
 		if v.Username == username {
 			return v, nil
@@ -60,7 +60,7 @@ func (mur MockUserRepository) GetUserByUsername(username string) (dbmodel.User, 
 	return dbmodel.User{}, errors.New("get user by username: not found")
 }
 
-func (mur MockUserRepository) CheckDuplicate(user dbmodel.User) error {
+func (mur *MockUserRepository) CheckDuplicate(user dbmodel.User) error {
 	for _,v := range mur.users {
 		if v.ID == user.ID {
 			return errors.New("duplicated id")
@@ -74,7 +74,7 @@ func (mur MockUserRepository) CheckDuplicate(user dbmodel.User) error {
 	return nil
 }
 
-func MakeMockUserRepository() MockUserRepository {
+func NewMockUserRepository() UserRepository {
 	mur := MockUserRepository{
 		next: 1,
 		users: []dbmodel.User{},
@@ -86,5 +86,5 @@ func MakeMockUserRepository() MockUserRepository {
 	mur.AddUser(u1)
 	mur.AddUser(u2)
 
-	return mur
+	return &mur
 }
