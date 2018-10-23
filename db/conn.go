@@ -26,7 +26,7 @@ func GetDB() (*mgo.Database, error) {
 	}
 
 	if env.GetEnv() == env.Production {
-		db = strings.Split(db, "/")[3]
+		db = strings.Split(db, "/")[2]
 		return session.Copy().DB(db), nil
 	}
 
