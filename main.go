@@ -95,12 +95,11 @@ func handlePage(df middleware.DoableFunc) http.Handler {
 
 func forceSslHeroku(next http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		if r.TLS == nil {
+		if r.Header.Get("x-forwarded-proto") != "https" {
 			sslUrl := "https://" + r.Host + r.RequestURI
-			http.Redirect(w, r, sslUrl, http.StatusTemporaryRedirect)
+			http.Redirect(w, r, sslUrl, http.StatusPermanentRedirect)
 			return
 		}
-		next.ServeHTTP(w, r)
+	next.ServeHTTP(w, r)
 	})
-
 }
