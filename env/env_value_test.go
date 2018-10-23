@@ -13,6 +13,12 @@ func TestGetEnv(t *testing.T) {
 
 func TestGetPort(t *testing.T) {
 	if GetPort() != os.Getenv("PORT") {
-		t.Errorf("expected `PORT`: %s, but get: %s", os.Getenv("PORT"), GetPort())
+		t.Errorf("expected `PORT`: %s, but get: %s", os.Getenv("MONGODB_URI"), GetPort())
+	}
+}
+
+func TestGetMongoURI(t *testing.T) {
+	if GetMongoURI() != os.Getenv("PORT") {
+		t.Errorf("expected `PORT`: %s, but get: %s", os.Getenv("MONGODB_URI"), GetMongoURI())
 	}
 }
