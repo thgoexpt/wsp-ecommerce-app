@@ -59,11 +59,7 @@ func main() {
 	handler.Validate()
 
 	if env == solidenv.Production {
-		fmt.Println("Running on port 80 and 443")
-		go func() {
-			log.Fatalln(http.ListenAndServeTLS(":443", "ssl/server.crt", "ssl/server.key", r))
-		}()
-		log.Fatalln(http.ListenAndServe(":80", httpr))
+		log.Fatalln(http.ListenAndServeTLS(":443", "ssl/server.crt", "ssl/server.key", r))
 	} else if env == solidenv.CI {
 		r.Handle("/mock/", middleware.MakeMiddleware(nil,
 			middleware.DoableFunc(handler.Mock),
