@@ -66,14 +66,6 @@
   pruneopts = "UT"
   revision = "0e37d006457bf46f9e6692014ba72ef82c33022c"
 
-[[projects]]
-  digest = "1:991cf6ed943bf7a1e494350d06a906cf2e85536c21829b5b4fac22ae0f412847"
-  name = "gopkg.in/jonahgeorge/force-ssl-heroku.v1"
-  packages = ["."]
-  pruneopts = "UT"
-  revision = "38a34d322659dbe9d312bad0ee5f79aedc7b0bc3"
-  version = "v1.0.0"
-
 [solve-meta]
   analyzer-name = "dep"
   analyzer-version = 1
@@ -84,7 +76,6 @@
     "github.com/gorilla/sessions",
     "github.com/guitarpawat/middleware",
     "golang.org/x/crypto/bcrypt",
-    "gopkg.in/jonahgeorge/force-ssl-heroku.v1",
   ]
   solver-name = "gps-cdcl"
   solver-version = 1
