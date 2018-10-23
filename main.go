@@ -9,6 +9,7 @@ import (
 	"github.com/guitarpawat/wsp-ecommerce/handler"
 	"log"
 	"net/http"
+	heroku "gopkg.in/jonahgeorge/force-ssl-heroku.v1"
 )
 
 var env = solidenv.GetEnv()
@@ -68,7 +69,7 @@ func main() {
 			middleware.DoableFunc(handler.Home)))
 
 		fmt.Println("Running on port 8000")
-		log.Fatalln(http.ListenAndServe(":8000", r))
+		log.Fatalln(http.ListenAndServe(":8000", heroku.ForceSsl(r)))
 	} else {
 		r.Handle("/mock/", middleware.MakeMiddleware(nil,
 			middleware.DoableFunc(handler.Mock),
