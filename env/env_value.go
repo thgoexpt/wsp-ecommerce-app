@@ -13,3 +13,7 @@ func GetEnv() string {
 	}
 	return env
 }
+
+func GetPort() string {
+	return os.Getenv("PORT")
+}
