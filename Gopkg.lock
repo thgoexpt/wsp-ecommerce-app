@@ -48,14 +48,6 @@
   version = "v1.1.3"
 
 [[projects]]
-  digest = "1:991cf6ed943bf7a1e494350d06a906cf2e85536c21829b5b4fac22ae0f412847"
-  name = "github.com/guitarpawat/force-ssl-heroku"
-  packages = ["."]
-  pruneopts = "UT"
-  revision = "38a34d322659dbe9d312bad0ee5f79aedc7b0bc3"
-  version = "v1.0.0"
-
-[[projects]]
   branch = "master"
   digest = "1:c2ce490ceee862006607116b359aa032dcc72c28ba2ecdfc70a9d5c78f912c52"
   name = "github.com/guitarpawat/middleware"
@@ -82,7 +74,6 @@
     "github.com/globalsign/mgo/bson",
     "github.com/gorilla/mux",
     "github.com/gorilla/sessions",
-    "github.com/guitarpawat/force-ssl-heroku",
     "github.com/guitarpawat/middleware",
     "golang.org/x/crypto/bcrypt",
   ]
