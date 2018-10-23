@@ -42,6 +42,6 @@
   name = "golang.org/x/crypto"
 
 [metadata.heroku]
-root-package = "github.com/guitarpawat/wsp-ecommerce"
-go-version = "go1.11.1"
-install = ["./..."]
+  root-package = "github.com/guitarpawat/wsp-ecommerce"
+  go-version = "go1.11.1"
+  install = ["./..."]
