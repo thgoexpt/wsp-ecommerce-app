@@ -2,28 +2,15 @@ package db
 
 import (
 	"github.com/globalsign/mgo"
-	"github.com/guitarpawat/wsp-ecommerce/flagvalue"
 )
 
 var session *mgo.Session = nil
 
 func GetDB() (*mgo.Database, error) {
 
-	host := flagvalue.GetDBHost()
-	port := flagvalue.GetDBPort()
-	db := flagvalue.GetDBName()
-
-	if host == "" {
-		host = "localhost"
-	}
-
-	if port == "" {
-		port = "27017"
-	}
-
-	if db == "" {
-		db = "solid"
-	}
+	host := "localhost"
+	port := "27017"
+	db := "solid"
 
 	if session == nil {
 		var err error

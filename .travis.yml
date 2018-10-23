@@ -16,6 +16,7 @@ jobs:
     - stage: "Backend Test"
       name: "go 1.10.x"
       go: "1.10.x"
+      services: mongodb
       before_install: skip
       install:
         - go get -t -v ./...
@@ -28,6 +29,7 @@ jobs:
     - stage: "Backend Test"
       name: "go 1.11.x"
       go: "1.11.x"
+      services: mongodb
       before_install: skip
       install:
         - go get -t -v ./...

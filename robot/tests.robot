@@ -3,8 +3,8 @@ Library    SeleniumLibrary
 Test Teardown     End of test
 
 *** Variables ***
-${INVALID_USERNAME}    fgeagbrsenrshbsshthjrshnsgsegswewaf
-${INVALID_PASSWORD}    dfgwehrsafdvsdnrseefws145s1hg4grsbw
+${INVALID_USERNAME}    fail
+${INVALID_PASSWORD}    fail
 
 *** Keywords ***
 End of test

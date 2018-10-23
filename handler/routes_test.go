@@ -153,3 +153,14 @@ func TestLogout(t *testing.T) {
 		t.Errorf("expected next to be: %t, but get: %t", true, v.Get("next").(bool))
 	}
 }
+
+func TestMock(t *testing.T) {
+	w := httptest.NewRecorder()
+	r := httptest.NewRequest(http.MethodGet, "/", nil)
+	v := middleware.ValueMap{}
+	Mock(w, r, &v)
+
+	if !v.Get("next").(bool) {
+		t.Errorf("expected next to be: %t, but get: %t", true, v.Get("next").(bool))
+	}
+}
