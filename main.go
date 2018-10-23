@@ -9,7 +9,6 @@ import (
 	"github.com/guitarpawat/wsp-ecommerce/handler"
 	"log"
 	"net/http"
-	heroku "gopkg.in/jonahgeorge/force-ssl-heroku.v1"
 )
 
 var env = solidenv.GetEnv()
@@ -60,7 +59,9 @@ func main() {
 	handler.Validate()
 
 	if env == solidenv.Production {
-		log.Fatalln(http.ListenAndServe(":"+solidenv.GetPort(), heroku.ForceSsl(r)))
+		log.Fatalln(http.ListenAndServe(":"+solidenv.GetPort(), middleware.MakeMiddleware(nil,
+			middleware.DoableFunc(handler.RedirectToHTTPSMiddleware),
+			rounter(r))))
 	} else if env == solidenv.CI {
 		r.Handle("/mock/", middleware.MakeMiddleware(nil,
 			middleware.DoableFunc(handler.Mock),
@@ -92,4 +93,10 @@ func handlePage(df middleware.DoableFunc) http.Handler {
 		middleware.DoableFunc(handler.CheckSession),
 		middleware.DoableFunc(handler.BuildHeader),
 		middleware.DoableFunc(df))
+}
+
+func rounter(h http.Handler) middleware.DoableFunc {
+	return func(w http.ResponseWriter, r *http.Request, v *middleware.ValueMap) {
+		h.ServeHTTP(w, r)
+	}
 }
