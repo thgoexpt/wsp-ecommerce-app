@@ -60,7 +60,7 @@ func main() {
 	handler.Validate()
 
 	if env == solidenv.Production {
-		log.Fatalln(http.ListenAndServe(":"+solidenv.GetPort(), r))
+		log.Fatalln(http.ListenAndServe(":"+solidenv.GetPort(), heroku.ForceSsl(r)))
 	} else if env == solidenv.CI {
 		r.Handle("/mock/", middleware.MakeMiddleware(nil,
 			middleware.DoableFunc(handler.Mock),
@@ -69,7 +69,7 @@ func main() {
 			middleware.DoableFunc(handler.Home)))
 
 		fmt.Println("Running on port 8000")
-		log.Fatalln(http.ListenAndServe(":8000", heroku.ForceSsl(r)))
+		log.Fatalln(http.ListenAndServe(":8000", r))
 	} else {
 		r.Handle("/mock/", middleware.MakeMiddleware(nil,
 			middleware.DoableFunc(handler.Mock),
