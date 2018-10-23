@@ -3,6 +3,7 @@ package db
 import (
 	"github.com/globalsign/mgo"
 	"github.com/guitarpawat/wsp-ecommerce/env"
+	"strings"
 )
 
 var session *mgo.Session = nil
@@ -22,6 +23,11 @@ func GetDB() (*mgo.Database, error) {
 		if err != nil {
 			return nil, err
 		}
+	}
+
+	if env.GetEnv() == env.Production {
+		db = strings.Split(db, "/")[3]
+		return session.Copy().DB(db), nil
 	}
 
 	return session.Copy().DB(db), nil
