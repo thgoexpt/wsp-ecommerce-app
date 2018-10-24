@@ -55,17 +55,17 @@ func TestUser_VerifyHash(t *testing.T) {
 
 func TestUser_IsSame(t *testing.T) {
 	u1 := User{
-		ID: "1",
+		ID:       "1",
 		Username: "u1",
 	}
 
 	u2 := User{
-		ID: "1",
+		ID:       "1",
 		Username: "u2",
 	}
 
 	u3 := User{
-		ID: "2",
+		ID:       "2",
 		Username: "u1",
 	}
 

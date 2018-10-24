@@ -22,7 +22,7 @@ func (u User) VerifyHash(password string) bool {
 	return (err == nil)
 }
 
-func (u User)IsSame(u2 User) bool {
+func (u User) IsSame(u2 User) bool {
 	return u.ID == u2.ID
 }
 
