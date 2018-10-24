@@ -13,11 +13,11 @@ End of test
 User opens a home page on PC
     Open Browser    http://localhost:8000    ${browser}
     Set Window Size    1920    1080
-    Wait Until Element Is Visible    alertBox
+    Wait Until Element Is Visible    alertBox    15
 
 User opens a login page
     Click Element    id:loginIcon
-    Wait Until Element Is Visible    myModal
+    Wait Until Element Is Visible    myModal    15
 
 User types invalid username
     Input Text    name:username    ${INVALID_USERNAME}
