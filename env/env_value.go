@@ -13,3 +13,11 @@ func GetEnv() string {
 	}
 	return env
 }
+
+func GetPort() string {
+	return os.Getenv("PORT")
+}
+
+func GetMongoURI() string {
+	return os.Getenv("MONGODB_URI")
+}

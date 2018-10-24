@@ -1,93 +1,98 @@
 language: go
-
 go_import_path: github.com/guitarpawat/wsp-ecommerce
-
 env:
   global:
-    - JYTHON=false
-    - DISPLAY=':99.0'
-
+  - JYTHON=false
+  - DISPLAY=':99.0'
 branches:
   only:
-  - /.*/
-
+  - "/.*/"
 jobs:
   include:
-    - stage: "Backend Test"
-      name: "go 1.10.x"
-      go: "1.10.x"
-      services: mongodb
-      before_install: skip
-      install:
-        - go get -t -v ./...
-      before_script: skip
-      script: go test -race -coverprofile=coverage.txt -covermode=atomic ./...
-      after_script: skip
-      after_success:
-        - bash <(curl -s https://codecov.io/bash)
-
-    - stage: "Backend Test"
-      name: "go 1.11.x"
-      go: "1.11.x"
-      services: mongodb
-      before_install: skip
-      install:
-        - go get -t -v ./...
-      before_script: skip
-      script: go test -race -coverprofile=coverage.txt -covermode=atomic ./...
-      after_script: skip
-      after_success:
-        - bash <(curl -s https://codecov.io/bash)
-        
-    - stage: "Frontend Test"
-      name: "go 1.10.x"
-      go: "1.10.x"
-      services: mongodb
-      addons:
-        apt:
-          sources:
-            - google-chrome
-          packages:
-            - google-chrome-stable
-      before_install:
-        - CDVERSION=`curl http://chromedriver.storage.googleapis.com/LATEST_RELEASE`
-        - sudo wget --no-verbose http://chromedriver.storage.googleapis.com/$CDVERSION/chromedriver_linux64.zip
-        - sudo unzip chromedriver_linux64.zip
-        - sudo chmod u+x chromedriver
-        - sudo mv chromedriver /usr/bin/
-        - sudo chmod 777 /usr/bin/chromedriver
-      install:
-        - sudo -H pip install -r requirements.txt
-      before_script:
-        - go get -t -v ./...
-        - go run main.go -env=CI &
-        - google-chrome-stable --no-sandbox --ignore-certificate-errors --headless --window-size=1920,1080 --disable-gpu --disable-dev-shm-usage --remote-debugging-port=51232 http://localhost:8000 &
-      script: robot --variable browser:headlesschrome robot/tests.robot
-      after-script: skip
-
-    - stage: "Frontend Test"
-      name: "go 1.11.x"
-      go: "1.11.x"
-      services: mongodb
-      addons:
-        apt:
-          sources:
-            - google-chrome
-          packages:
-            - google-chrome-stable
-      before_install:
-        - CDVERSION=`curl http://chromedriver.storage.googleapis.com/LATEST_RELEASE`
-        - sudo wget --no-verbose http://chromedriver.storage.googleapis.com/$CDVERSION/chromedriver_linux64.zip
-        - sudo unzip chromedriver_linux64.zip
-        - sudo chmod u+x chromedriver
-        - sudo mv chromedriver /usr/bin/
-        - sudo chmod 777 /usr/bin/chromedriver
-      install:
-        - sudo -H pip install -r requirements.txt
-      before_script:
-        - go get -t -v ./...
-        - go run main.go -env=CI &
-        - google-chrome-stable --no-sandbox --ignore-certificate-errors --headless --window-size=1920,1080 --disable-gpu --disable-dev-shm-usage --remote-debugging-port=51232 http://localhost:8000 &
-      script: robot --variable browser:headlesschrome robot/tests.robot
-      after-script: skip
-      
+  - stage: Backend Test
+    name: go 1.10.x
+    if: branch != master
+    go: 1.10.x
+    services: mongodb
+    before_install: skip
+    install:
+    - go get -t -v ./...
+    before_script: skip
+    script: go test -race -coverprofile=coverage.txt -covermode=atomic ./...
+    after_script: skip
+    after_success:
+    - bash <(curl -s https://codecov.io/bash)
+  - stage: Backend Test
+    name: go 1.11.x
+    if: branch != master
+    go: 1.11.x
+    services: mongodb
+    before_install: skip
+    install:
+    - go get -t -v ./...
+    before_script: skip
+    script: go test -race -coverprofile=coverage.txt -covermode=atomic ./...
+    after_script: skip
+    after_success:
+    - bash <(curl -s https://codecov.io/bash)
+  - stage: Frontend Test
+    name: go 1.10.x
+    if: branch != master
+    go: 1.10.x
+    services: mongodb
+    addons:
+      apt:
+        sources:
+        - google-chrome
+        packages:
+        - google-chrome-stable
+    before_install:
+    - CDVERSION=`curl http://chromedriver.storage.googleapis.com/LATEST_RELEASE`
+    - sudo wget --no-verbose http://chromedriver.storage.googleapis.com/$CDVERSION/chromedriver_linux64.zip
+    - sudo unzip chromedriver_linux64.zip
+    - sudo chmod u+x chromedriver
+    - sudo mv chromedriver /usr/bin/
+    - sudo chmod 777 /usr/bin/chromedriver
+    install:
+    - sudo -H pip install -r requirements.txt
+    before_script:
+    - go get -t -v ./...
+    - go run main.go -env=CI &
+    - google-chrome-stable --no-sandbox --ignore-certificate-errors --headless --window-size=1920,1080
+      --disable-gpu --disable-dev-shm-usage --remote-debugging-port=51232 http://localhost:8000 &
+    script: robot --variable browser:headlesschrome robot/tests.robot
+    after-script: skip
+  - stage: Frontend Test
+    name: go 1.11.x
+    if: branch != master
+    go: 1.11.x
+    services: mongodb
+    addons:
+      apt:
+        sources:
+        - google-chrome
+        packages:
+        - google-chrome-stable
+    before_install:
+    - CDVERSION=`curl http://chromedriver.storage.googleapis.com/LATEST_RELEASE`
+    - sudo wget --no-verbose http://chromedriver.storage.googleapis.com/$CDVERSION/chromedriver_linux64.zip
+    - sudo unzip chromedriver_linux64.zip
+    - sudo chmod u+x chromedriver
+    - sudo mv chromedriver /usr/bin/
+    - sudo chmod 777 /usr/bin/chromedriver
+    install:
+    - sudo -H pip install -r requirements.txt
+    before_script:
+    - go get -t -v ./...
+    - go run main.go -env=CI &
+    - google-chrome-stable --no-sandbox --ignore-certificate-errors --headless --window-size=1920,1080
+      --disable-gpu --disable-dev-shm-usage --remote-debugging-port=51232 http://localhost:8000 &
+    script: robot --variable browser:headlesschrome robot/tests.robot
+    after-script: skip
+  - stage: Deploy Build
+    if: branch = master
+    script: skip
+    deploy: &heroku
+      provider: heroku
+      api_key:
+        secure: GoiXYwg4rfrvaBbhuvoxXunG5UIwMQUCEGLo2mrWQFgzLh6cN3UcAVcKoqra3TnxozjUlQvSXS2D2kpJrExicmAOHQ1L6GtXtyNa0ZBSva7B8QID5VgPP3Di5YKOvfPQykDJE4RGjv4r1gkyqXYGnqK3bdPces55fOY/HpUiF4uFlGQRZ/RDCVGvG0IH32X5J7q5/0xj5kDUeigtWM8MzVQfVyu06FluB20nQqCZghpOqOTg1N/RGAkaaYKIfrwNh8qymHG2z0pysgCC9QJeq31b/MkAlsj/lErSN7SZ6RlHQ58/VB94zsqpEOh69pYdrMb6foCwc6hJoO8CEjeenA5c9SbEe5fGIwa9HtG2cRzeV1hgnZseihcSfbgyApTD59JTBDsvSq8tzXLjK0IFqaaSYnrtTpMRRLMNMfNl+fYwTIrhg7k5WnQORJMxV2ri7LNTDF8gg5fhJznw4tjyAyZ1+39doutZsOAa6DoFn/HZV7ijmLXrHS8R5etxag7YEx0fO/lGld2nmbhEq00hMgYntWKhF8p94ObReAZTDziiyKwQxuvOlstdwrsneQJc9XjzP1QM2OahDaGyJm7wzvnooBBt0+38MtZhZeS2/IRNFyrxJ5P3F3lVxynFpvR4oVcsH3VMIIZOFIo2ipalTpm9TWuIStdpcPIz0Rjxdgg=
