@@ -100,6 +100,6 @@ func forceSslHeroku(next http.Handler) http.Handler {
 			http.Redirect(w, r, sslUrl, http.StatusPermanentRedirect)
 			return
 		}
-	next.ServeHTTP(w, r)
+		next.ServeHTTP(w, r)
 	})
 }

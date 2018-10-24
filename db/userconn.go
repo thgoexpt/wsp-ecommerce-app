@@ -8,12 +8,11 @@ import (
 	"github.com/guitarpawat/wsp-ecommerce/model/dbmodel"
 )
 
-var TestUser, _ = dbmodel.MakeUser("test","test","Test User","test@example.com","Kasetsart, TH",dbmodel.TypeUser)
-var TestRegis, _ = dbmodel.MakeUser("regis","regis","Regis User","regis@example.com","Kasetsart, TH",dbmodel.TypeUser)
-var TestEmployee, _ = dbmodel.MakeUser("emp","emp","Happy Employee","emp@example.com","Kasetsart, TH",dbmodel.TypeEmployee)
-var TestOwner, _ = dbmodel.MakeUser("owner","owner","Rich Owner","owner@example.com","Kasetsart, TH",dbmodel.TypeOwner)
+var TestUser, _ = dbmodel.MakeUser("test", "test", "Test User", "test@example.com", "Kasetsart, TH", dbmodel.TypeUser)
+var TestRegis, _ = dbmodel.MakeUser("regis", "regis", "Regis User", "regis@example.com", "Kasetsart, TH", dbmodel.TypeUser)
+var TestEmployee, _ = dbmodel.MakeUser("emp", "emp", "Happy Employee", "emp@example.com", "Kasetsart, TH", dbmodel.TypeEmployee)
+var TestOwner, _ = dbmodel.MakeUser("owner", "owner", "Rich Owner", "owner@example.com", "Kasetsart, TH", dbmodel.TypeOwner)
 var TestLoginFailUserName = "fail"
-
 
 func init() {
 	if env.GetEnv() != env.Production {
