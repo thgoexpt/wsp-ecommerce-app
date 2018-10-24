@@ -11,10 +11,6 @@ jobs:
   include:
   - stage: Backend Test
     name: go 1.10.x
-<<<<<<< HEAD
-    if: branch != master
-=======
->>>>>>> master
     go: 1.10.x
     services: mongodb
     before_install: skip
@@ -27,10 +23,6 @@ jobs:
     - bash <(curl -s https://codecov.io/bash)
   - stage: Backend Test
     name: go 1.11.x
-<<<<<<< HEAD
-    if: branch != master
-=======
->>>>>>> master
     go: 1.11.x
     services: mongodb
     before_install: skip
@@ -43,10 +35,6 @@ jobs:
     - bash <(curl -s https://codecov.io/bash)
   - stage: Frontend Test
     name: go 1.10.x
-<<<<<<< HEAD
-    if: branch != master
-=======
->>>>>>> master
     go: 1.10.x
     services: mongodb
     addons:
@@ -73,10 +61,6 @@ jobs:
     after-script: skip
   - stage: Frontend Test
     name: go 1.11.x
-<<<<<<< HEAD
-    if: branch != master
-=======
->>>>>>> master
     go: 1.11.x
     services: mongodb
     addons:
@@ -102,10 +86,6 @@ jobs:
     script: robot --variable browser:headlesschrome robot/tests.robot
     after-script: skip
   - stage: Deploy Build
-<<<<<<< HEAD
-    if: branch = master
-=======
->>>>>>> master
     script: skip
     deploy: &heroku
       provider: heroku
