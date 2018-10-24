@@ -59,11 +59,7 @@ func main() {
 	handler.Validate()
 
 	if env == solidenv.Production {
-		fmt.Println("Running on port 80 and 443")
-		go func() {
-			log.Fatalln(http.ListenAndServeTLS(":443", "ssl/server.crt", "ssl/server.key", r))
-		}()
-		log.Fatalln(http.ListenAndServe(":80", httpr))
+		log.Fatalln(http.ListenAndServe(":"+solidenv.GetPort(), forceSslHeroku(r)))
 	} else if env == solidenv.CI {
 		r.Handle("/mock/", middleware.MakeMiddleware(nil,
 			middleware.DoableFunc(handler.Mock),
@@ -95,4 +91,15 @@ func handlePage(df middleware.DoableFunc) http.Handler {
 		middleware.DoableFunc(handler.CheckSession),
 		middleware.DoableFunc(handler.BuildHeader),
 		middleware.DoableFunc(df))
+}
+
+func forceSslHeroku(next http.Handler) http.Handler {
+	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		if r.Header.Get("x-forwarded-proto") != "https" {
+			sslUrl := "https://" + r.Host + r.RequestURI
+			http.Redirect(w, r, sslUrl, http.StatusPermanentRedirect)
+			return
+		}
+	next.ServeHTTP(w, r)
+	})
 }
