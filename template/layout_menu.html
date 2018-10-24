@@ -226,21 +226,21 @@
             <div class="header-icons-mobile">
                 {{if eq .User ""}}
                     <!--Register-->
-                    <a href="#myModal_regis" class="header-wrapicon1 dis-block m-l-30" data-toggle="modal" id="registerIcon">
+                    <a href="#myModal_regis" class="header-wrapicon1 dis-block m-l-30" data-toggle="modal" id="registerIcon-mobile">
                         <img src="../static/assets/icon/register.png" class="header-icon1" alt="ICON">
                     </a>
                     <!--Login-->
-                    <a href="#myModal" class="header-wrapicon1 dis-block m-l-30" data-toggle="modal" id="loginIcon">
+                    <a href="#myModal" class="header-wrapicon1 dis-block m-l-30" data-toggle="modal" id="loginIcon-mobile">
                         <img src="../static/assets/icon/login.png" class="header-icon1" alt="ICON">
                     </a>
 
                 {{else}}
                     <!-- User -->
-                    <a href="#" class="header-wrapicon1 dis-block m-l-30" id="userProfileIcon">
+                    <a href="#" class="header-wrapicon1 dis-block m-l-30" id="userProfileIcon-mobile">
                         <img src="../static/assets/icon/icon-header-01.png" class="header-icon1" alt="ICON">
                     </a>
                     <!--Logout-->
-                    <a href="/logout/" class="header-wrapicon1 dis-block m-l-30" id="logoutIcon">
+                    <a href="/logout/" class="header-wrapicon1 dis-block m-l-30" id="logoutIcon-mobile">
                         <img src="../static/assets/icon/logout.png" class="header-icon1" alt="ICON">
                     </a>
                 {{end}}
@@ -299,7 +299,7 @@
             </div>
 
             <div class="btn-show-menu-mobile hamburger hamburger--squeeze">
-                <span class="hamburger-box">
+                <span class="hamburger-box" id="dropdownMenu">
                     <span class="hamburger-inner"></span>
                 </span>
             </div>
@@ -318,7 +318,7 @@
 
                 <li class="item-topbar-mobile p-l-20 p-t-8 p-b-8">
                     <div class="topbar-child2-mobile">
-                        <span class="topbar-email" id="welcomeUser">
+                        <span class="topbar-email" id="welcomeUser-mobile">
                         {{if eq .User ""}}
                             Welcome, Guest
                         {{else}}
@@ -360,7 +360,7 @@
                 </li>
 
                 <li class="item-menu-mobile">
-                    <a href="/contact/">Contact</a>
+                    <a href="/contact/" id="lastDropdownMenuItem">Contact</a>
                 </li>
             </ul>
         </nav>
