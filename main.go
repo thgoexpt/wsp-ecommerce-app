@@ -30,7 +30,11 @@ func main() {
 
 	r.Handle("/product/", handlePage(handler.Product))
 
-	r.Handle("/product-detail/", handlePage(handler.ComingSoon))
+	r.Handle("/product-detail/", handlePage(handler.ProductDetail))
+
+	r.Handle("/profile/", handlePage(handler.Profile))
+
+	r.Handle("/profile-edit/", handlePage(handler.ProfileEdit))
 
 	r.Handle("/regis/", middleware.MakeMiddleware(nil,
 		middleware.DoableFunc(handler.Regis),
