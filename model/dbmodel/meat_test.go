@@ -2,6 +2,7 @@ package dbmodel
 
 import (
 	"testing"
+	"time"
 )
 
 func TestMakeMeat(t *testing.T) {
@@ -10,8 +11,10 @@ func TestMakeMeat(t *testing.T) {
 	grade := "A"
 	des := "Meat of black pig"
 	price := 9999.00
+	quantity := 666
+	expire, _ := time.Parse(time.RFC3339, "1998-01-20T06:30:15+07:00")
 
-	meat, _ := MakeMeat(name, meattype, grade, des, price)
+	meat, _ := MakeMeat(name, meattype, grade, des, price, quantity, expire)
 
 	if name != meat.Name {
 		t.Errorf("expected name: %s, but get: %s", name, meat.Name)
@@ -27,5 +30,11 @@ func TestMakeMeat(t *testing.T) {
 	}
 	if price != meat.Price {
 		t.Errorf("expected price: %f, but get: %f", price, meat.Price)
+	}
+	if quantity != meat.Quantity {
+		t.Errorf("expected quantity: %d, but get: %d", quantity, meat.Quantity)
+	}
+	if expire != meat.Expire {
+		t.Errorf("expected price: %s, but get: %s", expire, meat.Expire)
 	}
 }

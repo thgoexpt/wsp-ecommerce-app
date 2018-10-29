@@ -5,6 +5,7 @@ import (
 	"log"
 	"net/http"
 	"strconv"
+	"time"
 
 	"github.com/gorilla/sessions"
 	"github.com/guitarpawat/middleware"
@@ -222,8 +223,31 @@ func RegisMeat(w http.ResponseWriter, r *http.Request, v *middleware.ValueMap) {
 		return
 	}
 
+	quantityStr := r.PostFormValue("quantity")
+	quantity64, err := strconv.ParseInt(quantityStr, 10, 64)
+	if err != nil {
+		v.Set("warning", "Quantity is not an integer.")
+		v.Set("next", true)
+		return
+	}
+	quantity := int(quantity64)
+
+	expireStr := r.PostFormValue("expire")
+	dayStr, monthStr, yearStr := str.Split(expireStr, "//")
+
+	expireToParse := yearStr + "-" + monthStr + "-" + dayStr + "T00:00:00+07:00"
+
+	// GMTPlus7 := int((7 * time.Hour).Seconds())
+	// bangkok := time.FixedZone("Bangkok Time", GMTPlus7)
+	expire, err := time.Parse(time.RFC3339, expireToParse)
+	if err != nil {
+		v.Set("warning", "Expire is invalid.")
+		v.Set("next", true)
+		return
+	}
+
 	meat, err := dbmodel.MakeMeat(r.PostFormValue("name"), r.PostFormValue("type"),
-		r.PostFormValue("grade"), r.PostFormValue("des"), price)
+		r.PostFormValue("grade"), r.PostFormValue("des"), price, quantity, exprie)
 	if err != nil {
 		v.Set("warning", err.Error())
 	} else {

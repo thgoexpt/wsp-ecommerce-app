@@ -1,6 +1,10 @@
 package dbmodel
 
-import "github.com/globalsign/mgo/bson"
+import (
+	"time"
+
+	"github.com/globalsign/mgo/bson"
+)
 
 type Meat struct {
 	ID          bson.ObjectId `bson:"_id,omitempty"`
@@ -9,15 +13,19 @@ type Meat struct {
 	Grade       string        `bson:"grade"`
 	Description string        `bson:"des"`
 	Price       float64       `bson:"price"`
+	Quantity    int           `bson:"quantity"`
+	Expire      time.Time     `bson:"expire"`
 }
 
-func MakeMeat(name, meattype, grade, des string, price float64) (Meat, error) {
+func MakeMeat(name, meattype, grade, des string, price float64, quantity int, expire time.Time) (Meat, error) {
 	meat := Meat{
 		Name:        name,
 		Type:        meattype,
 		Grade:       grade,
 		Description: des,
 		Price:       price,
+		Quantity:    quantity,
+		Expire:      expire,
 	}
 
 	return meat, nil
