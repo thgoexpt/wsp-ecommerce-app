@@ -72,21 +72,21 @@
 
 									<div class="col-xs-6">
 										<label for="first_name"><h4>Name</h4></label>
-										<input type="text" class="form-control" name="first_name" id="first_name" title="enter your first name if any." disabled="true">
+										<input type="text" class="form-control" name="first_name" id="first_name" title="enter your first name if any." disabled="true" value="{{.Fullname}}">
 								</div>
 									</div>
 									<div class="form-group">
 
 										<div class="col-xs-6">
 											<label for="email"><h4>Email</h4></label>
-											<input type="email" class="form-control" name="email" id="email" title="enter your email." disabled="true">
+											<input type="email" class="form-control" name="email" id="email" title="enter your email." disabled="true" value="{{.Email}}">
 								</div>
 										</div>
 										<div class="form-group">
 
 											<div class="col-xs-6">
 												<label for="email"><h4>Address</h4></label>
-												<input type="email" class="form-control" id="location" title="enter a address" disabled="true">
+												<input type="text" class="form-control" id="location" title="enter a address" disabled="true" value="{{.Address}}">
 								</div>
 											</div>
 											<div class="form-group">
@@ -95,7 +95,9 @@
 													<div class="form-group">
 														<div class="col-xs-12">
 															<br>
-															<button class="btn btn-lg btn-success" type="button"><i class="glyphicon glyphicon-ok-sign"></i>Edit</button>
+															<a href="/profile-edit/">
+																<button class="btn btn-lg btn-success" type="button"><i class="glyphicon glyphicon-ok-sign"></i>Edit</button>
+															</a>
 														</div>
 													</div>
 							</form>

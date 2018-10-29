@@ -5,6 +5,7 @@ import (
 	"log"
 	"net/http"
 	"strconv"
+	"strings"
 	"time"
 
 	"github.com/gorilla/sessions"
@@ -68,31 +69,6 @@ func BuildHeader(w http.ResponseWriter, r *http.Request, v *middleware.ValueMap)
 
 	v.Set("header", header)
 	v.Set("next", true)
-}
-
-func UserDetail(w http.ResponseWriter, r *http.Request, v *middleware.ValueMap) {
-	header, ok := v.Get("header").(pagemodel.Menu)
-	if !ok {
-		header = defaultHeader
-	}
-
-	model := pagemodel.UserDetail{
-		Menu: header,
-	}
-
-	user, ok := v.Get("user").(dbmodel.User)
-	if !ok {
-		model.Fullname = ""
-		model.Email = ""
-		model.Address = ""
-	} else {
-		model.Fullname = user.Fullname
-		model.Email = user.Email
-		model.Address = user.Address
-	}
-
-	v.Set("next", false)
-	t.ExecuteTemplate(w, "home.html", model)
 }
 
 func Home(w http.ResponseWriter, r *http.Request, v *middleware.ValueMap) {
@@ -258,9 +234,9 @@ func RegisMeat(w http.ResponseWriter, r *http.Request, v *middleware.ValueMap) {
 	quantity := int(quantity64)
 
 	expireStr := r.PostFormValue("expire")
-	dayStr, monthStr, yearStr := str.Split(expireStr, "//")
+	expireSplit := strings.Split(expireStr, "//")
 
-	expireToParse := yearStr + "-" + monthStr + "-" + dayStr + "T00:00:00+07:00"
+	expireToParse := expireSplit[2] + "-" + expireSplit[1] + "-" + expireSplit[0] + "T00:00:00+07:00"
 
 	// GMTPlus7 := int((7 * time.Hour).Seconds())
 	// bangkok := time.FixedZone("Bangkok Time", GMTPlus7)
@@ -272,7 +248,7 @@ func RegisMeat(w http.ResponseWriter, r *http.Request, v *middleware.ValueMap) {
 	}
 
 	meat, err := dbmodel.MakeMeat(r.PostFormValue("name"), r.PostFormValue("type"),
-		r.PostFormValue("grade"), r.PostFormValue("des"), price, quantity, exprie)
+		r.PostFormValue("grade"), r.PostFormValue("des"), price, quantity, expire)
 	if err != nil {
 		v.Set("warning", err.Error())
 	} else {
@@ -346,8 +322,19 @@ func Profile(w http.ResponseWriter, r *http.Request, v *middleware.ValueMap) {
 		header = defaultHeader
 	}
 
-	model := pagemodel.ProductDetail{
+	model := pagemodel.UserDetail{
 		Menu: header,
+	}
+
+	user, ok := v.Get("user").(dbmodel.User)
+	if !ok {
+		model.Fullname = ""
+		model.Email = ""
+		model.Address = ""
+	} else {
+		model.Fullname = user.Fullname
+		model.Email = user.Email
+		model.Address = user.Address
 	}
 
 	v.Set("next", false)
@@ -366,6 +353,19 @@ func ProfileEdit(w http.ResponseWriter, r *http.Request, v *middleware.ValueMap)
 
 	v.Set("next", false)
 	t.ExecuteTemplate(w, "profile-edit.html", model)
+}
+
+func EditProfile(w http.ResponseWriter, r *http.Request, v *middleware.ValueMap) {
+	err := r.ParseForm()
+	if err != nil {
+		w.WriteHeader(http.StatusInternalServerError)
+		return
+	}
+
+	//TODO
+	// Update User Profile
+
+	v.Set("next", true)
 }
 
 func Mock(w http.ResponseWriter, r *http.Request, v *middleware.ValueMap) {
