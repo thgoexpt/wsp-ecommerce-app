@@ -2,13 +2,14 @@ package handler
 
 import (
 	"encoding/gob"
+	"log"
+	"net/http"
+
 	"github.com/gorilla/sessions"
 	"github.com/guitarpawat/middleware"
 	"github.com/guitarpawat/wsp-ecommerce/db"
 	"github.com/guitarpawat/wsp-ecommerce/model/dbmodel"
 	"github.com/guitarpawat/wsp-ecommerce/model/pagemodel"
-	"log"
-	"net/http"
 )
 
 var s = sessions.NewCookieStore([]byte("NOT FOR PRODUCTION"))
@@ -162,6 +163,20 @@ func ComingSoon(w http.ResponseWriter, r *http.Request, v *middleware.ValueMap) 
 
 	v.Set("next", false)
 	t.ExecuteTemplate(w, "comingsoon.html", model)
+}
+
+func AddProduct(w http.ResponseWriter, r *http.Request, v *middleware.ValueMap) {
+	header, ok := v.Get("header").(pagemodel.Menu)
+	if !ok {
+		header = defaultHeader
+	}
+
+	model := pagemodel.ProductDetail{
+		Menu: header,
+	}
+
+	v.Set("next", false)
+	t.ExecuteTemplate(w, "add-product.html", model)
 }
 
 func Regis(w http.ResponseWriter, r *http.Request, v *middleware.ValueMap) {

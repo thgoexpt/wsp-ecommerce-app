@@ -2,13 +2,14 @@ package main
 
 import (
 	"fmt"
+	"log"
+	"net/http"
+
 	"github.com/gorilla/mux"
 	"github.com/guitarpawat/middleware"
 	"github.com/guitarpawat/wsp-ecommerce/db"
 	solidenv "github.com/guitarpawat/wsp-ecommerce/env"
 	"github.com/guitarpawat/wsp-ecommerce/handler"
-	"log"
-	"net/http"
 )
 
 var env = solidenv.GetEnv()
@@ -24,13 +25,15 @@ func main() {
 
 	r.Handle("/about/", handlePage(handler.About))
 
-	r.Handle("/cart/", handlePage(handler.ComingSoon))
+	r.Handle("/cart/", handlePage(handler.Cart))
 
-	r.Handle("/contact/", handlePage(handler.ComingSoon))
+	r.Handle("/contact/", handlePage(handler.Contact))
 
 	r.Handle("/product/", handlePage(handler.Product))
 
 	r.Handle("/product-detail/", handlePage(handler.ComingSoon))
+
+	r.Handle("/add-product/", handlePage(handler.AddProduct))
 
 	r.Handle("/regis/", middleware.MakeMiddleware(nil,
 		middleware.DoableFunc(handler.Regis),
