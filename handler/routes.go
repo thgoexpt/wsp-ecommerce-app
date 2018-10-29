@@ -70,6 +70,31 @@ func BuildHeader(w http.ResponseWriter, r *http.Request, v *middleware.ValueMap)
 	v.Set("next", true)
 }
 
+func UserDetail(w http.ResponseWriter, r *http.Request, v *middleware.ValueMap) {
+	header, ok := v.Get("header").(pagemodel.Menu)
+	if !ok {
+		header = defaultHeader
+	}
+
+	model := pagemodel.UserDetail{
+		Menu: header,
+	}
+
+	user, ok := v.Get("user").(dbmodel.User)
+	if !ok {
+		model.Fullname = ""
+		model.Email = ""
+		model.Address = ""
+	} else {
+		model.Fullname = user.Fullname
+		model.Email = user.Email
+		model.Address = user.Address
+	}
+
+	v.Set("next", false)
+	t.ExecuteTemplate(w, "home.html", model)
+}
+
 func Home(w http.ResponseWriter, r *http.Request, v *middleware.ValueMap) {
 	header, ok := v.Get("header").(pagemodel.Menu)
 	if !ok {
