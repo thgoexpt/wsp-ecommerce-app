@@ -1,32 +1,17 @@
 package main
 
 import (
-	"flag"
 	"fmt"
-	"log"
-	"net/http"
-
 	"github.com/gorilla/mux"
 	"github.com/guitarpawat/middleware"
+	"github.com/guitarpawat/wsp-ecommerce/db"
+	solidenv "github.com/guitarpawat/wsp-ecommerce/env"
 	"github.com/guitarpawat/wsp-ecommerce/handler"
+	"log"
+	"net/http"
 )
 
-var env, dbhost, dbport, dbname string
-
-func init() {
-	flag.StringVar(&env, "env", "TESTING", "Indicates the program runs on the TESTING or PRODUCTION environment")
-	flag.StringVar(&dbhost, "dbhost", "localhost", "Database host")
-	flag.StringVar(&dbport, "dbport", "27017", "Database host")
-	flag.StringVar(&dbname, "dbname", "", "Name of database (default \"solid\" for PRODUCTION and \"solidtest\" for TESTING)")
-	flag.Parse()
-	if env == "PRODUCTION" && dbname == "" {
-		flag.Set("dbname", "solid")
-		dbname = "solid"
-	} else if dbname == "" {
-		flag.Set("dbname", "solidtest")
-		dbname = "solidtest"
-	}
-}
+var env = solidenv.GetEnv()
 
 func main() {
 
@@ -45,7 +30,11 @@ func main() {
 
 	r.Handle("/product/", handlePage(handler.Product))
 
-	r.Handle("/product-detail/", handlePage(handler.ComingSoon))
+	r.Handle("/product-detail/", handlePage(handler.ProductDetail))
+
+	r.Handle("/profile/", handlePage(handler.Profile))
+
+	r.Handle("/profile-edit/", handlePage(handler.ProfileEdit))
 
 	r.Handle("/regis/", middleware.MakeMiddleware(nil,
 		middleware.DoableFunc(handler.Regis),
@@ -81,22 +70,32 @@ func main() {
 
 	handler.Validate()
 
-	if env == "PRODUCTION" {
-		fmt.Println("Running on port 80 and 443")
-		go func() {
-			log.Fatalln(http.ListenAndServeTLS(":443", "ssl/server.crt", "ssl/server.key", r))
-		}()
-		log.Fatalln(http.ListenAndServe(":80", httpr))
-	} else if env == "CI" {
+	if env == solidenv.Production {
+		log.Fatalln(http.ListenAndServe(":"+solidenv.GetPort(), forceSslHeroku(r)))
+	} else if env == solidenv.CI {
+		r.Handle("/mock/", middleware.MakeMiddleware(nil,
+			middleware.DoableFunc(handler.Mock),
+			middleware.DoableFunc(handler.CheckSession),
+			middleware.DoableFunc(handler.BuildHeader),
+			middleware.DoableFunc(handler.Home)))
+
 		fmt.Println("Running on port 8000")
 		log.Fatalln(http.ListenAndServe(":8000", r))
 	} else {
+		r.Handle("/mock/", middleware.MakeMiddleware(nil,
+			middleware.DoableFunc(handler.Mock),
+			middleware.DoableFunc(handler.CheckSession),
+			middleware.DoableFunc(handler.BuildHeader),
+			middleware.DoableFunc(handler.Home)))
+
 		fmt.Println("Running on port 8000 and 4433")
 		go func() {
 			log.Fatalln(http.ListenAndServeTLS(":4433", "ssl/server.crt", "ssl/server.key", r))
 		}()
 		log.Fatalln(http.ListenAndServe(":8000", httpr))
 	}
+
+	db.Mock()
 }
 
 func handlePage(df middleware.DoableFunc) http.Handler {
@@ -104,4 +103,15 @@ func handlePage(df middleware.DoableFunc) http.Handler {
 		middleware.DoableFunc(handler.CheckSession),
 		middleware.DoableFunc(handler.BuildHeader),
 		middleware.DoableFunc(df))
+}
+
+func forceSslHeroku(next http.Handler) http.Handler {
+	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		if r.Header.Get("x-forwarded-proto") != "https" {
+			sslUrl := "https://" + r.Host + r.RequestURI
+			http.Redirect(w, r, sslUrl, http.StatusPermanentRedirect)
+			return
+		}
+		next.ServeHTTP(w, r)
+	})
 }

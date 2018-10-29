@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<title>Profile</title>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<!--===============================================================================================-->
+	<link rel="icon" type="image/png" href="../static/assets/icon/favicon.ico">
+	<!--===============================================================================================-->
+	<link rel="stylesheet" type="text/css" href="../static/animate/bootstrap/css/bootstrap.min.css">
+	<!--===============================================================================================-->
+	<link rel="stylesheet" type="text/css" href="../static//fonts/font-awesome-4.7.0/css/font-awesome.min.css">
+	<!--===============================================================================================-->
+	<link rel="stylesheet" type="text/css" href="../static/fonts/themify/themify-icons.css">
+	<!--===============================================================================================-->
+	<link rel="stylesheet" type="text/css" href="../static/fonts/Linearicons-Free-v1.0.0/icon-font.min.css">
+	<!--===============================================================================================-->
+	<link rel="stylesheet" type="text/css" href="../static/fonts/elegant-font/html-css/style.css">
+	<!--===============================================================================================-->
+	<link rel="stylesheet" type="text/css" href="../static/animate/animate/animate.css">
+	<!--===============================================================================================-->
+	<link rel="stylesheet" type="text/css" href="../static/animate/css-hamburgers/hamburgers.min.css">
+	<!--===============================================================================================-->
+	<link rel="stylesheet" type="text/css" href="../static/animate/animsition/css/animsition.min.css">
+	<!--===============================================================================================-->
+	<link rel="stylesheet" type="text/css" href="../static/animate/select2/select2.min.css">
+	<!--===============================================================================================-->
+	<link rel="stylesheet" type="text/css" href="../static/animate/slick/slick.css">
+	<!--===============================================================================================-->
+	<link rel="stylesheet" type="text/css" href="../static/css/util.css">
+	<link rel="stylesheet" type="text/css" href="../static/css/style.css">
+	<!--===============================================================================================-->
+</head>
+
+<body class="animsition">
+
+	{{template "menu" .Menu}}
+
+	<!-- Title Page -->
+	<section class="parallax0 parallax100 bg-title-page p-t-40 p-b-50 flex-col-c-m" style="background-image: url(../static/assets/about_us/aboutus_wall.jpg);">
+		<h2 class="l-text2 t-center">
+			Your Profile
+		</h2>
+	</section>
+
+	<!-- content page -->
+	<br>
+	<div class="container bootstrap snippet">
+
+		<!-- Username -->
+		<div class="row">
+			<div class="col-sm-10">
+				<h1>User name</h1>
+			</div>
+		</div><br>
+
+		<div class="row">
+			<div class="col-sm-3">
+
+				</hr><br>
+
+			</div>
+
+				<!--/col-3-->
+				<div class="col-sm-9">
+					<div class="tab-content">
+						<div class="tab-pane active" id="home">
+							<hr>
+							<form class="form" action="##" method="post" id="registrationForm">
+								<div class="form-group">
+
+									<div class="col-xs-6">
+										<label for="first_name"><h4>Name</h4></label>
+										<input type="text" class="form-control" name="first_name" id="first_name" placeholder="Name" title="enter your first name if any.">
+								</div>
+									</div>
+									<div class="form-group">
+
+										<div class="col-xs-6">
+											<label for="email"><h4>Email</h4></label>
+											<input type="email" class="form-control" name="email" id="email" placeholder="you@email.com" title="enter your email.">
+								</div>
+										</div>
+										<div class="form-group">
+
+											<div class="col-xs-6">
+												<label for="email"><h4>Address</h4></label>
+												<input type="email" class="form-control" id="location" placeholder="somewhere" title="enter a address">
+								</div>
+											</div>
+											<div class="form-group">
+
+												<div class="col-xs-6">
+													<label for="password"><h4>Password</h4></label>
+													<input type="password" class="form-control" name="password" id="password" placeholder="password" title="enter your password.">
+								</div>
+												</div>
+												<div class="form-group">
+
+													<div class="col-xs-6">
+														<label for="password2"><h4>Verify Password</h4></label>
+														<input type="password" class="form-control" name="password2" id="password2" placeholder=" verify password" title="enter your password2.">
+								</div>
+													</div>
+													<div class="form-group">
+														<div class="col-xs-12">
+															<br>
+															<button class="btn btn-lg btn-success" type="submit"><i class="glyphicon glyphicon-ok-sign"></i> Save</button>
+															<button class="btn btn-lg" type="reset"><i class="glyphicon glyphicon-repeat"></i> Reset</button>
+														</div>
+													</div>
+							</form>
+
+							<hr>
+
+						</div>
+
+					</div>
+					<!--/tab-pane-->
+				</div>
+				<!--/tab-content-->
+
+			</div>
+			<!--/col-9-->
+		</div>
+		<!--/row-->
+
+		{{template "footer"}}
+
+		<!-- Back to top -->
+		<div class="btn-back-to-top bg0-hov" id="myBtn">
+			<span class="symbol-btn-back-to-top">
+			<i class="fa fa-angle-double-up" aria-hidden="true"></i>
+		</span>
+		</div>
+
+		<!-- Container Selection -->
+		<div id="dropDownSelect1"></div>
+		<div id="dropDownSelect2"></div>
+
+		<!-- Login pop-up -->
+		{{template "login"}} {{template "register"}}
+
+		<!--===============================================================================================-->
+		<script type="text/javascript" src="../static/animate/jquery/jquery-3.2.1.min.js"></script>
+		<!--===============================================================================================-->
+		<script type="text/javascript" src="../static/animate/animsition/js/animsition.min.js"></script>
+		<!--===============================================================================================-->
+		<script type="text/javascript" src="../static/animate/bootstrap/js/popper.js"></script>
+		<script type="text/javascript" src="../static/animate/bootstrap/js/bootstrap.min.js"></script>
+		<!--===============================================================================================-->
+		<script type="text/javascript" src="../static/animate/select2/select2.min.js"></script>
+		<script type="text/javascript">
+			$(".selection-1").select2({
+				minimumResultsForSearch: 20,
+				dropdownParent: $('#dropDownSelect1')
+			});
+
+			$(".selection-2").select2({
+				minimumResultsForSearch: 20,
+				dropdownParent: $('#dropDownSelect2')
+			});
+		</script>
+		<!--===============================================================================================-->
+		<script src="../static/js/main.js"></script>
+
+</body>
+
+</html>

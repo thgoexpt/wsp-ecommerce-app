@@ -339,3 +339,36 @@ func Logout(w http.ResponseWriter, r *http.Request, v *middleware.ValueMap) {
 	v.Set("success", "Logout successful")
 	v.Set("next", true)
 }
+
+func Profile(w http.ResponseWriter, r *http.Request, v *middleware.ValueMap) {
+	header, ok := v.Get("header").(pagemodel.Menu)
+	if !ok {
+		header = defaultHeader
+	}
+
+	model := pagemodel.ProductDetail{
+		Menu: header,
+	}
+
+	v.Set("next", false)
+	t.ExecuteTemplate(w, "profile.html", model)
+}
+
+func ProfileEdit(w http.ResponseWriter, r *http.Request, v *middleware.ValueMap) {
+	header, ok := v.Get("header").(pagemodel.Menu)
+	if !ok {
+		header = defaultHeader
+	}
+
+	model := pagemodel.ProductDetail{
+		Menu: header,
+	}
+
+	v.Set("next", false)
+	t.ExecuteTemplate(w, "profile-edit.html", model)
+}
+
+func Mock(w http.ResponseWriter, r *http.Request, v *middleware.ValueMap) {
+	db.Mock()
+	v.Set("next", true)
+}
