@@ -1,21 +1,35 @@
 package db
 
-import "github.com/globalsign/mgo"
-
-var url = "localhost:27017"
+import (
+	"github.com/globalsign/mgo"
+	"github.com/guitarpawat/wsp-ecommerce/env"
+	"strings"
+)
 
 var session *mgo.Session = nil
 
 func GetDB() (*mgo.Database, error) {
+	db := "solid"
 
 	if session == nil {
+		host := "localhost:27017"
+
+		if env.GetEnv() == env.Production {
+			host = env.GetMongoURI()
+		}
+
 		var err error
-		session, err = mgo.Dial(url)
+		session, err = mgo.Dial(host)
 		if err != nil {
 			return nil, err
 		}
 	}
 
-	return session.Copy().DB("solid"), nil
+	if env.GetEnv() == env.Production {
+		db = strings.Split(env.GetMongoURI(), "/")[3]
+		return session.Copy().DB(db), nil
+	}
+
+	return session.Copy().DB(db), nil
 
 }

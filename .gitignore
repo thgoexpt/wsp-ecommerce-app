@@ -1,7 +1,6 @@
 #GO
 bin/
 pkg/
-vendor/
 
 *.test
 *.out
@@ -11,13 +10,15 @@ vendor/
 _*.go
 coverage.txt
 
+# Dep
+vendor/
+
 # Goland
 .idea/**/workspace.xml
 .idea/**/tasks.xml
 .idea/**/usage.statistics.xml
 .idea/**/dictionaries
 .idea/**/shelf
-
 .idea/**/dataSources/
 .idea/**/dataSources.ids
 .idea/**/dataSources.local.xml
@@ -25,3 +26,16 @@ coverage.txt
 .idea/**/dynamic.xml
 .idea/**/uiDesigner.xml
 .idea/**/dbnavigator.xml
+
+# Robot
+log.html
+report.html
+output.xml
+
+selenium-screenshot-*
+
+robot/log.html
+robot/report.html
+robot/output.xml
+
+robot/selenium-screenshot-*

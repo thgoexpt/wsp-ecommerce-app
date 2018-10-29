@@ -31,7 +31,7 @@ func TestMakeUser(t *testing.T) {
 		t.Errorf("expected user type: %d, but get: %d", usertype, user.Type)
 	}
 
-	err := bcrypt.CompareHashAndPassword([]byte(user.Hash),[]byte(password))
+	err := bcrypt.CompareHashAndPassword([]byte(user.Hash), []byte(password))
 	if err != nil {
 		t.Errorf("error while trying to compare password with hash: %s", err)
 	}
@@ -50,5 +50,42 @@ func TestUser_VerifyHash(t *testing.T) {
 	ok := user.VerifyHash(password)
 	if !ok {
 		t.Errorf("error while verify hash")
+	}
+}
+
+func TestUser_IsSame(t *testing.T) {
+	u1 := User{
+		ID:       "1",
+		Username: "u1",
+	}
+
+	u2 := User{
+		ID:       "1",
+		Username: "u2",
+	}
+
+	u3 := User{
+		ID:       "2",
+		Username: "u1",
+	}
+
+	if !u1.IsSame(u1) {
+		t.Errorf("Expected: u1 is same as u1")
+	}
+
+	if !u1.IsSame(u2) {
+		t.Errorf("Expected: u1 is same as u2")
+	}
+
+	if !u2.IsSame(u1) {
+		t.Errorf("Expected: u2 is same as u1")
+	}
+
+	if u1.IsSame(u3) {
+		t.Errorf("Expected: u1 is not same as u3")
+	}
+
+	if u3.IsSame(u1) {
+		t.Errorf("Expected: u3 is not same as u1")
 	}
 }

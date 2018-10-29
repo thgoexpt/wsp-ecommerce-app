@@ -102,8 +102,9 @@
             <div class="topbar-social">
                 <a href="https://www.facebook.com/profile.php?id=100002073423444" class="topbar-social-item fa fa-facebook"></a>
                 <a href="https://www.instagram.com/" class="topbar-social-item fa fa-instagram"></a>
-                <a href="https://www.pinterest.com/search/pins/?q=meat&rs=typed&term_meta[]=meat%7Ctyped" class="topbar-social-item fa fa-pinterest-p"></a>
-                <a href="https://www.youtube.com/channel/UCIe9MDRdkGoS99fBc5lgPfw" class="topbar-social-item fa fa-youtube-play"></a>
+                <a href="https://www.pinterest.com/search/pins/?q=smoke%20meat&rs=typed&term_meta[]=smoke%7Ctyped&term_meta[]=meat%7Ctyped"
+                    class="topbar-social-item fa fa-pinterest-p"></a>
+                <a href="https://www.youtube.com/channel/UCIe9MDRdkGoS99fBc5lgPfw/videos" class="topbar-social-item fa fa-youtube-play"></a>
             </div>
 
             <!-- Logo2 -->
@@ -112,7 +113,7 @@
             </a>
 
             <div class="topbar-child2">
-                <span class="topbar-email">
+                <span class="topbar-email" id="welcomeUser">
                     {{if eq .User ""}}
                     Welcome, Guest
                     {{else}}
@@ -122,21 +123,21 @@
 
                 {{if eq .User ""}}
                 <!--Register-->
-                <a href="#myModal_regis" class="header-wrapicon1 dis-block m-l-30" data-toggle="modal">
+                <a href="#myModal_regis" class="header-wrapicon1 dis-block m-l-30" data-toggle="modal" id="registerIcon">
                     <img src="../static/assets/icon/register.png" class="header-icon1" alt="ICON">
                 </a>
                 <!--Login-->
-                <a href="#myModal" class="header-wrapicon1 dis-block m-l-30" data-toggle="modal">
+                <a href="#myModal" class="header-wrapicon1 dis-block m-l-30" data-toggle="modal" id="loginIcon">
                     <img src="../static/assets/icon/login.png" class="header-icon1" alt="ICON">
                 </a>
 
                 {{else}}
                 <!-- User -->
-                <a href="#" class="header-wrapicon1 dis-block m-l-30">
+                <a href="#" class="header-wrapicon1 dis-block m-l-30" id="userProfileIcon">
                     <img src="../static/assets/icon/icon-header-01.png" class="header-icon1" alt="ICON">
                 </a>
                 <!--Logout-->
-                <a href="/logout/" class="header-wrapicon1 dis-block m-l-30">
+                <a href="/logout/" class="header-wrapicon1 dis-block m-l-30" id="logoutIcon">
                     <img src="../static/assets/icon/logout.png" class="header-icon1" alt="ICON">
                 </a>
                 {{end}}
@@ -223,132 +224,127 @@
         <div class="btn-show-menu">
             <!-- Header Icon mobile -->
             <div class="header-icons-mobile">
-                <a href="#" class="header-wrapicon1 dis-block">
-                    <img src="../static/assets/icon/icon-header-01.png" class="header-icon1" alt="ICON">
+                {{if eq .User ""}}
+                <!--Register-->
+                <a href="#myModal_regis" class="header-wrapicon1 dis-block m-l-30" data-toggle="modal" id="registerIcon-mobile">
+                    <img src="../static/assets/icon/register.png" class="header-icon1" alt="ICON">
+                </a>
+                <!--Login-->
+                <a href="#myModal" class="header-wrapicon1 dis-block m-l-30" data-toggle="modal" id="loginIcon-mobile">
+                    <img src="../static/assets/icon/login.png" class="header-icon1" alt="ICON">
                 </a>
 
-                <span class="linedivide2"></span>
+                {{else}}
+                <!-- User -->
+                <a href="#" class="header-wrapicon1 dis-block m-l-30" id="userProfileIcon-mobile">
+                    <img src="../static/assets/icon/icon-header-01.png" class="header-icon1" alt="ICON">
+                </a>
+                <!--Logout-->
+                <a href="/logout/" class="header-wrapicon1 dis-block m-l-30" id="logoutIcon-mobile">
+                    <img src="../static/assets/icon/logout.png" class="header-icon1" alt="ICON">
+                </a>
+                {{end}}
+                {{/*<a href="#" class="header-wrapicon1 dis-block">*/}}
+                    {{/*<img src="../static/assets/icon/icon-header-01.png" class="header-icon1" alt="ICON">*/}}
+                    {{/*</a>*/}}
 
-                <div class="header-wrapicon2">
-                    <img src="../static/assets/icon/icon-header-02.png" class="header-icon1 js-show-header-dropdown"
-                        alt="ICON">
-                    <span class="header-icons-noti">0</span>
+                {{/*<span class="linedivide2"></span>*/}}
 
-                    <!-- Header cart noti -->
-                    <div class="header-cart header-dropdown">
-                        <ul class="header-cart-wrapitem">
-                            <!-- <li class="header-cart-item">
-                                <div class="header-cart-item-img">
-                                    <img src="images/item-cart-01.jpg" alt="IMG">
-                                </div>
-
-                                <div class="header-cart-item-txt">
-                                    <a href="#" class="header-cart-item-name">
-                                        White Shirt With Pleat Detail Back
-                                    </a>
-
-                                    <span class="header-cart-item-info">
-                                        1 x $19.00
-                                    </span>
-                                </div>
-                            </li> -->
-                        </ul>
-
-                        <div class="header-cart-total">
-                            Total: $75.00
-                        </div>
-
-                        <!-- <div class="header-cart-buttons">
-                            <div class="header-cart-wrapbtn">
-                                Button
-                                <a href="cart.html" class="flex-c-m size1 bg1 bo-rad-20 hov1 s-text1 trans-0-4">
-                                    View Cart
-                                </a>
-                            </div>
-
-                            <div class="header-cart-wrapbtn">
-                                Button
-                                <a href="#" class="flex-c-m size1 bg1 bo-rad-20 hov1 s-text1 trans-0-4">
-                                    Check Out
-                                </a>
-                            </div>
-                        </div> -->
-                    </div>
+                {{/*<div class="header-wrapicon2">*/}}
+                    {{/*<img src="../static/assets/icon/icon-header-02.png" class="header-icon1 js-show-header-dropdown"
+                        */}} {{/*alt="ICON">*/}} {{/*<span class="header-icons-noti">0</span>*/}}
+                        {{/*<!-- Header cart noti -->*/}} {{/*<div class="header-cart header-dropdown">*/}}
+                        {{/*<ul class="header-cart-wrapitem">*/}} {{/*<!-- <li class="header-cart-item">*/}}
+                        {{/*<div class="header-cart-item-img">*/}}
+                        {{/*<img src="images/item-cart-01.jpg" alt="IMG">*/}} {{/*</div>*/}}
+                        {{/*<div class="header-cart-item-txt">*/}} {{/*<a href="#" class="header-cart-item-name">*/}}
+                        {{/*White Shirt With Pleat Detail Back*/}} {{/*</a>*/}}
+                        {{/*<span class="header-cart-item-info">*/}} {{/*1 x $19.00*/}} {{/*</span>*/}} {{/*</div>*/}}
+                        {{/*</li> -->*/}} {{/*</ul>*/}} {{/*<div class="header-cart-total">*/}} {{/*Total: $75.00*/}}
+                        {{/*</div>*/}} {{/*<!-- <div class="header-cart-buttons">*/}}
+                        {{/*<div class="header-cart-wrapbtn">*/}} {{/*Button*/}}
+                        {{/*<a href="cart.html" class="flex-c-m size1 bg1 bo-rad-20 hov1 s-text1 trans-0-4">*/}}
+                        {{/*View Cart*/}} {{/*</a>*/}} {{/*</div>*/}} {{/*<div class="header-cart-wrapbtn">*/}}
+                        {{/*Button*/}} {{/*<a href="#" class="flex-c-m size1 bg1 bo-rad-20 hov1 s-text1 trans-0-4">*/}}
+                        {{/*Check Out*/}} {{/*</a>*/}} {{/*</div>*/}} {{/*</div> -->*/}} {{/*</div>*/}} {{/*</div>*/}}
+                        </div> <div class="btn-show-menu-mobile hamburger hamburger--squeeze">
+                    <span class="hamburger-box" id="dropdownMenu">
+                        <span class="hamburger-inner"></span>
+                    </span>
                 </div>
             </div>
-
-            <div class="btn-show-menu-mobile hamburger hamburger--squeeze">
-                <span class="hamburger-box">
-                    <span class="hamburger-inner"></span>
-                </span>
-            </div>
         </div>
-    </div>
 
-    <!-- Menu Mobile -->
-    <div class="wrap-side-menu">
-        <nav class="side-menu">
-            <ul class="main-menu">
-                <li class="item-topbar-mobile p-l-20 p-t-8 p-b-8">
-                    <span class="topbar-child1">
-                        Free shipping for standard order over $100
-                    </span>
-                </li>
-
-                <li class="item-topbar-mobile p-l-20 p-t-8 p-b-8">
-                    <div class="topbar-child2-mobile">
-                        <span class="topbar-email">
-                            user@gmail.com
+        <!-- Menu Mobile -->
+        <div class="wrap-side-menu">
+            <nav class="side-menu">
+                <ul class="main-menu">
+                    <li class="item-topbar-mobile p-l-20 p-t-8 p-b-8">
+                        <span class="topbar-child1">
+                            Free shipping for standard order over $100
                         </span>
+                    </li>
 
-                    </div>
-                </li>
+                    <li class="item-topbar-mobile p-l-20 p-t-8 p-b-8">
+                        <div class="topbar-child2-mobile">
+                            <span class="topbar-email" id="welcomeUser-mobile">
+                                {{if eq .User ""}}
+                                Welcome, Guest
+                                {{else}}
+                                Welcome, {{.User}}
+                                {{end}}
+                            </span>
+                        </div>
+                    </li>
 
-                <li class="item-topbar-mobile p-l-10">
-                    <div class="topbar-social-mobile">
-                        <a href="https://www.facebook.com/profile.php?id=100002073423444" class="topbar-social-item fa fa-facebook"></a>
-                        <a href="https://www.instagram.com/" class="topbar-social-item fa fa-instagram"></a>
-                        <a href="https://www.pinterest.com/search/pins/?q=meat&rs=typed&term_meta[]=meat%7Ctyped" class="topbar-social-item fa fa-pinterest-p"></a>
-                        <a href="https://www.youtube.com/channel/UCIe9MDRdkGoS99fBc5lgPfw" class="topbar-social-item fa fa-youtube-play"></a>
-                    </div>
-                </li>
+                    <li class="item-topbar-mobile p-l-10">
+                        <div class="topbar-social-mobile">
+                            <a href="https://www.facebook.com/profile.php?id=100002073423444" class="topbar-social-item fa fa-facebook"></a>
+                            <a href="https://www.instagram.com/" class="topbar-social-item fa fa-instagram"></a>
+                            <a href="https://www.pinterest.com/search/pins/?q=smoke%20meat&rs=typed&term_meta[]=smoke%7Ctyped&term_meta[]=meat%7Ctyped"
+                                class="topbar-social-item fa fa-pinterest-p"></a>
+                            <a href="https://www.youtube.com/channel/UCIe9MDRdkGoS99fBc5lgPfw/videos" class="topbar-social-item fa fa-youtube-play"></a>
+                        </div>
+                    </li>
 
-                <li class="item-menu-mobile">
-                    <a href="/">Home</a>
-                    <i class="arrow-main-menu fa fa-angle-right" aria-hidden="true"></i>
-                </li>
+                    <li class="item-menu-mobile">
+                        <a href="/">Home</a>
+                        <i class="arrow-main-menu fa fa-angle-right" aria-hidden="true"></i>
+                    </li>
 
-                <li class="item-menu-mobile">
-                    <a href="/product/">Shop</a>
-                </li>
+                    <li class="item-menu-mobile">
+                        <a href="/product/">Shop</a>
+                    </li>
 
-                <li class="item-menu-mobile">
-                    <a href="/product/">Sale</a>
-                </li>
+                    <li class="item-menu-mobile">
+                        <a href="/product/">Sale</a>
+                    </li>
 
-                <li class="item-menu-mobile">
-                    <a href="/cart/">Cart</a>
-                </li>
+                    <li class="item-menu-mobile">
+                        <a href="/cart/">Cart</a>
+                    </li>
 
-                <li class="item-menu-mobile">
-                    <a href="/about/">About</a>
-                </li>
+                    <li class="item-menu-mobile">
+                        <a href="/about/">About</a>
+                    </li>
 
-                <li class="item-menu-mobile">
-                    <a href="/contact/">Contact</a>
-                </li>
-            </ul>
-        </nav>
-    </div>
-    {{if ne .Success ""}}
-    <div class="container alert alert-success alert-dismissible text-center" role="alert">
-        {{.Success}}
-    </div>
-    {{end}}
-    {{if ne .Warning ""}}
-    <div class="container alert alert-warning alert-dismissible text-center" role="alert">
-        Warning: {{.Warning}}
-    </div>
-    {{end}}
+                    <li class="item-menu-mobile">
+                        <a href="/contact/" id="lastDropdownMenuItem">Contact</a>
+                    </li>
+                </ul>
+            </nav>
+        </div>
+        <div id="alertBox">
+            {{if ne .Success ""}}
+            <div class="container alert alert-success alert-dismissible text-center" role="alert" id="successBox">
+                {{.Success}}
+            </div>
+            {{end}}
+            {{if ne .Warning ""}}
+            <div class="container alert alert-warning alert-dismissible text-center" role="alert" id="warningBox">
+                Warning: {{.Warning}}
+            </div>
+            {{end}}
+        </div>
 </header>
 {{end}}

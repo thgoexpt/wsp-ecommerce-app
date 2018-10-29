@@ -1,15 +1,20 @@
 package main
 
 import (
+	"fmt"
+	"github.com/gorilla/mux"
 	"github.com/guitarpawat/middleware"
+	"github.com/guitarpawat/wsp-ecommerce/db"
+	solidenv "github.com/guitarpawat/wsp-ecommerce/env"
+	"github.com/guitarpawat/wsp-ecommerce/handler"
 	"log"
 	"net/http"
-
-	"github.com/gorilla/mux"
-	"github.com/guitarpawat/wsp-ecommerce/handler"
 )
 
+var env = solidenv.GetEnv()
+
 func main() {
+
 	r := mux.NewRouter()
 	fs := http.StripPrefix("/static/", http.FileServer(http.Dir("static")))
 
@@ -53,10 +58,32 @@ func main() {
 
 	handler.Validate()
 
-	go func() {
-		log.Fatalln(http.ListenAndServeTLS(":4433","ssl/server.crt","ssl/server.key",r))
-	}()
-	log.Fatalln(http.ListenAndServe(":8000",httpr))
+	if env == solidenv.Production {
+		log.Fatalln(http.ListenAndServe(":"+solidenv.GetPort(), forceSslHeroku(r)))
+	} else if env == solidenv.CI {
+		r.Handle("/mock/", middleware.MakeMiddleware(nil,
+			middleware.DoableFunc(handler.Mock),
+			middleware.DoableFunc(handler.CheckSession),
+			middleware.DoableFunc(handler.BuildHeader),
+			middleware.DoableFunc(handler.Home)))
+
+		fmt.Println("Running on port 8000")
+		log.Fatalln(http.ListenAndServe(":8000", r))
+	} else {
+		r.Handle("/mock/", middleware.MakeMiddleware(nil,
+			middleware.DoableFunc(handler.Mock),
+			middleware.DoableFunc(handler.CheckSession),
+			middleware.DoableFunc(handler.BuildHeader),
+			middleware.DoableFunc(handler.Home)))
+
+		fmt.Println("Running on port 8000 and 4433")
+		go func() {
+			log.Fatalln(http.ListenAndServeTLS(":4433", "ssl/server.crt", "ssl/server.key", r))
+		}()
+		log.Fatalln(http.ListenAndServe(":8000", httpr))
+	}
+
+	db.Mock()
 }
 
 func handlePage(df middleware.DoableFunc) http.Handler {
@@ -64,4 +91,15 @@ func handlePage(df middleware.DoableFunc) http.Handler {
 		middleware.DoableFunc(handler.CheckSession),
 		middleware.DoableFunc(handler.BuildHeader),
 		middleware.DoableFunc(df))
+}
+
+func forceSslHeroku(next http.Handler) http.Handler {
+	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		if r.Header.Get("x-forwarded-proto") != "https" {
+			sslUrl := "https://" + r.Host + r.RequestURI
+			http.Redirect(w, r, sslUrl, http.StatusPermanentRedirect)
+			return
+		}
+		next.ServeHTTP(w, r)
+	})
 }

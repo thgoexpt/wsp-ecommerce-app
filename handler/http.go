@@ -1,16 +1,21 @@
 package handler
 
 import (
+	"github.com/guitarpawat/wsp-ecommerce/env"
 	"net"
 	"net/http"
 )
 
 func RedirectToHTTPS(w http.ResponseWriter, r *http.Request) {
-	host,_, err :=net.SplitHostPort(r.Host)
+	host, _, err := net.SplitHostPort(r.Host)
 	if err != nil {
 		host = r.Host
 	}
-	target := "https://" + host + ":4433" + r.URL.Path
+	port := ":443"
+	if env.GetEnv() != "PRODUCTION" {
+		port = ":4433"
+	}
+	target := "https://" + host + port + r.URL.Path
 	if len(r.URL.RawQuery) > 0 {
 		target += "?" + r.URL.RawQuery
 	}

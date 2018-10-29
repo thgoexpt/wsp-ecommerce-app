@@ -14,9 +14,9 @@ func pageTest(df middleware.DoableFunc, t *testing.T) {
 	r := httptest.NewRequest(http.MethodGet, "/", nil)
 	v := middleware.ValueMap{}
 	func(df middleware.DoableFunc, w http.ResponseWriter, r *http.Request, v *middleware.ValueMap) {
-		defer func() {recover()}()
-		df(w,r,v)
-	}(df,w,r,&v)
+		defer func() { recover() }()
+		df(w, r, v)
+	}(df, w, r, &v)
 	if w.Result().StatusCode != http.StatusOK {
 		t.Errorf("expected status code: %d, but get: %d", http.StatusOK, w.Result().StatusCode)
 	}
@@ -29,7 +29,7 @@ func TestCheckSession(t *testing.T) {
 	w := httptest.NewRecorder()
 	r := httptest.NewRequest(http.MethodGet, "/", nil)
 	v := middleware.ValueMap{}
-	CheckSession(w,r,&v)
+	CheckSession(w, r, &v)
 	session, err := s.Get(r, "user")
 	if err != nil {
 		t.Fatalf("failed to create new session")
@@ -54,7 +54,7 @@ func TestBuildHeader(t *testing.T) {
 	w := httptest.NewRecorder()
 	r := httptest.NewRequest(http.MethodGet, "/", nil)
 	v := middleware.ValueMap{}
-	BuildHeader(w,r,&v)
+	BuildHeader(w, r, &v)
 	user := v.Get("header").(pagemodel.Menu).User
 	if user != "" {
 		t.Errorf("expected blank user, but get: %s", user)
@@ -69,7 +69,7 @@ func TestBuildHeader(t *testing.T) {
 	w = httptest.NewRecorder()
 	r = httptest.NewRequest(http.MethodGet, "/", nil)
 	v = middleware.ValueMap{"user": username, "success": success, "warning": warning}
-	BuildHeader(w,r,&v)
+	BuildHeader(w, r, &v)
 	if v.Get("header").(pagemodel.Menu).Success != success {
 		t.Errorf("expected success: %s, but get: %s", success, v.Get("header").(pagemodel.Menu).Success)
 	}
@@ -115,10 +115,10 @@ func TestLogin(t *testing.T) {
 	r := httptest.NewRequest(http.MethodGet, "/", nil)
 	v := middleware.ValueMap{}
 	session, _ := s.Get(r, "user")
-	session.Values["user"] = dbmodel.User{Username:username}
-	session.Save(r,w)
-	CheckSession(w,r,&v)
-	Login(w,r,&v)
+	session.Values["user"] = dbmodel.User{Username: username}
+	session.Save(r, w)
+	CheckSession(w, r, &v)
+	Login(w, r, &v)
 
 	expected := "You are already logged in"
 	if v.Get("warning") != expected {
@@ -136,9 +136,9 @@ func TestLogout(t *testing.T) {
 	r := httptest.NewRequest(http.MethodGet, "/", nil)
 	v := middleware.ValueMap{}
 	session, _ := s.Get(r, "user")
-	session.Values["user"] = dbmodel.User{Username:username}
-	session.Save(r,w)
-	Logout(w,r,&v)
+	session.Values["user"] = dbmodel.User{Username: username}
+	session.Save(r, w)
+	Logout(w, r, &v)
 	model := dbmodel.User{}
 
 	if session.Values["user"] != model {
@@ -148,6 +148,17 @@ func TestLogout(t *testing.T) {
 	if v.Get("success") != expected {
 		t.Errorf("expected success message: %s, but get: %s", expected, v.Get("success"))
 	}
+
+	if !v.Get("next").(bool) {
+		t.Errorf("expected next to be: %t, but get: %t", true, v.Get("next").(bool))
+	}
+}
+
+func TestMock(t *testing.T) {
+	w := httptest.NewRecorder()
+	r := httptest.NewRequest(http.MethodGet, "/", nil)
+	v := middleware.ValueMap{}
+	Mock(w, r, &v)
 
 	if !v.Get("next").(bool) {
 		t.Errorf("expected next to be: %t, but get: %t", true, v.Get("next").(bool))
