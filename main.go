@@ -68,6 +68,8 @@ func main() {
 		Methods("POST")
 
 	r.Handle("/edit-profile/", middleware.MakeMiddleware(nil,
+		middleware.DoableFunc(handler.CheckSession),
+		middleware.DoableFunc(handler.BuildHeader),
 		middleware.DoableFunc(handler.EditProfile),
 		middleware.DoableFunc(handler.CheckSession),
 		middleware.DoableFunc(handler.BuildHeader),
