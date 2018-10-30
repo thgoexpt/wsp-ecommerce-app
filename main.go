@@ -2,13 +2,14 @@ package main
 
 import (
 	"fmt"
+	"log"
+	"net/http"
+
 	"github.com/gorilla/mux"
 	"github.com/guitarpawat/middleware"
 	"github.com/guitarpawat/wsp-ecommerce/db"
 	solidenv "github.com/guitarpawat/wsp-ecommerce/env"
 	"github.com/guitarpawat/wsp-ecommerce/handler"
-	"log"
-	"net/http"
 )
 
 var env = solidenv.GetEnv()
@@ -56,6 +57,20 @@ func main() {
 		middleware.DoableFunc(handler.CheckSession),
 		middleware.DoableFunc(handler.BuildHeader),
 		middleware.DoableFunc(handler.Home)))
+
+	r.Handle("/meat_test/", handlePage(handler.MeatTestPage))
+
+	r.Handle("/regis_meat/", middleware.MakeMiddleware(nil,
+		middleware.DoableFunc(handler.RegisMeat),
+		middleware.DoableFunc(handler.BuildHeader),
+		middleware.DoableFunc(handler.Home))).
+		Methods("POST")
+
+	r.Handle("/edit-profile/", middleware.MakeMiddleware(nil,
+		middleware.DoableFunc(handler.EditProfile),
+		middleware.DoableFunc(handler.BuildHeader),
+		middleware.DoableFunc(handler.Home))).
+		Methods("POST")
 
 	httpr := mux.NewRouter()
 	httpr.PathPrefix("/").HandlerFunc(handler.RedirectToHTTPS)
