@@ -400,16 +400,21 @@ func EditProfile(w http.ResponseWriter, r *http.Request, v *middleware.ValueMap)
 			}
 		}
 
-		if r.PostFormValue("pass-old") != "" && r.PostFormValue("pass") == r.PostFormValue("pass-repeat") {
-			newHash, err := bcrypt.GenerateFromPassword([]byte(r.PostFormValue("pass")), bcrypt.DefaultCost)
-			if err != nil {
-				v.Set("warning", "Error// Unable to update password.")
-			} else {
-				err = db.UpdatePass(user.ID, r.PostFormValue("pass-old"), string(newHash))
+		if r.PostFormValue("pass-old") != "" {
+			if r.PostFormValue("pass") == r.PostFormValue("pass-repeat") {
+				newHash, err := bcrypt.GenerateFromPassword([]byte(r.PostFormValue("pass")), bcrypt.DefaultCost)
 				if err != nil {
-					v.Set("warning", "Unable to update password.")
+					v.Set("warning", "Error// Unable to update password.")
+				} else {
+					err = db.UpdatePass(user.ID, r.PostFormValue("pass-old"), string(newHash))
+					if err != nil {
+						v.Set("warning", err.Error())
+					} else {
+						v.Set("success", "Update password successfully.")
+					}
 				}
-				v.Set("success", "Update password successfully.")
+			} else {
+				v.Set("warning", "Password is not the same.")
 			}
 		}
 	}
