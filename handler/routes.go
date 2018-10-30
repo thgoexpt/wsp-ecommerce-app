@@ -362,10 +362,18 @@ func EditProfile(w http.ResponseWriter, r *http.Request, v *middleware.ValueMap)
 		return
 	}
 
-	//TODO: Update User Profile
-	db.UpdateUser(r.PostFormValue("id"), r.PostFormValue("name"), r.PostFormValue("email"), r.PostFormValue("address"))
-
-	v.Set("success", "You have successfully edit your profile.")
+	//FIXME: Profile page won't update unless re login
+	user, ok := v.Get("user").(dbmodel.User)
+	if !ok {
+		v.Set("warning", "Unable to get user.")
+	} else {
+		err = db.UpdateUser(user.ID, r.PostFormValue("fullname"), r.PostFormValue("email"), r.PostFormValue("address"))
+		if err != nil {
+			v.Set("warning", "Edit profile fail.")
+		} else {
+			v.Set("success", "You have successfully edit your profile.")
+		}
+	}
 	v.Set("next", true)
 }
 

@@ -79,14 +79,14 @@ func RegisUser(user dbmodel.User) error {
 	return nil
 }
 
-func UpdateUser(id, name, email, address string) error {
+func UpdateUser(id bson.ObjectId, fullname, email, address string) error {
 	db, err := GetDB()
 	if err != nil {
 		return err
 	}
 	defer db.Session.Close()
 
-	err = db.C("Users").UpdateId(bson.M{"_id": id}, bson.M{"fullname": name, "email": email, "address": address})
+	err = db.C("Users").Update(bson.M{"_id": id}, bson.M{"$set": bson.M{"fullname": fullname, "email": email, "address": address}})
 	if err != nil {
 		return err
 	}
