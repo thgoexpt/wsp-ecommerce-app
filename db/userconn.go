@@ -105,6 +105,29 @@ func UpdateUser(id bson.ObjectId, fullname, email, address string) error {
 	return nil
 }
 
+func UpdatePass(id bson.ObjectId, oldPass, newPassHash string) error {
+	db, err := GetDB()
+	if err != nil {
+		return err
+	}
+	defer db.Session.Close()
+
+	user, err := GetUser(id)
+	if err != nil {
+		return err
+	}
+
+	user, err = AuthenticateUser(user.Username, oldPass)
+	if err != nil {
+		return err
+	}
+	err = db.C("Users").Update(bson.M{"_id": id}, bson.M{"$set": bson.M{"hash": newPassHash}})
+	if err != nil {
+		return err
+	}
+	return nil
+}
+
 func AuthenticateUser(username, password string) (dbmodel.User, error) {
 	db, err := GetDB()
 	if err != nil {

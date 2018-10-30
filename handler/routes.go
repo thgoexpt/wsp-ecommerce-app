@@ -14,6 +14,7 @@ import (
 	"github.com/guitarpawat/wsp-ecommerce/db"
 	"github.com/guitarpawat/wsp-ecommerce/model/dbmodel"
 	"github.com/guitarpawat/wsp-ecommerce/model/pagemodel"
+	"golang.org/x/crypto/bcrypt"
 )
 
 var s = sessions.NewCookieStore([]byte("NOT FOR PRODUCTION"))
@@ -396,6 +397,19 @@ func EditProfile(w http.ResponseWriter, r *http.Request, v *middleware.ValueMap)
 				session.Values["user"] = newUser
 				session.Save(r, w)
 				v.Set("success", "You have successfully edit your profile.")
+			}
+		}
+
+		if r.PostFormValue("pass-old") != "" && r.PostFormValue("pass") == r.PostFormValue("pass-repeat") {
+			newHash, err := bcrypt.GenerateFromPassword([]byte(r.PostFormValue("pass")), bcrypt.DefaultCost)
+			if err != nil {
+				v.Set("warning", "Error// Unable to update password.")
+			} else {
+				err = db.UpdatePass(user.ID, r.PostFormValue("pass-old"), string(newHash))
+				if err != nil {
+					v.Set("warning", "Unable to update password.")
+				}
+				v.Set("success", "Update password successfully.")
 			}
 		}
 	}
