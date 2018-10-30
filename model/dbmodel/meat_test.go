@@ -13,8 +13,9 @@ func TestMakeMeat(t *testing.T) {
 	price := 9999.00
 	quantity := 666
 	expire, _ := time.Parse(time.RFC3339, "1998-01-20T06:30:15+07:00")
+	ext := ".JPG"
 
-	meat, _ := MakeMeat(name, meattype, grade, des, price, quantity, expire)
+	meat, _ := MakeMeat(name, meattype, grade, des, price, quantity, expire, ext)
 
 	if name != meat.Name {
 		t.Errorf("expected name: %s, but get: %s", name, meat.Name)
@@ -35,6 +36,10 @@ func TestMakeMeat(t *testing.T) {
 		t.Errorf("expected quantity: %d, but get: %d", quantity, meat.Quantity)
 	}
 	if expire != meat.Expire {
-		t.Errorf("expected price: %s, but get: %s", expire, meat.Expire)
+		t.Errorf("expected expire: %s, but get: %s", expire, meat.Expire)
+	}
+
+	if ext != meat.ImageExtension {
+		t.Errorf("expected image extension: %s, but get: %s", ext, meat.ImageExtension)
 	}
 }
