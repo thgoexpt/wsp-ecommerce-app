@@ -2,6 +2,7 @@ package db
 
 import (
 	"errors"
+
 	"github.com/guitarpawat/wsp-ecommerce/env"
 
 	"github.com/globalsign/mgo/bson"
@@ -71,6 +72,21 @@ func RegisUser(user dbmodel.User) error {
 	}
 
 	err = db.C("Users").Insert(user)
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func UpdateUser(id, name, email, address string) error {
+	db, err := GetDB()
+	if err != nil {
+		return err
+	}
+	defer db.Session.Close()
+
+	err = db.C("Users").UpdateId(bson.M{"_id": id}, bson.M{"fullname": name, "email": email, "address": address})
 	if err != nil {
 		return err
 	}
