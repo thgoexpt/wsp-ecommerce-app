@@ -35,6 +35,8 @@ func main() {
 
 	r.Handle("/add-product/", handlePage(handler.AddProduct))
 
+	r.Handle("/product-stock/", handlePage(handler.ProductStock))
+
 	r.Handle("/regis/", middleware.MakeMiddleware(nil,
 		middleware.DoableFunc(handler.Regis),
 		middleware.DoableFunc(handler.CheckSession),

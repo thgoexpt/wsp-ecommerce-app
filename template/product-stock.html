@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<title>Product Stock</title>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<!--===============================================================================================-->
+	<link rel="icon" type="image/png" href="../static/assets/icon/favicon.ico">
+	<!--===============================================================================================-->
+	<link rel="stylesheet" type="text/css" href="../static/animate/bootstrap/css/bootstrap.min.css">
+	<!--===============================================================================================-->
+	<link rel="stylesheet" type="text/css" href="../static/fonts/font-awesome-4.7.0/css/font-awesome.min.css">
+	<!--===============================================================================================-->
+	<link rel="stylesheet" type="text/css" href="../static/fonts/themify/themify-icons.css">
+	<!--===============================================================================================-->
+	<link rel="stylesheet" type="text/css" href="../static/fonts/Linearicons-Free-v1.0.0/icon-font.min.css">
+	<!--===============================================================================================-->
+	<link rel="stylesheet" type="text/css" href="../static/fonts/elegant-font/html-css/style.css">
+	<!--===============================================================================================-->
+	<link rel="stylesheet" type="text/css" href="../static/animate/animate/animate.css">
+	<!--===============================================================================================-->
+	<link rel="stylesheet" type="text/css" href="../static/animate/css-hamburgers/hamburgers.min.css">
+	<!--===============================================================================================-->
+	<link rel="stylesheet" type="text/css" href="../static/animate/animsition/css/animsition.min.css">
+	<!--===============================================================================================-->
+	<link rel="stylesheet" type="text/css" href="../static/animate/select2/select2.min.css">
+	<!--===============================================================================================-->
+	<link rel="stylesheet" type="text/css" href="../static/animate/slick/slick.css">
+	<!--===============================================================================================-->
+	<link rel="stylesheet" type="text/css" href="../static/css/util.css">
+	<link rel="stylesheet" type="text/css" href="../static/css/style.css">
+	<!--===============================================================================================-->
+</head>
+
+<body class="animsition">
+
+	{{template "menu" .Menu}}
+
+	<!-- Title Page -->
+	<section class="parallax0 parallax100 bg-title-page p-t-40 p-b-50 flex-col-c-m" style="background-image: url(../static/assets/cart/cart_wall.jpg);">
+		<h2 class="l-text2 t-center">
+			Product Stock
+		</h2>
+	</section>
+
+	<!-- Stock -->
+	<section class="cart bgwhite p-t-70 p-b-100">
+		<div class="container">
+			<!-- Item in stock -->
+			<div class="container-table-cart pos-relative">
+				<div class="wrap-table-shopping-cart bgwhite">
+					<table class="table-shopping-cart">
+						<tr class="table-head">
+							<th class="column-1"></th>
+							<th class="column-2">Product</th>
+							<th class="column-3">Price</th>
+							<th class="column-4 p-l-70">Quantity</th>
+							<th class="column-5">Total</th>
+						</tr>
+
+						<tr class="table-row">
+							<td class="column-1">
+								<div class="cart-img-product b-rad-4 o-f-hidden">
+									<img src="../static/assets/meat/product/fish/otoro.jpg" alt="IMG-PRODUCT">
+								</div>
+							</td>
+							<td class="column-2">Otoro</td>
+							<td class="column-3">$36.00</td>
+							<td class="column-4 p-l-70">1</td>
+							<td class="column-5">$36.00</td>
+						</tr>
+
+						<tr class="table-row">
+							<td class="column-1">
+								<div class="cart-img-product b-rad-4 o-f-hidden">
+									<img src="../static/assets/meat/product/meat/brisket_beef.jpg" alt="IMG-PRODUCT">
+								</div>
+							</td>
+							<td class="column-2">Beef Brisket</td>
+							<td class="column-3">$16.00</td>
+							<td class="column-4 p-l-70">1</td>
+							<td class="column-5">$16.00</td>
+						</tr>
+					</table>
+				</div>
+			</div>
+		</div>
+	</section>
+
+	{{template "footer"}}
+
+	<!-- Back to top -->
+	<div class="btn-back-to-top bg0-hov" id="myBtn">
+		<span class="symbol-btn-back-to-top">
+			<i class="fa fa-angle-double-up" aria-hidden="true"></i>
+		</span>
+	</div>
+
+	<!-- Container Selection -->
+	<div id="dropDownSelect1"></div>
+	<div id="dropDownSelect2"></div>
+
+	<!-- Login pop-up -->
+	{{template "login"}}
+	{{template "register"}}
+
+	<!--===============================================================================================-->
+	<script type="text/javascript" src="../static/animate/jquery/jquery-3.2.1.min.js"></script>
+	<!--===============================================================================================-->
+	<script type="text/javascript" src="../static/animate/animsition/js/animsition.min.js"></script>
+	<!--===============================================================================================-->
+	<script type="text/javascript" src="../static/animate/bootstrap/js/popper.js"></script>
+	<script type="text/javascript" src="../static/animate/bootstrap/js/bootstrap.min.js"></script>
+	<!--===============================================================================================-->
+	<script type="text/javascript" src="../static/animate/select2/select2.min.js"></script>
+	<script type="text/javascript">
+		$(".selection-1").select2({
+			minimumResultsForSearch: 20,
+			dropdownParent: $('#dropDownSelect1')
+		});
+
+		$(".selection-2").select2({
+			minimumResultsForSearch: 20,
+			dropdownParent: $('#dropDownSelect2')
+		});
+	</script>
+	<!--===============================================================================================-->
+	<script src="../static/js/main.js"></script>
+
+</body>
+
+</html>
