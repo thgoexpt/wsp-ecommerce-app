@@ -172,6 +172,34 @@ func ComingSoon(w http.ResponseWriter, r *http.Request, v *middleware.ValueMap) 
 	t.ExecuteTemplate(w, "comingsoon.html", model)
 }
 
+func AddProduct(w http.ResponseWriter, r *http.Request, v *middleware.ValueMap) {
+	header, ok := v.Get("header").(pagemodel.Menu)
+	if !ok {
+		header = defaultHeader
+	}
+
+	model := pagemodel.ProductDetail{
+		Menu: header,
+	}
+
+	v.Set("next", false)
+	t.ExecuteTemplate(w, "add-product.html", model)
+}
+
+func ProductStock(w http.ResponseWriter, r *http.Request, v *middleware.ValueMap) {
+	header, ok := v.Get("header").(pagemodel.Menu)
+	if !ok {
+		header = defaultHeader
+	}
+
+	model := pagemodel.Card{
+		Menu: header,
+	}
+
+	v.Set("next", false)
+	t.ExecuteTemplate(w, "product-stock.html", model)
+}
+
 func Regis(w http.ResponseWriter, r *http.Request, v *middleware.ValueMap) {
 	err := r.ParseForm()
 	if err != nil {

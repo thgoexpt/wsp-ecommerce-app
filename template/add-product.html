@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<title>Add Product</title>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<!--===============================================================================================-->
+	<link rel="icon" type="image/png" href="../static/assets/icon/favicon.ico">
+	<!--===============================================================================================-->
+	<link rel="stylesheet" type="text/css" href="../static/animate/bootstrap/css/bootstrap.min.css">
+	<!--===============================================================================================-->
+	<link rel="stylesheet" type="text/css" href="../static/fonts/font-awesome-4.7.0/css/font-awesome.min.css">
+	<!--===============================================================================================-->
+	<link rel="stylesheet" type="text/css" href="../static/fonts/themify/themify-icons.css">
+	<!--===============================================================================================-->
+	<link rel="stylesheet" type="text/css" href="../static/fonts/Linearicons-Free-v1.0.0/icon-font.min.css">
+	<!--===============================================================================================-->
+	<link rel="stylesheet" type="text/css" href="../static/fonts/elegant-font/html-css/style.css">
+	<!--===============================================================================================-->
+	<link rel="stylesheet" type="text/css" href="../static/animate/animate/animate.css">
+	<!--===============================================================================================-->
+	<link rel="stylesheet" type="text/css" href="../static/animate/css-hamburgers/hamburgers.min.css">
+	<!--===============================================================================================-->
+	<link rel="stylesheet" type="text/css" href="../static/animate/animsition/css/animsition.min.css">
+	<!--===============================================================================================-->
+	<link rel="stylesheet" type="text/css" href="../static/animate/select2/select2.min.css">
+	<!--===============================================================================================-->
+	<link rel="stylesheet" type="text/css" href="../static/animate/slick/slick.css">
+	<!--===============================================================================================-->
+	<link rel="stylesheet" type="text/css" href="../static/css/util.css">
+	<link rel="stylesheet" type="text/css" href="../static/css/style.css">
+	<!--===============================================================================================-->
+</head>
+
+<body class="animsition">
+
+	{{template "menu" .Menu}}
+
+	<!-- Title Page -->
+	<section class="parallax0 parallax100 bg-title-page p-t-40 p-b-50 flex-col-c-m" style="background-image: url(../static/assets/add_product/add_product.jpg);">
+		<h2 class="l-text2 t-center">
+			Add Product
+		</h2>
+	</section>
+
+	<!-- Add product -->
+	<section class="cart bgwhite p-t-70 p-b-100">
+		<div class="container">
+			<!-- add product section
+			<div class="container-table-cart pos-relative">
+				<div class="wrap-table-shopping-cart bgwhite">
+					<table class="table-shopping-cart">
+						<tr class="table-head">
+							<th class="column-1">Image</th>
+							<th class="column-2">Product Name</th>
+							<th class="column-3">Price</th>
+							<th class="column-4">Quantity</th>
+							<th class="column-5">Countdown Expire</th>
+						</tr>
+
+						<tr class="table-row">
+							<td class="column-1"></td>
+							<td class="column-2">
+                <input type="text" class="form-control" name="name" required="required">
+              </td>
+							<td class="column-3">
+                  <input type="text" class="form-control" name="price" required="required">
+              </td>
+							<td class="column-4">
+                  <input type="text" class="form-control" name="quantity" required="required">
+							</td>
+							<td class="column-5">
+                  <input type="text" class="form-control" name="expire" required="required">
+              </td>
+						</tr>
+					</table>
+				</div>
+			</div> -->
+
+
+			<div class="col-md-6 p-b-30">
+				<form class="leave-comment">
+						<form class="add-product">
+					<h4 class="m-text26 p-b-36 p-t-15">
+						Add product
+					</h4>
+
+					<div class="bo4 of-hidden size15 m-b-20">
+						<input class="sizefull s-text7 p-l-22 p-r-22" type="text" name="product-name" placeholder="Product Name">
+					</div>
+
+					<div class="bo4 of-hidden size15 m-b-20">
+							<input class="sizefull s-text7 p-l-22 p-r-22" type="text" name="category" placeholder="Category">
+					</div>
+
+					<div class="bo4 of-hidden size15 m-b-20">
+							<input class="sizefull s-text7 p-l-22 p-r-22" type="text" name="price" placeholder="Price">
+						</div>
+
+					<div class="bo4 of-hidden size15 m-b-20">
+							<input class="sizefull s-text7 p-l-22 p-r-22" type="text" name="size" placeholder="Size">
+					</div>
+
+					<div class="bo4 of-hidden size15 m-b-20">
+							<input class="sizefull s-text7 p-l-22 p-r-22" type="text" name="region" placeholder="Region">
+					</div>
+
+					<div class="bo4 of-hidden size15 m-b-20">
+						<input class="sizefull s-text7 p-l-22 p-r-22" type="text" name="quantity" placeholder="Quantity">
+					</div>
+
+					<textarea class="dis-block s-text7 size20 bo4 p-l-22 p-r-22 p-t-13 m-b-20" name="description" placeholder="Description"></textarea>
+
+					<div class="bo4 of-hidden size15 m-b-20">
+							<input class="sizefull s-text7 p-l-22 p-r-22" type="text" name="additional-information" placeholder="Additional Information">
+					</div>
+
+					<div class="bo4 of-hidden size15 m-b-20">
+							<input class="sizefull s-text7 p-l-22 p-r-22" type="text" name="expire-date" placeholder="Expire Date">
+					</div>
+
+					<div class="w-size25">
+						<!-- Button -->
+						<button class="flex-c-m size2 bg1 bo-rad-23 hov1 m-text3 trans-0-4">
+							Add To Stock
+						</button>
+					</div>
+				</form>
+			</div>
+		</div>
+	</section>
+
+	{{template "footer"}}
+
+	<!-- Back to top -->
+	<div class="btn-back-to-top bg0-hov" id="myBtn">
+		<span class="symbol-btn-back-to-top">
+			<i class="fa fa-angle-double-up" aria-hidden="true"></i>
+		</span>
+	</div>
+
+	<!-- Container Selection -->
+	<div id="dropDownSelect1"></div>
+	<div id="dropDownSelect2"></div>
+
+	<!-- Login pop-up -->
+	{{template "login"}}
+	{{template "register"}}
+
+	<!--===============================================================================================-->
+	<script type="text/javascript" src="../static/animate/jquery/jquery-3.2.1.min.js"></script>
+	<!--===============================================================================================-->
+	<script type="text/javascript" src="../static/animate/animsition/js/animsition.min.js"></script>
+	<!--===============================================================================================-->
+	<script type="text/javascript" src="../static/animate/bootstrap/js/popper.js"></script>
+	<script type="text/javascript" src="../static/animate/bootstrap/js/bootstrap.min.js"></script>
+	<!--===============================================================================================-->
+	<script type="text/javascript" src="../static/animate/select2/select2.min.js"></script>
+	<script type="text/javascript">
+		$(".selection-1").select2({
+			minimumResultsForSearch: 20,
+			dropdownParent: $('#dropDownSelect1')
+		});
+
+		$(".selection-2").select2({
+			minimumResultsForSearch: 20,
+			dropdownParent: $('#dropDownSelect2')
+		});
+	</script>
+	<!--===============================================================================================-->
+	<script src="../static/js/main.js"></script>
+
+</body>
+
+</html>

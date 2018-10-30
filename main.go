@@ -27,9 +27,9 @@ func main() {
 
 	r.Handle("/about/", handlePage(handler.About))
 
-	r.Handle("/cart/", handlePage(handler.ComingSoon))
+	r.Handle("/cart/", handlePage(handler.Cart))
 
-	r.Handle("/contact/", handlePage(handler.ComingSoon))
+	r.Handle("/contact/", handlePage(handler.Contact))
 
 	r.Handle("/product/", handlePage(handler.Product))
 
@@ -38,6 +38,10 @@ func main() {
 	r.Handle("/profile/", handlePage(handler.Profile))
 
 	r.Handle("/profile-edit/", handlePage(handler.ProfileEdit))
+
+	r.Handle("/add-product/", handlePage(handler.AddProduct))
+
+	r.Handle("/product-stock/", handlePage(handler.ProductStock))
 
 	r.Handle("/regis/", middleware.MakeMiddleware(nil,
 		middleware.DoableFunc(handler.Regis),
