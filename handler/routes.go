@@ -15,6 +15,7 @@ import (
 	"github.com/guitarpawat/wsp-ecommerce/db"
 	"github.com/guitarpawat/wsp-ecommerce/model/dbmodel"
 	"github.com/guitarpawat/wsp-ecommerce/model/pagemodel"
+	"golang.org/x/crypto/bcrypt"
 )
 
 var s = sessions.NewCookieStore([]byte("NOT FOR PRODUCTION"))
@@ -369,8 +370,19 @@ func ProfileEdit(w http.ResponseWriter, r *http.Request, v *middleware.ValueMap)
 		header = defaultHeader
 	}
 
-	model := pagemodel.ProductDetail{
+	model := pagemodel.UserDetail{
 		Menu: header,
+	}
+
+	user, ok := v.Get("user").(dbmodel.User)
+	if !ok {
+		model.Fullname = ""
+		model.Email = ""
+		model.Address = ""
+	} else {
+		model.Fullname = user.Fullname
+		model.Email = user.Email
+		model.Address = user.Address
 	}
 
 	v.Set("next", false)
@@ -384,10 +396,49 @@ func EditProfile(w http.ResponseWriter, r *http.Request, v *middleware.ValueMap)
 		return
 	}
 
-	//TODO: Update User Profile
-	db.UpdateUser(r.PostFormValue("id"), r.PostFormValue("name"), r.PostFormValue("email"), r.PostFormValue("address"))
+	user, ok := v.Get("user").(dbmodel.User)
+	if !ok {
+		v.Set("warning", "Unable to get user.")
+	} else {
+		err = db.UpdateUser(user.ID, r.PostFormValue("fullname"), r.PostFormValue("email"), r.PostFormValue("address"))
+		if err != nil {
+			v.Set("warning", "Edit profile fail.")
+		} else {
+			session, err := s.Get(r, "user")
+			if err != nil {
+				w.WriteHeader(http.StatusInternalServerError)
+				return
+			}
 
-	v.Set("success", "You have successfully edit your profile.")
+			newUser, err := db.GetUser(user.ID)
+			if err != nil {
+				fmt.Println(err)
+				v.Set("warning", "Unable to get new user.")
+			} else {
+				session.Values["user"] = newUser
+				session.Save(r, w)
+				v.Set("success", "You have successfully edit your profile.")
+			}
+		}
+
+		if r.PostFormValue("pass-old") != "" {
+			if r.PostFormValue("pass") == r.PostFormValue("pass-repeat") {
+				newHash, err := bcrypt.GenerateFromPassword([]byte(r.PostFormValue("pass")), bcrypt.DefaultCost)
+				if err != nil {
+					v.Set("warning", "Error// Unable to update password.")
+				} else {
+					err = db.UpdatePass(user.ID, r.PostFormValue("pass-old"), string(newHash))
+					if err != nil {
+						v.Set("warning", err.Error())
+					} else {
+						v.Set("success", "Update password successfully.")
+					}
+				}
+			} else {
+				v.Set("warning", "Password is not the same.")
+			}
+		}
+	}
 	v.Set("next", true)
 }
 

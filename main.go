@@ -64,14 +64,18 @@ func main() {
 
 	r.Handle("/regis_meat/", middleware.MakeMiddleware(nil,
 		middleware.DoableFunc(handler.RegisMeat),
+		middleware.DoableFunc(handler.CheckSession),
 		middleware.DoableFunc(handler.BuildHeader),
 		middleware.DoableFunc(handler.Home))).
 		Methods("POST")
 
 	r.Handle("/edit-profile/", middleware.MakeMiddleware(nil,
-		middleware.DoableFunc(handler.EditProfile),
+		middleware.DoableFunc(handler.CheckSession),
 		middleware.DoableFunc(handler.BuildHeader),
-		middleware.DoableFunc(handler.Home))).
+		middleware.DoableFunc(handler.EditProfile),
+		middleware.DoableFunc(handler.CheckSession),
+		middleware.DoableFunc(handler.BuildHeader),
+		middleware.DoableFunc(handler.Profile))).
 		Methods("POST")
 
 	httpr := mux.NewRouter()
