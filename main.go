@@ -21,6 +21,8 @@ func main() {
 
 	r.PathPrefix("/static/").Handler(fs)
 
+	r.HandleFunc("/image/{name}", handler.Images)
+
 	r.Handle("/", handlePage(handler.Home))
 
 	r.Handle("/about/", handlePage(handler.About))
@@ -31,7 +33,11 @@ func main() {
 
 	r.Handle("/product/", handlePage(handler.Product))
 
-	r.Handle("/product-detail/", handlePage(handler.ComingSoon))
+	r.Handle("/product-detail/", handlePage(handler.ProductDetail))
+
+	r.Handle("/profile/", handlePage(handler.Profile))
+
+	r.Handle("/profile-edit/", handlePage(handler.ProfileEdit))
 
 	r.Handle("/add-product/", handlePage(handler.AddProduct))
 
@@ -57,6 +63,24 @@ func main() {
 		middleware.DoableFunc(handler.CheckSession),
 		middleware.DoableFunc(handler.BuildHeader),
 		middleware.DoableFunc(handler.Home)))
+
+	r.Handle("/meat_test/", handlePage(handler.MeatTestPage))
+
+	r.Handle("/regis_meat/", middleware.MakeMiddleware(nil,
+		middleware.DoableFunc(handler.RegisMeat),
+		middleware.DoableFunc(handler.CheckSession),
+		middleware.DoableFunc(handler.BuildHeader),
+		middleware.DoableFunc(handler.Home))).
+		Methods("POST")
+
+	r.Handle("/edit-profile/", middleware.MakeMiddleware(nil,
+		middleware.DoableFunc(handler.CheckSession),
+		middleware.DoableFunc(handler.BuildHeader),
+		middleware.DoableFunc(handler.EditProfile),
+		middleware.DoableFunc(handler.CheckSession),
+		middleware.DoableFunc(handler.BuildHeader),
+		middleware.DoableFunc(handler.Profile))).
+		Methods("POST")
 
 	httpr := mux.NewRouter()
 	httpr.PathPrefix("/").HandlerFunc(handler.RedirectToHTTPS)
