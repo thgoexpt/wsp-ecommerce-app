@@ -30,7 +30,7 @@
 	<!--===============================================================================================-->
 	<link rel="stylesheet" type="text/css" href="../static/css/util.css">
 	<link rel="stylesheet" type="text/css" href="../static/css/style.css">
-	<!--===============================================================================================-->
+	
 </head>
 
 <body class="animsition">
@@ -47,86 +47,54 @@
 	<!-- Add product -->
 	<section class="cart bgwhite p-t-70 p-b-100">
 		<div class="container">
-			<!-- add product section
-			<div class="container-table-cart pos-relative">
-				<div class="wrap-table-shopping-cart bgwhite">
-					<table class="table-shopping-cart">
-						<tr class="table-head">
-							<th class="column-1">Image</th>
-							<th class="column-2">Product Name</th>
-							<th class="column-3">Price</th>
-							<th class="column-4">Quantity</th>
-							<th class="column-5">Countdown Expire</th>
-						</tr>
-
-						<tr class="table-row">
-							<td class="column-1"></td>
-							<td class="column-2">
-                <input type="text" class="form-control" name="name" required="required">
-              </td>
-							<td class="column-3">
-                  <input type="text" class="form-control" name="price" required="required">
-              </td>
-							<td class="column-4">
-                  <input type="text" class="form-control" name="quantity" required="required">
-							</td>
-							<td class="column-5">
-                  <input type="text" class="form-control" name="expire" required="required">
-              </td>
-						</tr>
-					</table>
+			<div class="row">
+				<div class="col-md-6 p-b-30">
+					<div id="img-preview-block" class="img-circle avatar avatar-original center-block" style="background-size:cover; 
+					background-image:url(http://robohash.org/sitsequiquia.png?size=120x120)"></div>
+					<br> 
+					<span class="btn btn-link btn-file">Edit avatar <input type="file" id="upload-img"></span>
 				</div>
-			</div> -->
 
-
-			<div class="col-md-6 p-b-30">
-				<form class="leave-comment">
-						<form class="add-product">
-					<h4 class="m-text26 p-b-36 p-t-15">
-						Add product
-					</h4>
-
-					<div class="bo4 of-hidden size15 m-b-20">
-						<input class="sizefull s-text7 p-l-22 p-r-22" type="text" name="product-name" placeholder="Product Name">
-					</div>
-
-					<div class="bo4 of-hidden size15 m-b-20">
-							<input class="sizefull s-text7 p-l-22 p-r-22" type="text" name="category" placeholder="Category">
-					</div>
-
-					<div class="bo4 of-hidden size15 m-b-20">
-							<input class="sizefull s-text7 p-l-22 p-r-22" type="text" name="price" placeholder="Price">
+				<div class="col-md-6 p-b-30">
+					<form class="add-product">
+						<h4 class="m-text26 p-b-36 p-t-15">
+								Add product
+						</h4>
+		
+						<div class="bo4 of-hidden size15 m-b-20">
+							<input class="sizefull s-text7 p-l-22 p-r-22" type="text" name="name" placeholder="Product Name">
 						</div>
-
-					<div class="bo4 of-hidden size15 m-b-20">
-							<input class="sizefull s-text7 p-l-22 p-r-22" type="text" name="size" placeholder="Size">
-					</div>
-
-					<div class="bo4 of-hidden size15 m-b-20">
-							<input class="sizefull s-text7 p-l-22 p-r-22" type="text" name="region" placeholder="Region">
-					</div>
-
-					<div class="bo4 of-hidden size15 m-b-20">
-						<input class="sizefull s-text7 p-l-22 p-r-22" type="text" name="quantity" placeholder="Quantity">
-					</div>
-
-					<textarea class="dis-block s-text7 size20 bo4 p-l-22 p-r-22 p-t-13 m-b-20" name="description" placeholder="Description"></textarea>
-
-					<div class="bo4 of-hidden size15 m-b-20">
-							<input class="sizefull s-text7 p-l-22 p-r-22" type="text" name="additional-information" placeholder="Additional Information">
-					</div>
-
-					<div class="bo4 of-hidden size15 m-b-20">
-							<input class="sizefull s-text7 p-l-22 p-r-22" type="text" name="expire-date" placeholder="Expire Date">
-					</div>
-
-					<div class="w-size25">
-						<!-- Button -->
-						<button class="flex-c-m size2 bg1 bo-rad-23 hov1 m-text3 trans-0-4">
-							Add To Stock
-						</button>
-					</div>
-				</form>
+	
+						<div class="bo4 of-hidden size15 m-b-20">
+								<input class="sizefull s-text7 p-l-22 p-r-22" type="text" name="category" placeholder="Category (Meat, Pork, Fish, Other)">
+						</div>
+	
+						<div class="bo4 of-hidden size15 m-b-20">
+								<input class="sizefull s-text7 p-l-22 p-r-22" type="text" name="grade" placeholder="Grade (A, B, C, D)">
+						</div>
+	
+						<textarea class="dis-block s-text7 size20 bo4 p-l-22 p-r-22 p-t-13 m-b-20" name="description" placeholder="Description"></textarea>
+	
+						<div class="bo4 of-hidden size15 m-b-20">
+								<input class="sizefull s-text7 p-l-22 p-r-22" type="text" name="price" placeholder="Price">
+						</div>
+	
+						<div class="bo4 of-hidden size15 m-b-20">
+							<input class="sizefull s-text7 p-l-22 p-r-22" type="text" name="quantity" placeholder="Quantity">
+						</div>
+	
+						<div class="bo4 of-hidden size15 m-b-20">
+								<input class="sizefull s-text7 p-l-22 p-r-22" type="text" name="expire-date" placeholder="Expire Date (DD/MM/YYYY)">
+						</div>
+	
+						<div class="w-size25">
+							<!-- Button -->
+							<button class="flex-c-m size2 bg1 bo-rad-23 hov1 m-text3 trans-0-4">
+								Add To Stock
+							</button>
+						</div>
+					</form>
+				</div>
 			</div>
 		</div>
 	</section>
@@ -170,7 +138,6 @@
 	</script>
 	<!--===============================================================================================-->
 	<script src="../static/js/main.js"></script>
-
 </body>
 
 </html>
