@@ -363,7 +363,6 @@ func EditProfile(w http.ResponseWriter, r *http.Request, v *middleware.ValueMap)
 		return
 	}
 
-	//FIXME: Profile page won't update unless re login
 	user, ok := v.Get("user").(dbmodel.User)
 	if !ok {
 		v.Set("warning", "Unable to get user.")
