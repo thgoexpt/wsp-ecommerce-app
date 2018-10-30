@@ -2,6 +2,7 @@ package handler
 
 import (
 	"encoding/gob"
+	"fmt"
 	"log"
 	"net/http"
 	"strconv"
@@ -371,7 +372,21 @@ func EditProfile(w http.ResponseWriter, r *http.Request, v *middleware.ValueMap)
 		if err != nil {
 			v.Set("warning", "Edit profile fail.")
 		} else {
-			v.Set("success", "You have successfully edit your profile.")
+			session, err := s.Get(r, "user")
+			if err != nil {
+				w.WriteHeader(http.StatusInternalServerError)
+				return
+			}
+
+			newUser, err := db.GetUser(user.ID)
+			if err != nil {
+				fmt.Println(err)
+				v.Set("warning", "Unable to get new user.")
+			} else {
+				session.Values["user"] = newUser
+				session.Save(r, w)
+				v.Set("success", "You have successfully edit your profile.")
+			}
 		}
 	}
 	v.Set("next", true)
