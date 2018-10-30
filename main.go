@@ -66,7 +66,7 @@ func main() {
 		middleware.DoableFunc(handler.Home))).
 		Methods("POST")
 
-	r.Handle("/edit-profle/", middleware.MakeMiddleware(nil,
+	r.Handle("/edit-profile/", middleware.MakeMiddleware(nil,
 		middleware.DoableFunc(handler.EditProfile),
 		middleware.DoableFunc(handler.BuildHeader),
 		middleware.DoableFunc(handler.Home))).

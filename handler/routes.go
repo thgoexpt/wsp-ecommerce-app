@@ -362,9 +362,10 @@ func EditProfile(w http.ResponseWriter, r *http.Request, v *middleware.ValueMap)
 		return
 	}
 
-	//TODO
-	// Update User Profile
+	//TODO: Update User Profile
+	db.UpdateUser(r.PostFormValue("id"), r.PostFormValue("name"), r.PostFormValue("email"), r.PostFormValue("address"))
 
+	v.Set("success", "You have successfully edit your profile.")
 	v.Set("next", true)
 }
 
