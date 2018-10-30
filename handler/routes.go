@@ -2,10 +2,12 @@ package handler
 
 import (
 	"encoding/gob"
+	"fmt"
+	"github.com/gorilla/mux"
 	"log"
 	"net/http"
+	"path/filepath"
 	"strconv"
-	"strings"
 	"time"
 
 	"github.com/gorilla/sessions"
@@ -207,23 +209,23 @@ func MeatTestPage(w http.ResponseWriter, r *http.Request, v *middleware.ValueMap
 
 	v.Set("next", false)
 	t.ExecuteTemplate(w, "add_meat_test.html", nil)
+
 }
 
 func RegisMeat(w http.ResponseWriter, r *http.Request, v *middleware.ValueMap) {
-	err := r.ParseForm()
+	err := r.ParseMultipartForm(32<<20)
 	if err != nil {
 		w.WriteHeader(http.StatusInternalServerError)
 		return
 	}
-
 	priceStr := r.PostFormValue("price")
+	fmt.Println(priceStr)
 	price, err := strconv.ParseFloat(priceStr, 64)
 	if err != nil {
 		v.Set("warning", "Price is not a number.")
 		v.Set("next", true)
 		return
 	}
-
 	quantityStr := r.PostFormValue("quantity")
 	quantity64, err := strconv.ParseInt(quantityStr, 10, 64)
 	if err != nil {
@@ -232,23 +234,30 @@ func RegisMeat(w http.ResponseWriter, r *http.Request, v *middleware.ValueMap) {
 		return
 	}
 	quantity := int(quantity64)
-
 	expireStr := r.PostFormValue("expire")
-	expireSplit := strings.Split(expireStr, "//")
-
-	expireToParse := expireSplit[2] + "-" + expireSplit[1] + "-" + expireSplit[0] + "T00:00:00+07:00"
+	//expireSplit := strings.Split(expireStr, "//")
+	//
+	//expireToParse := expireSplit[2] + "-" + expireSplit[1] + "-" + expireSplit[0] + "T00:00:00+07:00"
 
 	// GMTPlus7 := int((7 * time.Hour).Seconds())
 	// bangkok := time.FixedZone("Bangkok Time", GMTPlus7)
-	expire, err := time.Parse(time.RFC3339, expireToParse)
+	expire, err := time.Parse("2/1/2006", expireStr)
 	if err != nil {
 		v.Set("warning", "Expire is invalid.")
 		v.Set("next", true)
 		return
 	}
+	file, h, err := r.FormFile("uploadfile")
+	if err != nil {
+		fmt.Println(err)
+		v.Set("warning", err)
+		v.Set("next", true)
+		return
+	}
+	ext := filepath.Ext(h.Filename)
 
 	meat, err := dbmodel.MakeMeat(r.PostFormValue("name"), r.PostFormValue("type"),
-		r.PostFormValue("grade"), r.PostFormValue("des"), price, quantity, expire)
+		r.PostFormValue("grade"), r.PostFormValue("des"), price, quantity, expire, ext)
 	if err != nil {
 		v.Set("warning", err.Error())
 	} else {
@@ -258,6 +267,19 @@ func RegisMeat(w http.ResponseWriter, r *http.Request, v *middleware.ValueMap) {
 		} else {
 			v.Set("success", "You have successfully add meat into the store.")
 		}
+	}
+	id, err := db.GetMeatId(meat)
+	if err != nil {
+		v.Set("warning", err)
+		v.Set("next", true)
+		return
+	}
+	fname := "meat_"+id+ext
+	err = db.EditFile(fname, file)
+	if err != nil {
+		v.Set("warning", "cannot upload image")
+		v.Set("next", true)
+		return
 	}
 	v.Set("next", true)
 }
@@ -372,4 +394,15 @@ func EditProfile(w http.ResponseWriter, r *http.Request, v *middleware.ValueMap)
 func Mock(w http.ResponseWriter, r *http.Request, v *middleware.ValueMap) {
 	db.Mock()
 	v.Set("next", true)
+}
+
+func Images(w http.ResponseWriter, r *http.Request) {
+	vars := mux.Vars(r)
+	b, err := db.GetFile(vars["name"])
+	if err != nil {
+		w.WriteHeader(http.StatusNotFound)
+		return
+	}
+
+	w.Write(b)
 }

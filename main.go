@@ -21,6 +21,8 @@ func main() {
 
 	r.PathPrefix("/static/").Handler(fs)
 
+	r.HandleFunc("/image/{name}", handler.Images)
+
 	r.Handle("/", handlePage(handler.Home))
 
 	r.Handle("/about/", handlePage(handler.About))
