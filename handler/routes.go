@@ -348,8 +348,19 @@ func ProfileEdit(w http.ResponseWriter, r *http.Request, v *middleware.ValueMap)
 		header = defaultHeader
 	}
 
-	model := pagemodel.ProductDetail{
+	model := pagemodel.UserDetail{
 		Menu: header,
+	}
+
+	user, ok := v.Get("user").(dbmodel.User)
+	if !ok {
+		model.Fullname = ""
+		model.Email = ""
+		model.Address = ""
+	} else {
+		model.Fullname = user.Fullname
+		model.Email = user.Email
+		model.Address = user.Address
 	}
 
 	v.Set("next", false)
