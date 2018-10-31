@@ -222,23 +222,17 @@ func Regis(w http.ResponseWriter, r *http.Request, v *middleware.ValueMap) {
 	v.Set("next", true)
 }
 
-func MeatTestPage(w http.ResponseWriter, r *http.Request, v *middleware.ValueMap) {
-	// db, err := db.GetDB()
-	// if err != nil {
-	// 	w.WriteHeader(http.StatusInternalServerError)
-	// 	return
-	// }
+func AddMeat(w http.ResponseWriter, r *http.Request, v *middleware.ValueMap) {
+	header, ok := v.Get("header").(pagemodel.Menu)
+	if !ok {
+		header = defaultHeader
+	}
 
-	// var meat []dbmodel.Meat
-	// err = db.C("Users").Find(nil).All(&meats)
-	// if err != nil {
-	// 	w.WriteHeader(http.StatusInternalServerError)
-	// 	return
-	// }
-
+	model := pagemodel.ProductDetail{
+		Menu: header,
+	}
+	t.ExecuteTemplate(w, "add-product.html", model)
 	v.Set("next", false)
-	t.ExecuteTemplate(w, "add_meat_test.html", nil)
-
 }
 
 func RegisMeat(w http.ResponseWriter, r *http.Request, v *middleware.ValueMap) {
