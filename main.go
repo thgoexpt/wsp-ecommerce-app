@@ -67,8 +67,9 @@ func main() {
 	r.Handle("/add_meat/", handlePage(handler.AddMeat))
 
 	r.Handle("/regis_meat/", middleware.MakeMiddleware(nil,
-		middleware.DoableFunc(handler.RegisMeat),
 		middleware.DoableFunc(handler.CheckSession),
+		middleware.DoableFunc(handler.BuildHeader),
+		middleware.DoableFunc(handler.RegisMeat),
 		middleware.DoableFunc(handler.BuildHeader),
 		middleware.DoableFunc(handler.Home))).
 		Methods("POST")

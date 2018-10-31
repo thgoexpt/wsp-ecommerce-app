@@ -11,8 +11,6 @@ func RegisMeat(meat dbmodel.Meat) error {
 		return err
 	}
 	defer db.Session.Close()
-	// TODO
-	// Check case
 
 	err = db.C("Meats").Insert(meat)
 	if err != nil {

@@ -2,7 +2,6 @@ package handler
 
 import (
 	"encoding/gob"
-	"fmt"
 	"github.com/gorilla/mux"
 	"log"
 	"net/http"
@@ -54,6 +53,7 @@ func BuildHeader(w http.ResponseWriter, r *http.Request, v *middleware.ValueMap)
 		header.User = ""
 	} else {
 		header.User = user.Username
+		header.UserType = user.Type
 	}
 
 	warning, ok := v.Get("warning").(string)
@@ -225,7 +225,13 @@ func Regis(w http.ResponseWriter, r *http.Request, v *middleware.ValueMap) {
 func AddMeat(w http.ResponseWriter, r *http.Request, v *middleware.ValueMap) {
 	header, ok := v.Get("header").(pagemodel.Menu)
 	if !ok {
-		header = defaultHeader
+		w.WriteHeader(http.StatusUnauthorized)
+		return
+	}
+
+	if header.UserType != dbmodel.TypeEmployee && header.UserType != dbmodel.TypeOwner {
+		w.WriteHeader(http.StatusForbidden)
+		return
 	}
 
 	model := pagemodel.ProductDetail{
@@ -236,13 +242,23 @@ func AddMeat(w http.ResponseWriter, r *http.Request, v *middleware.ValueMap) {
 }
 
 func RegisMeat(w http.ResponseWriter, r *http.Request, v *middleware.ValueMap) {
+	header, ok := v.Get("header").(pagemodel.Menu)
+	if !ok {
+		w.WriteHeader(http.StatusUnauthorized)
+		return
+	}
+
+	if header.UserType != dbmodel.TypeEmployee && header.UserType != dbmodel.TypeOwner {
+		w.WriteHeader(http.StatusForbidden)
+		return
+	}
+
 	err := r.ParseMultipartForm(32<<20)
 	if err != nil {
 		w.WriteHeader(http.StatusInternalServerError)
 		return
 	}
 	priceStr := r.PostFormValue("price")
-	fmt.Println(priceStr)
 	price, err := strconv.ParseFloat(priceStr, 64)
 	if err != nil {
 		v.Set("warning", "Price is not a number.")
@@ -272,7 +288,6 @@ func RegisMeat(w http.ResponseWriter, r *http.Request, v *middleware.ValueMap) {
 	}
 	file, h, err := r.FormFile("uploadfile")
 	if err != nil {
-		fmt.Println(err)
 		v.Set("warning", err)
 		v.Set("next", true)
 		return
@@ -434,7 +449,6 @@ func EditProfile(w http.ResponseWriter, r *http.Request, v *middleware.ValueMap)
 
 			newUser, err := db.GetUser(user.ID)
 			if err != nil {
-				fmt.Println(err)
 				v.Set("warning", "Unable to get new user.")
 			} else {
 				session.Values["user"] = newUser
