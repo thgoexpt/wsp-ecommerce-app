@@ -44,6 +44,11 @@ func TestMakeCart(t *testing.T) {
 	if bQuantity != cartB {
 		t.Errorf("expected meatB quantity: %d, but get: %d", bQuantity, cartB)
 	}
+
+	cart.RemoveMeat(meatB.ID)
+	if cart.Meats[meatB.ID] != 0 {
+		t.Errorf("expected meatB quantity: %d, but get: %d", 0, cart.Meats[meatB.ID])
+	}
 }
 
 func MakeExUser() User {
