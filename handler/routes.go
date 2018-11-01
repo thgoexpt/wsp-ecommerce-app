@@ -145,23 +145,8 @@ func Product(w http.ResponseWriter, r *http.Request, v *middleware.ValueMap) {
 	t.ExecuteTemplate(w, "product.html", model)
 }
 
-func ProductDetail(w http.ResponseWriter, r *http.Request, v *middleware.ValueMap) {
-	header, ok := v.Get("header").(pagemodel.Menu)
-	if !ok {
-		header = defaultHeader
-	}
-
-	vars := mux.Vars(r)
-	meatId := vars["meatId"]
-
-	meat, err := db.GetMeat(string(meatId))
-	if err != nil {
-		w.WriteHeader(http.StatusNotFound)
-		return
-	}
-
-	model := pagemodel.ProductDetail{
-		Menu:        header,
+func GetMeatModel(meat dbmodel.Meat) pagemodel.MeatModel {
+	return pagemodel.MeatModel{
 		ID:          meat.ID.Hex(),
 		Pic:         "/image/meat_" + meat.ID.Hex() + meat.ImageExtension,
 		ProName:     meat.Name,
@@ -169,7 +154,29 @@ func ProductDetail(w http.ResponseWriter, r *http.Request, v *middleware.ValueMa
 		Grade:       meat.Grade,
 		Description: meat.Description,
 		Price:       meat.Price,
-		Expire:      meat.Expire.Format("02/01/2006"),
+		Expire:      meat.Expire.Format(pagemodel.TimeFormat),
+		Quantity:    meat.Quantity,
+		Total:       meat.Price * float64(meat.Quantity),
+	}
+}
+
+func ProductDetail(w http.ResponseWriter, r *http.Request, v *middleware.ValueMap) {
+	header, ok := v.Get("header").(pagemodel.Menu)
+	if !ok {
+		header = defaultHeader
+	}
+
+	vars := mux.Vars(r)
+	meat, err := db.GetMeat(string(vars["meatId"]))
+	if err != nil {
+		w.WriteHeader(http.StatusNotFound)
+		return
+	}
+	meatModel := GetMeatModel(meat)
+
+	model := pagemodel.ProductDetail{
+		Menu:      header,
+		MeatModel: meatModel,
 	}
 
 	v.Set("next", false)
@@ -210,8 +217,19 @@ func ProductStock(w http.ResponseWriter, r *http.Request, v *middleware.ValueMap
 		header = defaultHeader
 	}
 
-	model := pagemodel.Card{
-		Menu: header,
+	model := pagemodel.Stock{
+		Menu:  header,
+		Meats: []pagemodel.MeatModel{},
+	}
+
+	meats, err := db.GetAllMeats()
+	if err != nil {
+		w.WriteHeader(http.StatusNotFound)
+		return
+	}
+
+	for i := 0; i < len(meats); i++ {
+		model.Meats = append(model.Meats, GetMeatModel(meats[i]))
 	}
 
 	v.Set("next", false)
