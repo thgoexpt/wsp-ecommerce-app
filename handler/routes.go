@@ -2,12 +2,13 @@ package handler
 
 import (
 	"encoding/gob"
-	"github.com/gorilla/mux"
 	"log"
 	"net/http"
 	"path/filepath"
 	"strconv"
 	"time"
+
+	"github.com/gorilla/mux"
 
 	"github.com/gorilla/sessions"
 	"github.com/guitarpawat/middleware"
@@ -136,12 +137,38 @@ func Product(w http.ResponseWriter, r *http.Request, v *middleware.ValueMap) {
 		header = defaultHeader
 	}
 
-	model := pagemodel.Product{
-		Menu: header,
+	v.Set("next", false)
+	model := pagemodel.Stock{
+		Menu:  header,
+		Meats: []pagemodel.MeatModel{},
 	}
 
-	v.Set("next", false)
+	meats, err := db.GetAllMeats()
+	if err != nil {
+		w.WriteHeader(http.StatusNotFound)
+		return
+	}
+
+	for i := 0; i < len(meats); i++ {
+		model.Meats = append(model.Meats, GetMeatModel(meats[i]))
+	}
+
 	t.ExecuteTemplate(w, "product.html", model)
+}
+
+func GetMeatModel(meat dbmodel.Meat) pagemodel.MeatModel {
+	return pagemodel.MeatModel{
+		ID:          meat.ID.Hex(),
+		Pic:         "/image/meat_" + meat.ID.Hex() + meat.ImageExtension,
+		ProName:     meat.Name,
+		Type:        meat.Type,
+		Grade:       meat.Grade,
+		Description: meat.Description,
+		Price:       meat.Price,
+		Expire:      meat.Expire.Format(dbmodel.TimeFormat),
+		Quantity:    meat.Quantity,
+		Total:       meat.Price * float64(meat.Quantity),
+	}
 }
 
 func ProductDetail(w http.ResponseWriter, r *http.Request, v *middleware.ValueMap) {
@@ -150,11 +177,20 @@ func ProductDetail(w http.ResponseWriter, r *http.Request, v *middleware.ValueMa
 		header = defaultHeader
 	}
 
+	v.Set("next", false)
+	vars := mux.Vars(r)
+	meat, err := db.GetMeat(string(vars["meatId"]))
+	if err != nil {
+		w.WriteHeader(http.StatusNotFound)
+		return
+	}
+	meatModel := GetMeatModel(meat)
+
 	model := pagemodel.ProductDetail{
-		Menu: header,
+		Menu:      header,
+		MeatModel: meatModel,
 	}
 
-	v.Set("next", false)
 	t.ExecuteTemplate(w, "product-detail.html", model)
 }
 
@@ -192,11 +228,22 @@ func ProductStock(w http.ResponseWriter, r *http.Request, v *middleware.ValueMap
 		header = defaultHeader
 	}
 
-	model := pagemodel.Card{
-		Menu: header,
+	v.Set("next", false)
+	model := pagemodel.Stock{
+		Menu:  header,
+		Meats: []pagemodel.MeatModel{},
 	}
 
-	v.Set("next", false)
+	meats, err := db.GetAllMeats()
+	if err != nil {
+		w.WriteHeader(http.StatusNotFound)
+		return
+	}
+
+	for i := 0; i < len(meats); i++ {
+		model.Meats = append(model.Meats, GetMeatModel(meats[i]))
+	}
+
 	t.ExecuteTemplate(w, "product-stock.html", model)
 }
 
@@ -253,7 +300,7 @@ func RegisMeat(w http.ResponseWriter, r *http.Request, v *middleware.ValueMap) {
 		return
 	}
 
-	err := r.ParseMultipartForm(32<<20)
+	err := r.ParseMultipartForm(32 << 20)
 	if err != nil {
 		w.WriteHeader(http.StatusInternalServerError)
 		return
@@ -312,7 +359,7 @@ func RegisMeat(w http.ResponseWriter, r *http.Request, v *middleware.ValueMap) {
 		v.Set("next", true)
 		return
 	}
-	fname := "meat_"+id+ext
+	fname := "meat_" + id + ext
 	err = db.EditFile(fname, file)
 	if err != nil {
 		v.Set("warning", "cannot upload image")

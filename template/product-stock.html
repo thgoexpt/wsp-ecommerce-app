@@ -59,29 +59,20 @@
 							<th class="column-5">Total</th>
 						</tr>
 
-						<tr class="table-row">
-							<td class="column-1">
-								<div class="cart-img-product b-rad-4 o-f-hidden">
-									<img src="../static/assets/meat/product/fish/otoro.jpg" alt="IMG-PRODUCT">
-								</div>
-							</td>
-							<td class="column-2">Otoro</td>
-							<td class="column-3">$36.00</td>
-							<td class="column-4 p-l-70">1</td>
-							<td class="column-5">$36.00</td>
-						</tr>
-
-						<tr class="table-row">
-							<td class="column-1">
-								<div class="cart-img-product b-rad-4 o-f-hidden">
-									<img src="../static/assets/meat/product/meat/brisket_beef.jpg" alt="IMG-PRODUCT">
-								</div>
-							</td>
-							<td class="column-2">Beef Brisket</td>
-							<td class="column-3">$16.00</td>
-							<td class="column-4 p-l-70">1</td>
-							<td class="column-5">$16.00</td>
-						</tr>
+						{{range .Meats}}
+							<tr class="table-row">
+								<td class="column-1">
+									<div class="cart-img-product b-rad-4 o-f-hidden">
+										<img src="{{.Pic}}" alt="IMG-PRODUCT">
+									</div>
+								</td>
+								<td class="column-2">{{.ProName}}</td>
+								<td class="column-3">${{.Price}}</td>
+								<td class="column-4 p-l-70">{{.Quantity}}</td>
+								<td class="column-5">${{.Total}}</td>
+							</tr>
+						{{end}}
+						
 					</table>
 				</div>
 			</div>

@@ -33,7 +33,7 @@ func main() {
 
 	r.Handle("/product/", handlePage(handler.Product))
 
-	r.Handle("/product-detail/", handlePage(handler.ProductDetail))
+	r.Handle("/product-detail/{meatId}", handlePage(handler.ProductDetail))
 
 	r.Handle("/profile/", handlePage(handler.Profile))
 
