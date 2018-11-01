@@ -137,6 +137,7 @@ func Product(w http.ResponseWriter, r *http.Request, v *middleware.ValueMap) {
 		header = defaultHeader
 	}
 
+	v.Set("next", false)
 	model := pagemodel.Stock{
 		Menu:  header,
 		Meats: []pagemodel.MeatModel{},
@@ -152,7 +153,6 @@ func Product(w http.ResponseWriter, r *http.Request, v *middleware.ValueMap) {
 		model.Meats = append(model.Meats, GetMeatModel(meats[i]))
 	}
 
-	v.Set("next", false)
 	t.ExecuteTemplate(w, "product.html", model)
 }
 
@@ -177,6 +177,7 @@ func ProductDetail(w http.ResponseWriter, r *http.Request, v *middleware.ValueMa
 		header = defaultHeader
 	}
 
+	v.Set("next", false)
 	vars := mux.Vars(r)
 	meat, err := db.GetMeat(string(vars["meatId"]))
 	if err != nil {
@@ -190,7 +191,6 @@ func ProductDetail(w http.ResponseWriter, r *http.Request, v *middleware.ValueMa
 		MeatModel: meatModel,
 	}
 
-	v.Set("next", false)
 	t.ExecuteTemplate(w, "product-detail.html", model)
 }
 
@@ -228,6 +228,7 @@ func ProductStock(w http.ResponseWriter, r *http.Request, v *middleware.ValueMap
 		header = defaultHeader
 	}
 
+	v.Set("next", false)
 	model := pagemodel.Stock{
 		Menu:  header,
 		Meats: []pagemodel.MeatModel{},
@@ -243,7 +244,6 @@ func ProductStock(w http.ResponseWriter, r *http.Request, v *middleware.ValueMap
 		model.Meats = append(model.Meats, GetMeatModel(meats[i]))
 	}
 
-	v.Set("next", false)
 	t.ExecuteTemplate(w, "product-stock.html", model)
 }
 
