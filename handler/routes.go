@@ -137,8 +137,19 @@ func Product(w http.ResponseWriter, r *http.Request, v *middleware.ValueMap) {
 		header = defaultHeader
 	}
 
-	model := pagemodel.Product{
-		Menu: header,
+	model := pagemodel.Stock{
+		Menu:  header,
+		Meats: []pagemodel.MeatModel{},
+	}
+
+	meats, err := db.GetAllMeats()
+	if err != nil {
+		w.WriteHeader(http.StatusNotFound)
+		return
+	}
+
+	for i := 0; i < len(meats); i++ {
+		model.Meats = append(model.Meats, GetMeatModel(meats[i]))
 	}
 
 	v.Set("next", false)
