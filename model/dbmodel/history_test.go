@@ -6,7 +6,7 @@ import (
 )
 
 func TestMakeSalesHistory_NoMeat(t *testing.T) {
-	expectedTime:= time.Now()
+	expectedTime := time.Now()
 	expectedPrice := 10.25
 	expectedTrackingNumber := "EA123456789TH"
 
@@ -30,10 +30,10 @@ func TestMakeSalesHistory_NoMeat(t *testing.T) {
 }
 
 func TestMakeSalesHistory_SomeMeat(t *testing.T) {
-	mockMeat1 := Meat{ID:"1"}
-	mockMeat2 := Meat{ID:"2"}
-	expectedTime:= time.Now()
-	expectedMeat := map[Meat]int{mockMeat1:3, mockMeat2:1}
+	mockMeat1 := Meat{ID: "1"}
+	mockMeat2 := Meat{ID: "2"}
+	expectedTime := time.Now()
+	expectedMeat := map[Meat]int{mockMeat1: 3, mockMeat2: 1}
 	expectedPrice := 10.25
 	expectedTrackingNumber := "EA123456789TH"
 
@@ -72,8 +72,8 @@ func TestMakeSalesHistory_SomeMeat(t *testing.T) {
 
 func TestMakeSalesHistory_ErrorNoID(t *testing.T) {
 	mockMeat := Meat{}
-	expectedTime:= time.Now()
-	expectedMeat := map[Meat]int{mockMeat:3}
+	expectedTime := time.Now()
+	expectedMeat := map[Meat]int{mockMeat: 3}
 	expectedPrice := 10.25
 	expectedTrackingNumber := "EA123456789TH"
 
