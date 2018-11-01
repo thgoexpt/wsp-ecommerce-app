@@ -207,6 +207,11 @@
                         <li>
                             <a href="/contact/">Contact</a>
                         </li>
+                        {{if ge .UserType 4}}
+                            <li class="sale-noti">
+                                <a href="/add_meat/">Add Product</a>
+                            </li>
+                        {{end}}
                     </ul>
                 </nav>
             </div>
@@ -362,6 +367,12 @@
                 <li class="item-menu-mobile">
                     <a href="/contact/" id="lastDropdownMenuItem">Contact</a>
                 </li>
+
+                {{if ge .UserType 4}}
+                    <li class="item-menu-mobile">
+                        <a href="/add_meat/" id="lastDropdownMenuItem">Add Product</a>
+                    </li>
+                {{end}}
             </ul>
         </nav>
     </div>
