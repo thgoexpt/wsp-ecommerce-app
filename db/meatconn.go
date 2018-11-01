@@ -24,7 +24,7 @@ func MockMeat() {
 	}
 	defer db.Session.Close()
 
-	db.C("Users").Remove(bson.M{"name": TestMeat.Name})
+	db.C("Meats").Remove(bson.M{"name": TestMeat.Name})
 
 	RegisMeat(TestMeat)
 }
