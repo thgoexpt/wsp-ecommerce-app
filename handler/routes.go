@@ -2,7 +2,6 @@ package handler
 
 import (
 	"encoding/gob"
-	"fmt"
 	"github.com/gorilla/mux"
 	"log"
 	"net/http"
@@ -15,6 +14,7 @@ import (
 	"github.com/guitarpawat/wsp-ecommerce/db"
 	"github.com/guitarpawat/wsp-ecommerce/model/dbmodel"
 	"github.com/guitarpawat/wsp-ecommerce/model/pagemodel"
+	"golang.org/x/crypto/bcrypt"
 )
 
 var s = sessions.NewCookieStore([]byte("NOT FOR PRODUCTION"))
@@ -53,6 +53,7 @@ func BuildHeader(w http.ResponseWriter, r *http.Request, v *middleware.ValueMap)
 		header.User = ""
 	} else {
 		header.User = user.Username
+		header.UserType = user.Type
 	}
 
 	warning, ok := v.Get("warning").(string)
@@ -171,6 +172,34 @@ func ComingSoon(w http.ResponseWriter, r *http.Request, v *middleware.ValueMap) 
 	t.ExecuteTemplate(w, "comingsoon.html", model)
 }
 
+func AddProduct(w http.ResponseWriter, r *http.Request, v *middleware.ValueMap) {
+	header, ok := v.Get("header").(pagemodel.Menu)
+	if !ok {
+		header = defaultHeader
+	}
+
+	model := pagemodel.ProductDetail{
+		Menu: header,
+	}
+
+	v.Set("next", false)
+	t.ExecuteTemplate(w, "add-product.html", model)
+}
+
+func ProductStock(w http.ResponseWriter, r *http.Request, v *middleware.ValueMap) {
+	header, ok := v.Get("header").(pagemodel.Menu)
+	if !ok {
+		header = defaultHeader
+	}
+
+	model := pagemodel.Card{
+		Menu: header,
+	}
+
+	v.Set("next", false)
+	t.ExecuteTemplate(w, "product-stock.html", model)
+}
+
 func Regis(w http.ResponseWriter, r *http.Request, v *middleware.ValueMap) {
 	err := r.ParseForm()
 	if err != nil {
@@ -193,33 +222,43 @@ func Regis(w http.ResponseWriter, r *http.Request, v *middleware.ValueMap) {
 	v.Set("next", true)
 }
 
-func MeatTestPage(w http.ResponseWriter, r *http.Request, v *middleware.ValueMap) {
-	// db, err := db.GetDB()
-	// if err != nil {
-	// 	w.WriteHeader(http.StatusInternalServerError)
-	// 	return
-	// }
+func AddMeat(w http.ResponseWriter, r *http.Request, v *middleware.ValueMap) {
+	header, ok := v.Get("header").(pagemodel.Menu)
+	if !ok {
+		w.WriteHeader(http.StatusUnauthorized)
+		return
+	}
 
-	// var meat []dbmodel.Meat
-	// err = db.C("Users").Find(nil).All(&meats)
-	// if err != nil {
-	// 	w.WriteHeader(http.StatusInternalServerError)
-	// 	return
-	// }
+	if header.UserType != dbmodel.TypeEmployee && header.UserType != dbmodel.TypeOwner {
+		w.WriteHeader(http.StatusForbidden)
+		return
+	}
 
+	model := pagemodel.ProductDetail{
+		Menu: header,
+	}
+	t.ExecuteTemplate(w, "add-product.html", model)
 	v.Set("next", false)
-	t.ExecuteTemplate(w, "add_meat_test.html", nil)
-
 }
 
 func RegisMeat(w http.ResponseWriter, r *http.Request, v *middleware.ValueMap) {
+	header, ok := v.Get("header").(pagemodel.Menu)
+	if !ok {
+		w.WriteHeader(http.StatusUnauthorized)
+		return
+	}
+
+	if header.UserType != dbmodel.TypeEmployee && header.UserType != dbmodel.TypeOwner {
+		w.WriteHeader(http.StatusForbidden)
+		return
+	}
+
 	err := r.ParseMultipartForm(32<<20)
 	if err != nil {
 		w.WriteHeader(http.StatusInternalServerError)
 		return
 	}
 	priceStr := r.PostFormValue("price")
-	fmt.Println(priceStr)
 	price, err := strconv.ParseFloat(priceStr, 64)
 	if err != nil {
 		v.Set("warning", "Price is not a number.")
@@ -249,7 +288,6 @@ func RegisMeat(w http.ResponseWriter, r *http.Request, v *middleware.ValueMap) {
 	}
 	file, h, err := r.FormFile("uploadfile")
 	if err != nil {
-		fmt.Println(err)
 		v.Set("warning", err)
 		v.Set("next", true)
 		return
@@ -369,8 +407,19 @@ func ProfileEdit(w http.ResponseWriter, r *http.Request, v *middleware.ValueMap)
 		header = defaultHeader
 	}
 
-	model := pagemodel.ProductDetail{
+	model := pagemodel.UserDetail{
 		Menu: header,
+	}
+
+	user, ok := v.Get("user").(dbmodel.User)
+	if !ok {
+		model.Fullname = ""
+		model.Email = ""
+		model.Address = ""
+	} else {
+		model.Fullname = user.Fullname
+		model.Email = user.Email
+		model.Address = user.Address
 	}
 
 	v.Set("next", false)
@@ -384,10 +433,48 @@ func EditProfile(w http.ResponseWriter, r *http.Request, v *middleware.ValueMap)
 		return
 	}
 
-	//TODO: Update User Profile
-	db.UpdateUser(r.PostFormValue("id"), r.PostFormValue("name"), r.PostFormValue("email"), r.PostFormValue("address"))
+	user, ok := v.Get("user").(dbmodel.User)
+	if !ok {
+		v.Set("warning", "Unable to get user.")
+	} else {
+		err = db.UpdateUser(user.ID, r.PostFormValue("fullname"), r.PostFormValue("email"), r.PostFormValue("address"))
+		if err != nil {
+			v.Set("warning", "Edit profile fail.")
+		} else {
+			session, err := s.Get(r, "user")
+			if err != nil {
+				w.WriteHeader(http.StatusInternalServerError)
+				return
+			}
 
-	v.Set("success", "You have successfully edit your profile.")
+			newUser, err := db.GetUser(user.ID)
+			if err != nil {
+				v.Set("warning", "Unable to get new user.")
+			} else {
+				session.Values["user"] = newUser
+				session.Save(r, w)
+				v.Set("success", "You have successfully edit your profile.")
+			}
+		}
+
+		if r.PostFormValue("pass-old") != "" {
+			if r.PostFormValue("pass") == r.PostFormValue("pass-repeat") {
+				newHash, err := bcrypt.GenerateFromPassword([]byte(r.PostFormValue("pass")), bcrypt.DefaultCost)
+				if err != nil {
+					v.Set("warning", "Error// Unable to update password.")
+				} else {
+					err = db.UpdatePass(user.ID, r.PostFormValue("pass-old"), string(newHash))
+					if err != nil {
+						v.Set("warning", err.Error())
+					} else {
+						v.Set("success", "Update password successfully.")
+					}
+				}
+			} else {
+				v.Set("warning", "Password is not the same.")
+			}
+		}
+	}
 	v.Set("next", true)
 }
 
