@@ -5,9 +5,9 @@ Test Teardown     End of test
 *** Variables ***
 ${INVALID_USERNAME}    fail
 ${INVALID_PASSWORD}    fail
-${VALID_USERNAME}    test
-${VALID_PASSWORD}    test
-${VALID_EMAIL}    test@example.com
+${VALID_USERNAME}    tester
+${VALID_PASSWORD}    123456
+${VALID_EMAIL}    Charin.ta@ku.th
 ${NAME}    Charin
 ${MOCK_EMAIL}    ta@ku.th
 
@@ -85,11 +85,11 @@ User clicks register button
 User opens a home page on PC
     Open Browser    http://localhost:8000/mock/    ${browser}
     Set Window Size    1920    1080
-    Wait Until Element Is Visible    alertBox    30
+    Wait Until Element Is Visible    alertBox    15
 
 User opens a login page on PC
     Click Element    id:loginIcon
-    Wait Until Element Is Visible    myModal    30
+    Wait Until Element Is Visible    myModal    15
 
 User opens a register page on PC
     Click Element    id:registerIcon
@@ -99,7 +99,7 @@ User sees that he is not logged in on PC
     Element Text Should Be    id:welcomeUser    Welcome, Guest
 
 User sees that he is logged in on PC
-    Element Text Should Be    id:welcomeUser    Welcome, test
+    Element Text Should Be    id:welcomeUser    Welcome, tester
 
 
 
@@ -107,101 +107,23 @@ User sees that he is logged in on PC
 User opens a home page on mobile phone
     Open Browser    http://localhost:8000/mock/    ${browser}
     Set Window Size    600    800
-    Wait Until Element Is Visible    alertBox    30
+    Wait Until Element Is Visible    alertBox    15
 
 User sees that he is not logged in on mobile phone
     Element Text Should Be    id:welcomeUser-mobile    Welcome, Guest
 
 User sees that he is logged in on mobile phone
-    Element Text Should Be    id:welcomeUser-mobile    Welcome, test
+    Element Text Should Be    id:welcomeUser-mobile    Welcome, tester
 
 User opens dropdown menu
     Click Element    id:dropdownMenu
-    Wait Until Element Is Visible    id:welcomeUser-mobile    30
+    Wait Until Element Is Visible    id:welcomeUser-mobile    15
 
 User opens a login page on mobile phone
     Click Element    id:loginIcon-mobile
-    Wait Until Element Is Visible    myModal    30
+    Wait Until Element Is Visible    myModal    15
 
 *** Test Cases ***
-Test Login on PC failure because of invalid username and password on PC
-    User opens a home page on PC
-    User sees that he is not logged in on PC
-    User opens a login page on PC
-    User types invalid username
-    User types invalid password
-    User clicks login button
-    User sees the invalid username or password dialog
-    User sees that he is not logged in on PC
-
-Test Login failure because of invalid username and password on mobile phone
-    User opens a home page on mobile phone
-    User opens dropdown menu
-    User sees that he is not logged in on mobile phone
-    User opens a login page on mobile phone
-    User types invalid username
-    User types invalid password
-    User clicks login button
-    User sees the invalid username or password dialog
-    User opens dropdown menu
-    User sees that he is not logged in on mobile phone
-
-Test Login on PC failure because of invalid password on PC
-    User opens a home page on PC
-    User sees that he is not logged in on PC
-    User opens a login page on PC
-    User types valid username
-    User types invalid password
-    User clicks login button
-    User sees the invalid username or password dialog
-    User sees that he is not logged in on PC
-
-Test Login failure because of invalid password on mobile phone
-    User opens a home page on mobile phone
-    User opens dropdown menu
-    User sees that he is not logged in on mobile phone
-    User opens a login page on mobile phone
-    User types valid username
-    User types invalid password
-    User clicks login button
-    User sees the invalid username or password dialog
-    User opens dropdown menu
-    User sees that he is not logged in on mobile phone
-
-
-Test Login on PC with valid username and password
-    User opens a home page on PC
-    User sees that he is not logged in on PC
-    User opens a login page on PC
-    User types valid username
-    User types valid password
-    User clicks login button
-    User sees the login successful dialog
-    User sees that he is logged in on PC
-
-Test Login with valid username and password on mobile phone
-    User opens a home page on mobile phone
-    User opens dropdown menu
-    User sees that he is not logged in on mobile phone
-    User opens a login page on mobile phone
-    User types valid username
-    User types valid password
-    User clicks login button
-    User sees the login successful dialog
-    User opens dropdown menu
-    User sees that he is logged in on mobile phone
-
-Test Register on PC with valid username
-    User opens a home page on PC
-    User opens a register page on PC
-    User types valid username in register modal
-    User types valid password in register modal
-    User types name in register modal
-    User types email in register modal
-    User types address in register modal
-    User clicks register button
-    User sees the already have that username dialog
-
 Test Register on PC with valid email
     User opens a home page on PC
     User opens a register page on PC
