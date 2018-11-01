@@ -2,23 +2,30 @@ package handler
 
 import (
 	"encoding/gob"
+	"fmt"
+	"github.com/gorilla/mux"
+	"log"
+	"net/http"
+	"path/filepath"
+	"strconv"
+	"time"
+
 	"github.com/gorilla/sessions"
 	"github.com/guitarpawat/middleware"
 	"github.com/guitarpawat/wsp-ecommerce/db"
 	"github.com/guitarpawat/wsp-ecommerce/model/dbmodel"
 	"github.com/guitarpawat/wsp-ecommerce/model/pagemodel"
-	"log"
-	"net/http"
 )
 
 var s = sessions.NewCookieStore([]byte("NOT FOR PRODUCTION"))
 
 var defaultHeader = pagemodel.Menu{
-	Warning: "Something went wrong",
+	Warning: "Something went wrong {defualt}",
 }
 
 func init() {
 	gob.Register(dbmodel.User{})
+	gob.Register(dbmodel.Meat{})
 }
 
 func CheckSession(w http.ResponseWriter, r *http.Request, v *middleware.ValueMap) {
@@ -186,6 +193,97 @@ func Regis(w http.ResponseWriter, r *http.Request, v *middleware.ValueMap) {
 	v.Set("next", true)
 }
 
+func MeatTestPage(w http.ResponseWriter, r *http.Request, v *middleware.ValueMap) {
+	// db, err := db.GetDB()
+	// if err != nil {
+	// 	w.WriteHeader(http.StatusInternalServerError)
+	// 	return
+	// }
+
+	// var meat []dbmodel.Meat
+	// err = db.C("Users").Find(nil).All(&meats)
+	// if err != nil {
+	// 	w.WriteHeader(http.StatusInternalServerError)
+	// 	return
+	// }
+
+	v.Set("next", false)
+	t.ExecuteTemplate(w, "add_meat_test.html", nil)
+
+}
+
+func RegisMeat(w http.ResponseWriter, r *http.Request, v *middleware.ValueMap) {
+	err := r.ParseMultipartForm(32<<20)
+	if err != nil {
+		w.WriteHeader(http.StatusInternalServerError)
+		return
+	}
+	priceStr := r.PostFormValue("price")
+	fmt.Println(priceStr)
+	price, err := strconv.ParseFloat(priceStr, 64)
+	if err != nil {
+		v.Set("warning", "Price is not a number.")
+		v.Set("next", true)
+		return
+	}
+	quantityStr := r.PostFormValue("quantity")
+	quantity64, err := strconv.ParseInt(quantityStr, 10, 64)
+	if err != nil {
+		v.Set("warning", "Quantity is not an integer.")
+		v.Set("next", true)
+		return
+	}
+	quantity := int(quantity64)
+	expireStr := r.PostFormValue("expire")
+	//expireSplit := strings.Split(expireStr, "//")
+	//
+	//expireToParse := expireSplit[2] + "-" + expireSplit[1] + "-" + expireSplit[0] + "T00:00:00+07:00"
+
+	// GMTPlus7 := int((7 * time.Hour).Seconds())
+	// bangkok := time.FixedZone("Bangkok Time", GMTPlus7)
+	expire, err := time.Parse("2/1/2006", expireStr)
+	if err != nil {
+		v.Set("warning", "Expire is invalid.")
+		v.Set("next", true)
+		return
+	}
+	file, h, err := r.FormFile("uploadfile")
+	if err != nil {
+		fmt.Println(err)
+		v.Set("warning", err)
+		v.Set("next", true)
+		return
+	}
+	ext := filepath.Ext(h.Filename)
+
+	meat, err := dbmodel.MakeMeat(r.PostFormValue("name"), r.PostFormValue("type"),
+		r.PostFormValue("grade"), r.PostFormValue("des"), price, quantity, expire, ext)
+	if err != nil {
+		v.Set("warning", err.Error())
+	} else {
+		err = db.RegisMeat(meat)
+		if err != nil {
+			v.Set("warning", err.Error())
+		} else {
+			v.Set("success", "You have successfully add meat into the store.")
+		}
+	}
+	id, err := db.GetMeatId(meat)
+	if err != nil {
+		v.Set("warning", err)
+		v.Set("next", true)
+		return
+	}
+	fname := "meat_"+id+ext
+	err = db.EditFile(fname, file)
+	if err != nil {
+		v.Set("warning", "cannot upload image")
+		v.Set("next", true)
+		return
+	}
+	v.Set("next", true)
+}
+
 func Login(w http.ResponseWriter, r *http.Request, v *middleware.ValueMap) {
 	user, ok := v.Get("user").(dbmodel.User)
 	if !ok {
@@ -246,8 +344,19 @@ func Profile(w http.ResponseWriter, r *http.Request, v *middleware.ValueMap) {
 		header = defaultHeader
 	}
 
-	model := pagemodel.ProductDetail{
+	model := pagemodel.UserDetail{
 		Menu: header,
+	}
+
+	user, ok := v.Get("user").(dbmodel.User)
+	if !ok {
+		model.Fullname = ""
+		model.Email = ""
+		model.Address = ""
+	} else {
+		model.Fullname = user.Fullname
+		model.Email = user.Email
+		model.Address = user.Address
 	}
 
 	v.Set("next", false)
@@ -268,7 +377,32 @@ func ProfileEdit(w http.ResponseWriter, r *http.Request, v *middleware.ValueMap)
 	t.ExecuteTemplate(w, "profile-edit.html", model)
 }
 
+func EditProfile(w http.ResponseWriter, r *http.Request, v *middleware.ValueMap) {
+	err := r.ParseForm()
+	if err != nil {
+		w.WriteHeader(http.StatusInternalServerError)
+		return
+	}
+
+	//TODO: Update User Profile
+	db.UpdateUser(r.PostFormValue("id"), r.PostFormValue("name"), r.PostFormValue("email"), r.PostFormValue("address"))
+
+	v.Set("success", "You have successfully edit your profile.")
+	v.Set("next", true)
+}
+
 func Mock(w http.ResponseWriter, r *http.Request, v *middleware.ValueMap) {
 	db.Mock()
 	v.Set("next", true)
+}
+
+func Images(w http.ResponseWriter, r *http.Request) {
+	vars := mux.Vars(r)
+	b, err := db.GetFile(vars["name"])
+	if err != nil {
+		w.WriteHeader(http.StatusNotFound)
+		return
+	}
+
+	w.Write(b)
 }
