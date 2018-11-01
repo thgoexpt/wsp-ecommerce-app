@@ -10,8 +10,6 @@ import (
 
 	"github.com/gorilla/mux"
 
-	"github.com/gorilla/mux"
-
 	"github.com/gorilla/sessions"
 	"github.com/guitarpawat/middleware"
 	"github.com/guitarpawat/wsp-ecommerce/db"
@@ -154,11 +152,7 @@ func ProductDetail(w http.ResponseWriter, r *http.Request, v *middleware.ValueMa
 	}
 
 	vars := mux.Vars(r)
-	meatId, err := db.GetFile(vars["meatId"])
-	if err != nil {
-		w.WriteHeader(http.StatusNotFound)
-		return
-	}
+	meatId := vars["meatId"]
 
 	meat, err := db.GetMeat(string(meatId))
 	if err != nil {
@@ -175,6 +169,7 @@ func ProductDetail(w http.ResponseWriter, r *http.Request, v *middleware.ValueMa
 		Grade:       meat.Grade,
 		Description: meat.Description,
 		Price:       meat.Price,
+		Expire:      meat.Expire.Format("02/01/2006"),
 	}
 
 	v.Set("next", false)

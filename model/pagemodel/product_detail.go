@@ -9,4 +9,5 @@ type ProductDetail struct {
 	Grade       string
 	Description string
 	Price       float64
+	Expire      string
 }
