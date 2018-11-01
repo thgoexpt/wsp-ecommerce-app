@@ -540,3 +540,17 @@ func Images(w http.ResponseWriter, r *http.Request) {
 
 	w.Write(b)
 }
+
+func SaleHistory(w http.ResponseWriter, r *http.Request, v *middleware.ValueMap) {
+	header, ok := v.Get("header").(pagemodel.Menu)
+	if !ok {
+		header = defaultHeader
+	}
+
+	model := pagemodel.ProductDetail{
+		Menu: header,
+	}
+
+	v.Set("next", false)
+	t.ExecuteTemplate(w, "sale-history.html", model)
+}
