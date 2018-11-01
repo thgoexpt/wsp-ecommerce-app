@@ -5,9 +5,9 @@ Test Teardown     End of test
 *** Variables ***
 ${INVALID_USERNAME}    fail
 ${INVALID_PASSWORD}    fail
-${VALID_USERNAME}    tester
-${VALID_PASSWORD}    123456
-${VALID_EMAIL}    Charin.ta@ku.th
+${VALID_USERNAME}    test
+${VALID_PASSWORD}    test
+${VALID_EMAIL}    test@example.com
 ${NAME}    Charin
 ${MOCK_EMAIL}    ta@ku.th
 
@@ -99,7 +99,7 @@ User sees that he is not logged in on PC
     Element Text Should Be    id:welcomeUser    Welcome, Guest
 
 User sees that he is logged in on PC
-    Element Text Should Be    id:welcomeUser    Welcome, tester
+    Element Text Should Be    id:welcomeUser    Welcome, test
 
 
 
@@ -113,7 +113,7 @@ User sees that he is not logged in on mobile phone
     Element Text Should Be    id:welcomeUser-mobile    Welcome, Guest
 
 User sees that he is logged in on mobile phone
-    Element Text Should Be    id:welcomeUser-mobile    Welcome, tester
+    Element Text Should Be    id:welcomeUser-mobile    Welcome, test
 
 User opens dropdown menu
     Click Element    id:dropdownMenu
