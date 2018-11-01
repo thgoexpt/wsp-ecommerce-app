@@ -17,23 +17,23 @@ End of test
     Close Browser
 
 User sees the invalid username or password dialog
-    Wait Until Element Is Visible    alertBox
+    Wait Until Element Is Visible    alertBox    30
     Element Text Should Be    id:warningBox    Warning: Invalid username/password
 
 User sees the login successful dialog
-    Wait Until Element Is Visible    alertBox
+    Wait Until Element Is Visible    alertBox    30
     Element Text Should Be    id:successBox    Login successful
 
 User sees the success to registration dialog
-    Wait Until Element Is Visible    alertBox
+    Wait Until Element Is Visible    alertBox    30
     Element Text Should Be    id:successBox    User created successful, please login.
 
 User sees the already have that username dialog
-    Wait Until Element Is Visible    alertBox
+    Wait Until Element Is Visible    alertBox    30
     Element Text Should Be    id:warningBox    Warning: Username already exists
 
 User sees the already have that email dialog
-    Wait Until Element Is Visible    alertBox
+    Wait Until Element Is Visible    alertBox    30
     Element Text Should Be    id:warningBox    Warning: Email already in use
 
 
@@ -85,15 +85,15 @@ User clicks register button
 User opens a home page on PC
     Open Browser    http://localhost:8000/mock/    ${browser}
     Set Window Size    1920    1080
-    Wait Until Element Is Visible    alertBox    15
+    Wait Until Element Is Visible    alertBox    30
 
 User opens a login page on PC
     Click Element    id:loginIcon
-    Wait Until Element Is Visible    myModal    15
+    Wait Until Element Is Visible    myModal    30
 
 User opens a register page on PC
     Click Element    id:registerIcon
-    Wait Until Element Is Visible    myModal_regis    15
+    Wait Until Element Is Visible    myModal_regis    30
 
 User sees that he is not logged in on PC
     Element Text Should Be    id:welcomeUser    Welcome, Guest
@@ -107,7 +107,7 @@ User sees that he is logged in on PC
 User opens a home page on mobile phone
     Open Browser    http://localhost:8000/mock/    ${browser}
     Set Window Size    600    800
-    Wait Until Element Is Visible    alertBox    15
+    Wait Until Element Is Visible    alertBox    30
 
 User sees that he is not logged in on mobile phone
     Element Text Should Be    id:welcomeUser-mobile    Welcome, Guest
@@ -117,11 +117,11 @@ User sees that he is logged in on mobile phone
 
 User opens dropdown menu
     Click Element    id:dropdownMenu
-    Wait Until Element Is Visible    id:welcomeUser-mobile    15
+    Wait Until Element Is Visible    id:welcomeUser-mobile    30
 
 User opens a login page on mobile phone
     Click Element    id:loginIcon-mobile
-    Wait Until Element Is Visible    myModal    15
+    Wait Until Element Is Visible    myModal    30
 
 *** Test Cases ***
 Test Register on PC with valid email
