@@ -85,11 +85,11 @@ User clicks register button
 User opens a home page on PC
     Open Browser    http://localhost:8000/mock/    ${browser}
     Set Window Size    1920    1080
-    Wait Until Element Is Visible    alertBox    15
+    Wait Until Element Is Visible    alertBox    30
 
 User opens a login page on PC
     Click Element    id:loginIcon
-    Wait Until Element Is Visible    myModal    15
+    Wait Until Element Is Visible    myModal    30
 
 User opens a register page on PC
     Click Element    id:registerIcon
@@ -107,7 +107,7 @@ User sees that he is logged in on PC
 User opens a home page on mobile phone
     Open Browser    http://localhost:8000/mock/    ${browser}
     Set Window Size    600    800
-    Wait Until Element Is Visible    alertBox    15
+    Wait Until Element Is Visible    alertBox    30
 
 User sees that he is not logged in on mobile phone
     Element Text Should Be    id:welcomeUser-mobile    Welcome, Guest
@@ -117,11 +117,11 @@ User sees that he is logged in on mobile phone
 
 User opens dropdown menu
     Click Element    id:dropdownMenu
-    Wait Until Element Is Visible    id:welcomeUser-mobile    15
+    Wait Until Element Is Visible    id:welcomeUser-mobile    30
 
 User opens a login page on mobile phone
     Click Element    id:loginIcon-mobile
-    Wait Until Element Is Visible    myModal    15
+    Wait Until Element Is Visible    myModal    30
 
 *** Test Cases ***
 Test Login on PC failure because of invalid username and password on PC
