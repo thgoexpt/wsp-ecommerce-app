@@ -3,12 +3,13 @@ package handler
 import (
 	"encoding/gob"
 	"fmt"
-	"github.com/gorilla/mux"
 	"log"
 	"net/http"
 	"path/filepath"
 	"strconv"
 	"time"
+
+	"github.com/gorilla/mux"
 
 	"github.com/gorilla/sessions"
 	"github.com/guitarpawat/middleware"
@@ -150,8 +151,28 @@ func ProductDetail(w http.ResponseWriter, r *http.Request, v *middleware.ValueMa
 		header = defaultHeader
 	}
 
+	vars := mux.Vars(r)
+	meatId, err := db.GetFile(vars["meatId"])
+	if err != nil {
+		w.WriteHeader(http.StatusNotFound)
+		return
+	}
+
+	meat, err := db.GetMeat(string(meatId))
+	if err != nil {
+		w.WriteHeader(http.StatusNotFound)
+		return
+	}
+
 	model := pagemodel.ProductDetail{
-		Menu: header,
+		Menu:        header,
+		ID:          meat.ID.Hex(),
+		Pic:         "/image/meat_" + meat.ID.Hex() + meat.ImageExtension,
+		ProName:     meat.Name,
+		Type:        meat.Type,
+		Grade:       meat.Grade,
+		Description: meat.Description,
+		Price:       meat.Price,
 	}
 
 	v.Set("next", false)
@@ -242,7 +263,7 @@ func MeatTestPage(w http.ResponseWriter, r *http.Request, v *middleware.ValueMap
 }
 
 func RegisMeat(w http.ResponseWriter, r *http.Request, v *middleware.ValueMap) {
-	err := r.ParseMultipartForm(32<<20)
+	err := r.ParseMultipartForm(32 << 20)
 	if err != nil {
 		w.WriteHeader(http.StatusInternalServerError)
 		return
@@ -303,7 +324,7 @@ func RegisMeat(w http.ResponseWriter, r *http.Request, v *middleware.ValueMap) {
 		v.Set("next", true)
 		return
 	}
-	fname := "meat_"+id+ext
+	fname := "meat_" + id + ext
 	err = db.EditFile(fname, file)
 	if err != nil {
 		v.Set("warning", "cannot upload image")
