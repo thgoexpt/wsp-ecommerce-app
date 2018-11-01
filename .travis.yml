@@ -16,12 +16,12 @@ jobs:
     services: mongodb
     before_install: skip
     install:
-    - go get -t -v ./...
+    - travis_retry go get -t -v ./...
     before_script: skip
     script: go test -race -coverprofile=coverage.txt -covermode=atomic ./...
     after_script: skip
     after_success:
-    - bash <(curl -s https://codecov.io/bash)
+    - travis_retry bash <(curl -s https://codecov.io/bash)
   - stage: Backend Test
     name: go 1.11.x
     if: branch != master
@@ -29,12 +29,12 @@ jobs:
     services: mongodb
     before_install: skip
     install:
-    - go get -t -v ./...
+    - travis_retry go get -t -v ./...
     before_script: skip
     script: go test -race -coverprofile=coverage.txt -covermode=atomic ./...
     after_script: skip
     after_success:
-    - bash <(curl -s https://codecov.io/bash)
+    - travis_retry bash <(curl -s https://codecov.io/bash)
   - stage: Frontend Test
     name: go 1.10.x
     if: branch != master
@@ -56,11 +56,11 @@ jobs:
     install:
     - sudo -H pip install -r requirements.txt
     before_script:
-    - go get -t -v ./...
+    - travis_retry go get -t -v ./...
     - go run main.go -env=CI &
-    - google-chrome-stable --no-sandbox --ignore-certificate-errors --headless --window-size=1920,1080
+    - travis_retry google-chrome-stable --no-sandbox --ignore-certificate-errors --headless --window-size=1920,1080
       --disable-gpu --disable-dev-shm-usage --remote-debugging-port=51232 http://localhost:8000 &
-    script: robot --variable browser:headlesschrome robot/tests.robot
+    script: travis_retry robot --variable browser:headlesschrome robot/tests.robot
     after-script: skip
   - stage: Frontend Test
     name: go 1.11.x
@@ -81,13 +81,13 @@ jobs:
     - sudo mv chromedriver /usr/bin/
     - sudo chmod 777 /usr/bin/chromedriver
     install:
-    - sudo -H pip install -r requirements.txt
+    - travis_retry sudo -H pip install -r requirements.txt
     before_script:
-    - go get -t -v ./...
+    - travis_retry go get -t -v ./...
     - go run main.go -env=CI &
-    - google-chrome-stable --no-sandbox --ignore-certificate-errors --headless --window-size=1920,1080
+    - travis_retry google-chrome-stable --no-sandbox --ignore-certificate-errors --headless --window-size=1920,1080
       --disable-gpu --disable-dev-shm-usage --remote-debugging-port=51232 http://localhost:8000 &
-    script: robot --variable browser:headlesschrome robot/tests.robot
+    script: travis_retry robot --variable browser:headlesschrome robot/tests.robot
     after-script: skip
   - stage: Deploy Build
     if: branch = master
