@@ -4,13 +4,20 @@ import (
 	"time"
 
 	"github.com/globalsign/mgo/bson"
+	"github.com/guitarpawat/wsp-ecommerce/env"
 	"github.com/guitarpawat/wsp-ecommerce/model/dbmodel"
 )
 
 var TestTime, _ = time.Parse(dbmodel.TimeFormat, "15/04/2019")
 var TestMeat, _ = dbmodel.MakeMeat("Kurobuta", "Pig", "C", "Black Pig's Meat", 300.0, 50, TestTime, ".jpg")
 
-func Mock() {
+func init() {
+	if env.GetEnv() != env.Production {
+		MockMeat()
+	}
+}
+
+func MockMeat() {
 	db, err := GetDB()
 	if err != nil {
 		panic("cannot connect to db")
