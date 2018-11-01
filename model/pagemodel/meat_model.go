@@ -1,7 +1,5 @@
 package pagemodel
 
-const TimeFormat = "02/01/2006"
-
 type MeatModel struct {
 	ID          string
 	Pic         string

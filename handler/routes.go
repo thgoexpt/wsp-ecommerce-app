@@ -165,7 +165,7 @@ func GetMeatModel(meat dbmodel.Meat) pagemodel.MeatModel {
 		Grade:       meat.Grade,
 		Description: meat.Description,
 		Price:       meat.Price,
-		Expire:      meat.Expire.Format(pagemodel.TimeFormat),
+		Expire:      meat.Expire.Format(dbmodel.TimeFormat),
 		Quantity:    meat.Quantity,
 		Total:       meat.Price * float64(meat.Quantity),
 	}
