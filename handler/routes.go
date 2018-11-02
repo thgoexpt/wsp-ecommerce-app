@@ -153,7 +153,7 @@ func Product(w http.ResponseWriter, r *http.Request, v *middleware.ValueMap) {
 		model.Meats = append(model.Meats, GetMeatModel(meats[i]))
 	}
 
-	t.ExecuteTemplate(w, "product.html", model)
+	t.ExecuteTemplate(w, "product_real.html", model)
 }
 
 func ProductSortType(w http.ResponseWriter, r *http.Request, v *middleware.ValueMap) {
@@ -162,13 +162,13 @@ func ProductSortType(w http.ResponseWriter, r *http.Request, v *middleware.Value
 		header = defaultHeader
 	}
 
-	v.Set("next", false)
 	model := pagemodel.Product{
 		Menu:  header,
 		Meats: []pagemodel.MeatModel{},
 	}
 
 	vars := mux.Vars(r)
+
 	meats, err := db.SortType(vars["type"], vars["price_sort"])
 	if err != nil {
 		w.WriteHeader(http.StatusNotFound)
@@ -179,7 +179,8 @@ func ProductSortType(w http.ResponseWriter, r *http.Request, v *middleware.Value
 		model.Meats = append(model.Meats, GetMeatModel(meats[i]))
 	}
 
-	t.ExecuteTemplate(w, "product.html", model)
+	v.Set("next", false)
+	t.ExecuteTemplate(w, "product_sort.html", model)
 }
 
 func ProductSearch(w http.ResponseWriter, r *http.Request, v *middleware.ValueMap) {
@@ -219,7 +220,7 @@ func ProductSearch(w http.ResponseWriter, r *http.Request, v *middleware.ValueMa
 		model.Meats = append(model.Meats, GetMeatModel(meats[i]))
 	}
 
-	t.ExecuteTemplate(w, "product.html", model)
+	t.ExecuteTemplate(w, "product_search.html", model)
 }
 
 func GetMeatModel(meat dbmodel.Meat) pagemodel.MeatModel {
