@@ -14,4 +14,5 @@ func init() {
 func Mock() {
 	db.MockUser()
 	db.MockMeat()
+	db.MockSalesHistory()
 }

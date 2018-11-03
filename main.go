@@ -85,6 +85,8 @@ func main() {
 		middleware.DoableFunc(handler.Profile))).
 		Methods("POST")
 
+	r.Handle("/sales_history/", handlePage(handler.SaleHistory))
+
 	httpr := mux.NewRouter()
 	httpr.PathPrefix("/").HandlerFunc(handler.RedirectToHTTPS)
 

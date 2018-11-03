@@ -2,6 +2,7 @@ package handler
 
 import (
 	"encoding/gob"
+	"github.com/globalsign/mgo/bson"
 	"github.com/guitarpawat/wsp-ecommerce/db/mock"
 	"log"
 	"net/http"
@@ -26,8 +27,10 @@ var defaultHeader = pagemodel.Menu{
 }
 
 func init() {
+	gob.Register(bson.ObjectId(""))
 	gob.Register(dbmodel.User{})
 	gob.Register(dbmodel.Meat{})
+	gob.Register(dbmodel.SalesHistory{})
 }
 
 func CheckSession(w http.ResponseWriter, r *http.Request, v *middleware.ValueMap) {
@@ -51,9 +54,8 @@ func BuildHeader(w http.ResponseWriter, r *http.Request, v *middleware.ValueMap)
 	header := pagemodel.Menu{}
 
 	user, ok := v.Get("user").(dbmodel.User)
-	if !ok {
-		header.User = ""
-	} else {
+	if ok {
+		header.UserID = user.ID
 		header.User = user.Username
 		header.UserType = user.Type
 	}
@@ -548,8 +550,20 @@ func SaleHistory(w http.ResponseWriter, r *http.Request, v *middleware.ValueMap)
 		header = defaultHeader
 	}
 
-	model := pagemodel.ProductDetail{
-		Menu: header,
+	sh, err := db.GetUserSalesHistory(header.UserID)
+	if err != nil {
+		w.WriteHeader(http.StatusInternalServerError)
+		return
+	}
+
+	if len(sh) == 0 {
+		header.Warning = "No sale record found"
+	}
+
+	model, err := pagemodel.ToSalesHistoryPageModel(sh, header)
+	if err != nil {
+		w.WriteHeader(http.StatusInternalServerError)
+		return
 	}
 
 	v.Set("next", false)
