@@ -526,7 +526,8 @@ func EditProfile(w http.ResponseWriter, r *http.Request, v *middleware.ValueMap)
 }
 
 func Mock(w http.ResponseWriter, r *http.Request, v *middleware.ValueMap) {
-	db.Mock()
+	db.MockUser()
+	db.MockMeat()
 	v.Set("next", true)
 }
 

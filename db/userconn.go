@@ -17,11 +17,11 @@ var TestLoginFailUserName = "fail"
 
 func init() {
 	if env.GetEnv() != env.Production {
-		Mock()
+		MockUser()
 	}
 }
 
-func Mock() {
+func MockUser() {
 	db, err := GetDB()
 	if err != nil {
 		panic("cannot connect to db")

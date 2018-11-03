@@ -115,7 +115,7 @@ func main() {
 		log.Fatalln(http.ListenAndServe(":8000", httpr))
 	}
 
-	db.Mock()
+	db.MockUser()
 }
 
 func handlePage(df middleware.DoableFunc) http.Handler {
