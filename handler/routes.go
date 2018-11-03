@@ -2,7 +2,6 @@ package handler
 
 import (
 	"encoding/gob"
-	"fmt"
 	"log"
 	"net/http"
 	"path/filepath"
@@ -162,16 +161,15 @@ func ProductSortType(w http.ResponseWriter, r *http.Request, v *middleware.Value
 		header = defaultHeader
 	}
 
-	fmt.Println("I'm HERE!!!")
 	model := pagemodel.Product{
 		Menu:  header,
 		Meats: []pagemodel.MeatModel{},
 	}
 
-	// vars := mux.Vars(r)
+	vars := mux.Vars(r)
 
-	// meats, err := db.SortType(vars["type"], vars["price_sort"])
-	meats, err := db.SortType("all", "price")
+	meats, err := db.SortType(vars["meattype"], vars["price_sort"])
+	// meats, err := db.SortType(vars["meattype"], "price")
 	if err != nil {
 		meats = []dbmodel.Meat{}
 	}

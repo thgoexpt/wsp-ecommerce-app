@@ -12,7 +12,7 @@ var TestTime, _ = time.Parse(dbmodel.TimeFormat, "15/04/2019")
 var TestTime2, _ = time.Parse(dbmodel.TimeFormat, "14/02/2019")
 var ChickWingTime, _ = time.Parse(dbmodel.TimeFormat, "20/01/2019")
 
-var TestMeat, _ = dbmodel.MakeMeat("Kurobuta", "Pig", "C", "Black Pig's Meat", 300.1, 50, TestTime, ".jpg")
+var TestMeat, _ = dbmodel.MakeMeat("Kurobuta", "Chicken", "C", "Black Pig's Meat", 300.1, 50, TestTime, ".jpg")
 var CupidWing, _ = dbmodel.MakeMeat("Cupid's Wing", "Angle", "R", "Juicy wing meat of an angelic creature!", 400.0, 69, TestTime2, ".jpg")
 var ChickWing, _ = dbmodel.MakeMeat("Chick's Wing", "Chicken", "D", "Chick's Meat", 500.0, 100, ChickWingTime, ".jpg")
 
@@ -123,7 +123,7 @@ func SortType(meattype, sorting string) ([]dbmodel.Meat, error) {
 			Pattern: "(" + meattype + ")",
 			Options: "i", //insensitive
 		},
-	}).Limit(10).Sort("type", sorting).Iter().All(&meats)
+	}).Limit(10).Sort(sorting).Iter().All(&meats)
 	if err != nil {
 		return nil, err
 	}
@@ -148,16 +148,28 @@ func Search(name string, startPrice, endPrice float64, sorting string) ([]dbmode
 	}
 
 	var meats []dbmodel.Meat
-	err = db.C("Meats").Find(bson.M{
-		"name": bson.RegEx{
-			Pattern: "(" + name + ")",
-			Options: "i", //insensitive
-		},
-		"price": bson.M{
-			"$gte": startPrice,
-			"$lte": endPrice,
-		},
-	}).Limit(10).Sort(sorting).Iter().All(&meats)
+	if endPrice != -1 {
+		err = db.C("Meats").Find(bson.M{
+			"name": bson.RegEx{
+				Pattern: "(" + name + ")",
+				Options: "i", //insensitive
+			},
+			"price": bson.M{
+				"$gte": startPrice,
+				"$lte": endPrice,
+			},
+		}).Limit(10).Sort(sorting).Iter().All(&meats)
+	} else {
+		err = db.C("Meats").Find(bson.M{
+			"name": bson.RegEx{
+				Pattern: "(" + name + ")",
+				Options: "i", //insensitive
+			},
+			"price": bson.M{
+				"$gte": startPrice,
+			},
+		}).Limit(10).Sort(sorting).Iter().All(&meats)
+	}
 
 	if err != nil {
 		return nil, err
