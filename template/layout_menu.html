@@ -343,17 +343,19 @@
                     </ul>
                 </nav>
             </div>
-            <div id="alertBox">
-                {{if ne .Success ""}}
-                <div class="container alert alert-success alert-dismissible text-center" role="alert" id="successBox">
-                    {{.Success}}
-                </div>
-                {{end}}
-                {{if ne .Warning ""}}
-                <div class="container alert alert-warning alert-dismissible text-center" role="alert" id="warningBox">
-                    Warning: {{.Warning}}
-                </div>
-                {{end}}
-            </div>
+        </div>
+    </div>
+    <div id="alertBox">
+        {{if ne .Success ""}}
+        <div class="container alert alert-success alert-dismissible text-center" role="alert" id="successBox">
+            {{.Success}}
+        </div>
+        {{end}}
+        {{if ne .Warning ""}}
+        <div class="container alert alert-warning alert-dismissible text-center" role="alert" id="warningBox">
+            Warning: {{.Warning}}
+        </div>
+        {{end}}
+    </div>
 </header>
 {{end}}
