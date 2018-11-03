@@ -40,11 +40,11 @@ func MockSalesHistory() {
 		panic(err)
 	}
 
-	MockSalesHistory1, err = dbmodel.MakeSalesHistory(TestTime, userobj, map[dbmodel.Meat]int{meatobj1:3, meatobj2:1},12.50,"EA123456788TH")
+	MockSalesHistory1, err = dbmodel.MakeSalesHistory(TestTime, userobj, map[dbmodel.Meat]int{meatobj1: 3, meatobj2: 1}, 12.50, "EA123456788TH")
 	if err != nil {
 		panic(err)
 	}
-	MockSalesHistory2, err = dbmodel.MakeSalesHistory(TestTime, userobj, map[dbmodel.Meat]int{meatobj2:5},12.50,"EA123456789TH")
+	MockSalesHistory2, err = dbmodel.MakeSalesHistory(TestTime, userobj, map[dbmodel.Meat]int{meatobj2: 5}, 12.50, "EA123456789TH")
 	if err != nil {
 		panic(err)
 	}
@@ -67,7 +67,7 @@ func RegisSalesHistory(sh dbmodel.SalesHistory) error {
 	return nil
 }
 
-func GetUserSalesHistory(userID bson.ObjectId) ([]dbmodel.SalesHistory, error)  {
+func GetUserSalesHistory(userID bson.ObjectId) ([]dbmodel.SalesHistory, error) {
 	db, err := GetDB()
 	if err != nil {
 		return nil, err

@@ -24,7 +24,7 @@ func ToSalesHistoryPageModel(sh []dbmodel.SalesHistory, menu Menu) (SalesHistory
 	page := SalesHistoryPageModel{Menu: menu}
 
 	shms := new([]SalesHistoryModel)
-	for _,v := range sh {
+	for _, v := range sh {
 		shm, err := ToSalesHistoryModel(v)
 		if err != nil {
 			return SalesHistoryPageModel{}, err

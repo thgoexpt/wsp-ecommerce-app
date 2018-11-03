@@ -10,7 +10,7 @@ type SalesHistory struct {
 	ID             bson.ObjectId `bson:"_id,omitempty"`
 	Time           time.Time     `bson:"time"`
 	User           bson.ObjectId `bson:"user"`
-	Meats          []Meats         `bson:"meats"`
+	Meats          []Meats       `bson:"meats"`
 	Price          float64       `bson:"price"`
 	TrackingNumber string        `bson:"tracking_number"`
 }
