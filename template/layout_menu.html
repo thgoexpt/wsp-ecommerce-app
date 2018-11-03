@@ -3,7 +3,7 @@
 <div class="wrap_header fixed-header2 trans-0-4">
     <!-- Logo -->
     <a href="/" class="logo">
-        <img src="../static/assets/logo/logo2.png" alt="IMG-LOGO">
+        <img src="/static/assets/logo/logo2.png" alt="IMG-LOGO">
     </a>
 
     <!-- Menu -->
@@ -39,14 +39,14 @@
 
     <!-- Header Icon -->
     <div class="header-icons">
-        <a href="#" class="header-wrapicon1 dis-block">
-            <img src="../static/assets/icon/icon-header-01.png" class="header-icon1" alt="ICON">
+        <a href="/profile/" class="header-wrapicon1 dis-block">
+            <img src="/static/assets/icon/icon-header-01.png" class="header-icon1" alt="ICON">
         </a>
 
         <span class="linedivide1"></span>
 
         <div class="header-wrapicon2">
-            <img src="../static/assets/icon/icon-header-02.png" class="header-icon1 js-show-header-dropdown" alt="ICON">
+            <img src="/static/assets/icon/icon-header-02.png" class="header-icon1 js-show-header-dropdown" alt="ICON">
             <span class="header-icons-noti">0</span>
 
             <!-- Header cart noti -->
@@ -109,7 +109,7 @@
 
             <!-- Logo2 -->
             <a href="/" class="logo2">
-                <img src="../static/assets/logo/logo2.png" alt="IMG-LOGO" style="height:100%">
+                <img src="/static/assets/logo/logo2.png" alt="IMG-LOGO" style="height:100%">
             </a>
 
             <div class="topbar-child2">
@@ -124,29 +124,28 @@
                 {{if eq .User ""}}
                 <!--Register-->
                 <a href="#myModal_regis" class="header-wrapicon1 dis-block m-l-30" data-toggle="modal" id="registerIcon">
-                    <img src="../static/assets/icon/register.png" class="header-icon1" alt="ICON">
+                    <img src="/static/assets/icon/register.png" class="header-icon1" alt="ICON">
                 </a>
                 <!--Login-->
                 <a href="#myModal" class="header-wrapicon1 dis-block m-l-30" data-toggle="modal" id="loginIcon">
-                    <img src="../static/assets/icon/login.png" class="header-icon1" alt="ICON">
+                    <img src="/static/assets/icon/login.png" class="header-icon1" alt="ICON">
                 </a>
 
                 {{else}}
                 <!-- User -->
-                <a href="#" class="header-wrapicon1 dis-block m-l-30" id="userProfileIcon">
-                    <img src="../static/assets/icon/icon-header-01.png" class="header-icon1" alt="ICON">
+                <a href="/profile/" class="header-wrapicon1 dis-block m-l-30" id="userProfileIcon">
+                    <img src="/static/assets/icon/icon-header-01.png" class="header-icon1" alt="ICON">
                 </a>
                 <!--Logout-->
                 <a href="/logout/" class="header-wrapicon1 dis-block m-l-30" id="logoutIcon">
-                    <img src="../static/assets/icon/logout.png" class="header-icon1" alt="ICON">
+                    <img src="/static/assets/icon/logout.png" class="header-icon1" alt="ICON">
                 </a>
                 {{end}}
 
                 <span class="linedivide1"></span>
 
                 <div class="header-wrapicon2 m-r-13">
-                    <img src="../static/assets/icon/icon-header-02.png" class="header-icon1 js-show-header-dropdown"
-                        alt="ICON">
+                    <img src="/static/assets/icon/icon-header-02.png" class="header-icon1 js-show-header-dropdown" alt="ICON">
                     <span class="header-icons-noti">0</span>
 
                     <!-- Header cart noti -->
@@ -207,6 +206,11 @@
                         <li>
                             <a href="/contact/">Contact</a>
                         </li>
+                        {{if ge .UserType 4}}
+                        <li class="sale-noti">
+                            <a href="/add_meat/">Add Product</a>
+                        </li>
+                        {{end}}
                     </ul>
                 </nav>
             </div>
@@ -217,7 +221,7 @@
     <div class="wrap_header_mobile">
         <!-- Logo moblie -->
         <a href="/" class="logo-mobile">
-            <img src="../static/assets/logo/logo2.png" alt="IMG-LOGO">
+            <img src="/static/assets/logo/logo2.png" alt="IMG-LOGO">
         </a>
 
         <!-- Button show menu -->
@@ -227,31 +231,31 @@
                 {{if eq .User ""}}
                 <!--Register-->
                 <a href="#myModal_regis" class="header-wrapicon1 dis-block m-l-30" data-toggle="modal" id="registerIcon-mobile">
-                    <img src="../static/assets/icon/register.png" class="header-icon1" alt="ICON">
+                    <img src="/static/assets/icon/register.png" class="header-icon1" alt="ICON">
                 </a>
                 <!--Login-->
                 <a href="#myModal" class="header-wrapicon1 dis-block m-l-30" data-toggle="modal" id="loginIcon-mobile">
-                    <img src="../static/assets/icon/login.png" class="header-icon1" alt="ICON">
+                    <img src="/static/assets/icon/login.png" class="header-icon1" alt="ICON">
                 </a>
 
                 {{else}}
                 <!-- User -->
                 <a href="#" class="header-wrapicon1 dis-block m-l-30" id="userProfileIcon-mobile">
-                    <img src="../static/assets/icon/icon-header-01.png" class="header-icon1" alt="ICON">
+                    <img src="/static/assets/icon/icon-header-01.png" class="header-icon1" alt="ICON">
                 </a>
                 <!--Logout-->
                 <a href="/logout/" class="header-wrapicon1 dis-block m-l-30" id="logoutIcon-mobile">
-                    <img src="../static/assets/icon/logout.png" class="header-icon1" alt="ICON">
+                    <img src="/static/assets/icon/logout.png" class="header-icon1" alt="ICON">
                 </a>
                 {{end}}
                 {{/*<a href="#" class="header-wrapicon1 dis-block">*/}}
-                    {{/*<img src="../static/assets/icon/icon-header-01.png" class="header-icon1" alt="ICON">*/}}
+                    {{/*<img src="/static/assets/icon/icon-header-01.png" class="header-icon1" alt="ICON">*/}}
                     {{/*</a>*/}}
 
                 {{/*<span class="linedivide2"></span>*/}}
 
                 {{/*<div class="header-wrapicon2">*/}}
-                    {{/*<img src="../static/assets/icon/icon-header-02.png" class="header-icon1 js-show-header-dropdown"
+                    {{/*<img src="/static/assets/icon/icon-header-02.png" class="header-icon1 js-show-header-dropdown"
                         */}} {{/*alt="ICON">*/}} {{/*<span class="header-icons-noti">0</span>*/}}
                         {{/*<!-- Header cart noti -->*/}} {{/*<div class="header-cart header-dropdown">*/}}
                         {{/*<ul class="header-cart-wrapitem">*/}} {{/*<!-- <li class="header-cart-item">*/}}
@@ -273,78 +277,83 @@
                     </span>
                 </div>
             </div>
-        </div>
 
-        <!-- Menu Mobile -->
-        <div class="wrap-side-menu">
-            <nav class="side-menu">
-                <ul class="main-menu">
-                    <li class="item-topbar-mobile p-l-20 p-t-8 p-b-8">
-                        <span class="topbar-child1">
-                            Free shipping for standard order over $100
-                        </span>
-                    </li>
-
-                    <li class="item-topbar-mobile p-l-20 p-t-8 p-b-8">
-                        <div class="topbar-child2-mobile">
-                            <span class="topbar-email" id="welcomeUser-mobile">
-                                {{if eq .User ""}}
-                                Welcome, Guest
-                                {{else}}
-                                Welcome, {{.User}}
-                                {{end}}
+            <!-- Menu Mobile -->
+            <div class="wrap-side-menu">
+                <nav class="side-menu">
+                    <ul class="main-menu">
+                        <li class="item-topbar-mobile p-l-20 p-t-8 p-b-8">
+                            <span class="topbar-child1">
+                                Free shipping for standard order over $100
                             </span>
-                        </div>
-                    </li>
+                        </li>
 
-                    <li class="item-topbar-mobile p-l-10">
-                        <div class="topbar-social-mobile">
-                            <a href="https://www.facebook.com/profile.php?id=100002073423444" class="topbar-social-item fa fa-facebook"></a>
-                            <a href="https://www.instagram.com/" class="topbar-social-item fa fa-instagram"></a>
-                            <a href="https://www.pinterest.com/search/pins/?q=smoke%20meat&rs=typed&term_meta[]=smoke%7Ctyped&term_meta[]=meat%7Ctyped"
-                                class="topbar-social-item fa fa-pinterest-p"></a>
-                            <a href="https://www.youtube.com/channel/UCIe9MDRdkGoS99fBc5lgPfw/videos" class="topbar-social-item fa fa-youtube-play"></a>
-                        </div>
-                    </li>
+                        <li class="item-topbar-mobile p-l-20 p-t-8 p-b-8">
+                            <div class="topbar-child2-mobile">
+                                <span class="topbar-email" id="welcomeUser-mobile">
+                                    {{if eq .User ""}}
+                                    Welcome, Guest
+                                    {{else}}
+                                    Welcome, {{.User}}
+                                    {{end}}
+                                </span>
+                            </div>
+                        </li>
 
-                    <li class="item-menu-mobile">
-                        <a href="/">Home</a>
-                        <i class="arrow-main-menu fa fa-angle-right" aria-hidden="true"></i>
-                    </li>
+                        <li class="item-topbar-mobile p-l-10">
+                            <div class="topbar-social-mobile">
+                                <a href="https://www.facebook.com/profile.php?id=100002073423444" class="topbar-social-item fa fa-facebook"></a>
+                                <a href="https://www.instagram.com/" class="topbar-social-item fa fa-instagram"></a>
+                                <a href="https://www.pinterest.com/search/pins/?q=smoke%20meat&rs=typed&term_meta[]=smoke%7Ctyped&term_meta[]=meat%7Ctyped"
+                                    class="topbar-social-item fa fa-pinterest-p"></a>
+                                <a href="https://www.youtube.com/channel/UCIe9MDRdkGoS99fBc5lgPfw/videos" class="topbar-social-item fa fa-youtube-play"></a>
+                            </div>
+                        </li>
 
-                    <li class="item-menu-mobile">
-                        <a href="/product/">Shop</a>
-                    </li>
+                        <li class="item-menu-mobile">
+                            <a href="/">Home</a>
+                            <i class="arrow-main-menu fa fa-angle-right" aria-hidden="true"></i>
+                        </li>
 
-                    <li class="item-menu-mobile">
-                        <a href="/product/">Sale</a>
-                    </li>
+                        <li class="item-menu-mobile">
+                            <a href="/product/">Shop</a>
+                        </li>
 
-                    <li class="item-menu-mobile">
-                        <a href="/cart/">Cart</a>
-                    </li>
+                        <li class="item-menu-mobile">
+                            <a href="/product/">Sale</a>
+                        </li>
 
-                    <li class="item-menu-mobile">
-                        <a href="/about/">About</a>
-                    </li>
+                        <li class="item-menu-mobile">
+                            <a href="/cart/">Cart</a>
+                        </li>
 
-                    <li class="item-menu-mobile">
-                        <a href="/contact/" id="lastDropdownMenuItem">Contact</a>
-                    </li>
-                </ul>
-            </nav>
-        </div>
-        <div id="alertBox">
-            {{if ne .Success ""}}
-            <div class="container alert alert-success alert-dismissible text-center" role="alert" id="successBox">
-                {{.Success}}
+                        <li class="item-menu-mobile">
+                            <a href="/about/">About</a>
+                        </li>
+
+                        <li class="item-menu-mobile">
+                            <a href="/contact/" id="lastDropdownMenuItem">Contact</a>
+                        </li>
+
+                        {{if ge .UserType 4}}
+                        <li class="item-menu-mobile">
+                            <a href="/add_meat/" id="lastDropdownMenuItem">Add Product</a>
+                        </li>
+                        {{end}}
+                    </ul>
+                </nav>
             </div>
-            {{end}}
-            {{if ne .Warning ""}}
-            <div class="container alert alert-warning alert-dismissible text-center" role="alert" id="warningBox">
-                Warning: {{.Warning}}
+            <div id="alertBox">
+                {{if ne .Success ""}}
+                <div class="container alert alert-success alert-dismissible text-center" role="alert" id="successBox">
+                    {{.Success}}
+                </div>
+                {{end}}
+                {{if ne .Warning ""}}
+                <div class="container alert alert-warning alert-dismissible text-center" role="alert" id="warningBox">
+                    Warning: {{.Warning}}
+                </div>
+                {{end}}
             </div>
-            {{end}}
-        </div>
 </header>
 {{end}}

@@ -2,6 +2,7 @@ package db
 
 import (
 	"errors"
+
 	"github.com/guitarpawat/wsp-ecommerce/env"
 
 	"github.com/globalsign/mgo/bson"
@@ -75,6 +76,55 @@ func RegisUser(user dbmodel.User) error {
 		return err
 	}
 
+	return nil
+}
+
+func GetUser(id bson.ObjectId) (dbmodel.User, error) {
+	db, err := GetDB()
+	if err != nil {
+		return dbmodel.User{}, err
+	}
+	defer db.Session.Close()
+
+	user := dbmodel.User{}
+	err = db.C("Users").Find(bson.M{"_id": id}).One(&user)
+	return user, err
+}
+
+func UpdateUser(id bson.ObjectId, fullname, email, address string) error {
+	db, err := GetDB()
+	if err != nil {
+		return err
+	}
+	defer db.Session.Close()
+
+	err = db.C("Users").Update(bson.M{"_id": id}, bson.M{"$set": bson.M{"fullname": fullname, "email": email, "address": address}})
+	if err != nil {
+		return err
+	}
+	return nil
+}
+
+func UpdatePass(id bson.ObjectId, oldPass, newPassHash string) error {
+	db, err := GetDB()
+	if err != nil {
+		return err
+	}
+	defer db.Session.Close()
+
+	user, err := GetUser(id)
+	if err != nil {
+		return err
+	}
+
+	user, err = AuthenticateUser(user.Username, oldPass)
+	if err != nil {
+		return err
+	}
+	err = db.C("Users").Update(bson.M{"_id": id}, bson.M{"$set": bson.M{"hash": newPassHash}})
+	if err != nil {
+		return err
+	}
 	return nil
 }
 

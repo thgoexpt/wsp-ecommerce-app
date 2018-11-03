@@ -1,7 +1,9 @@
 package dbmodel
 
-import "github.com/globalsign/mgo/bson"
-import "golang.org/x/crypto/bcrypt"
+import (
+	"github.com/globalsign/mgo/bson"
+	"golang.org/x/crypto/bcrypt"
+)
 
 const TypeUser = 0
 const TypeEmployee = 4
@@ -29,8 +31,9 @@ func (u User) IsSame(u2 User) bool {
 func MakeUser(username, password, fullname, email, address string, usertype int) (User, error) {
 	hash, err := bcrypt.GenerateFromPassword([]byte(password), bcrypt.DefaultCost)
 	if err != nil {
-		return User{}, nil
+		return User{}, err
 	}
+
 	user := User{
 		Username: username,
 		Hash:     string(hash),

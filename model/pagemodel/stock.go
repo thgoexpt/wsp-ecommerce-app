@@ -1,6 +1,6 @@
 package pagemodel
 
-type Product struct {
+type Stock struct {
 	Menu
 	Meats []MeatModel
 }

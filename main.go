@@ -2,13 +2,14 @@ package main
 
 import (
 	"fmt"
+	"log"
+	"net/http"
+
 	"github.com/gorilla/mux"
 	"github.com/guitarpawat/middleware"
 	"github.com/guitarpawat/wsp-ecommerce/db"
 	solidenv "github.com/guitarpawat/wsp-ecommerce/env"
 	"github.com/guitarpawat/wsp-ecommerce/handler"
-	"log"
-	"net/http"
 )
 
 var env = solidenv.GetEnv()
@@ -20,17 +21,31 @@ func main() {
 
 	r.PathPrefix("/static/").Handler(fs)
 
+	r.HandleFunc("/image/{name}", handler.Images)
+
 	r.Handle("/", handlePage(handler.Home))
 
 	r.Handle("/about/", handlePage(handler.About))
 
-	r.Handle("/cart/", handlePage(handler.ComingSoon))
+	r.Handle("/cart/", handlePage(handler.Cart))
 
-	r.Handle("/contact/", handlePage(handler.ComingSoon))
+	r.Handle("/contact/", handlePage(handler.Contact))
 
 	r.Handle("/product/", handlePage(handler.Product))
+	r.Handle("/product/sort/type={meattype}&priceSort={price_sort}/", handlePage(handler.ProductSortType))
+	r.Handle("/product/search/name={name}&startPrice={startPrice}&endPrice={endPrice}&priceSort={price_sort}/", handlePage(handler.ProductSearch))
 
-	r.Handle("/product-detail/", handlePage(handler.ComingSoon))
+	r.Handle("/product-detail/{meatId}", handlePage(handler.ProductDetail))
+
+	r.Handle("/profile/", handlePage(handler.Profile))
+
+	r.Handle("/profile-edit/", handlePage(handler.ProfileEdit))
+
+	r.Handle("/add-product/", handlePage(handler.AddProduct))
+
+	r.Handle("/product-stock/", handlePage(handler.ProductStock))
+
+	r.Handle("/sale-history/", handlePage(handler.SaleHistory))
 
 	r.Handle("/regis/", middleware.MakeMiddleware(nil,
 		middleware.DoableFunc(handler.Regis),
@@ -52,6 +67,25 @@ func main() {
 		middleware.DoableFunc(handler.CheckSession),
 		middleware.DoableFunc(handler.BuildHeader),
 		middleware.DoableFunc(handler.Home)))
+
+	r.Handle("/add_meat/", handlePage(handler.AddMeat))
+
+	r.Handle("/regis_meat/", middleware.MakeMiddleware(nil,
+		middleware.DoableFunc(handler.CheckSession),
+		middleware.DoableFunc(handler.BuildHeader),
+		middleware.DoableFunc(handler.RegisMeat),
+		middleware.DoableFunc(handler.BuildHeader),
+		middleware.DoableFunc(handler.Home))).
+		Methods("POST")
+
+	r.Handle("/edit-profile/", middleware.MakeMiddleware(nil,
+		middleware.DoableFunc(handler.CheckSession),
+		middleware.DoableFunc(handler.BuildHeader),
+		middleware.DoableFunc(handler.EditProfile),
+		middleware.DoableFunc(handler.CheckSession),
+		middleware.DoableFunc(handler.BuildHeader),
+		middleware.DoableFunc(handler.Profile))).
+		Methods("POST")
 
 	httpr := mux.NewRouter()
 	httpr.PathPrefix("/").HandlerFunc(handler.RedirectToHTTPS)
