@@ -6,11 +6,12 @@ import (
 )
 
 func TestMakeSalesHistory_NoMeat(t *testing.T) {
+	user := User{ID:"1"}
 	expectedTime := time.Now()
 	expectedPrice := 10.25
 	expectedTrackingNumber := "EA123456789TH"
 
-	sh, _ := MakeSalesHistory(expectedTime, map[Meat]int{}, expectedPrice, expectedTrackingNumber)
+	sh, _ := MakeSalesHistory(expectedTime, user, map[Meat]int{}, expectedPrice, expectedTrackingNumber)
 
 	if expectedTime != sh.Time {
 		t.Errorf("expected time: %s, but get: %s", expectedTime, sh.Time)
@@ -29,7 +30,24 @@ func TestMakeSalesHistory_NoMeat(t *testing.T) {
 	}
 }
 
+func TestMakeSalesHistory_NoUser(t *testing.T) {
+	user := User{}
+	expectedTime := time.Now()
+	mockMeat1 := Meat{ID: "1"}
+	mockMeat2 := Meat{ID: "2"}
+	expectedMeat := map[Meat]int{mockMeat1: 3, mockMeat2: 1}
+	expectedPrice := 10.25
+	expectedTrackingNumber := "EA123456789TH"
+
+	_, err := MakeSalesHistory(expectedTime, user, expectedMeat, expectedPrice, expectedTrackingNumber)
+
+	if err == nil {
+		t.Errorf("expected error")
+	}
+}
+
 func TestMakeSalesHistory_SomeMeat(t *testing.T) {
+	user := User{ID:"1"}
 	mockMeat1 := Meat{ID: "1"}
 	mockMeat2 := Meat{ID: "2"}
 	expectedTime := time.Now()
@@ -37,7 +55,7 @@ func TestMakeSalesHistory_SomeMeat(t *testing.T) {
 	expectedPrice := 10.25
 	expectedTrackingNumber := "EA123456789TH"
 
-	sh, _ := MakeSalesHistory(expectedTime, expectedMeat, expectedPrice, expectedTrackingNumber)
+	sh, _ := MakeSalesHistory(expectedTime, user, expectedMeat, expectedPrice, expectedTrackingNumber)
 
 	if expectedTime != sh.Time {
 		t.Errorf("expected time: %s, but get: %s", expectedTime, sh.Time)
@@ -71,13 +89,14 @@ func TestMakeSalesHistory_SomeMeat(t *testing.T) {
 }
 
 func TestMakeSalesHistory_ErrorNoID(t *testing.T) {
+	user := User{ID:"1"}
 	mockMeat := Meat{}
 	expectedTime := time.Now()
 	expectedMeat := map[Meat]int{mockMeat: 3}
 	expectedPrice := 10.25
 	expectedTrackingNumber := "EA123456789TH"
 
-	_, err := MakeSalesHistory(expectedTime, expectedMeat, expectedPrice, expectedTrackingNumber)
+	_, err := MakeSalesHistory(expectedTime, user, expectedMeat, expectedPrice, expectedTrackingNumber)
 
 	if err == nil {
 		t.Errorf("expected error")
