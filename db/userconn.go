@@ -3,8 +3,6 @@ package db
 import (
 	"errors"
 
-	"github.com/guitarpawat/wsp-ecommerce/env"
-
 	"github.com/globalsign/mgo/bson"
 	"github.com/guitarpawat/wsp-ecommerce/model/dbmodel"
 )
@@ -15,13 +13,7 @@ var TestEmployee, _ = dbmodel.MakeUser("emp", "emp", "Happy Employee", "emp@exam
 var TestOwner, _ = dbmodel.MakeUser("owner", "owner", "Rich Owner", "owner@example.com", "Kasetsart, TH", dbmodel.TypeOwner)
 var TestLoginFailUserName = "fail"
 
-func init() {
-	if env.GetEnv() != env.Production {
-		Mock()
-	}
-}
-
-func Mock() {
+func MockUser() {
 	db, err := GetDB()
 	if err != nil {
 		panic("cannot connect to db")

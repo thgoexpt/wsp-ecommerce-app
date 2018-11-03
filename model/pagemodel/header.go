@@ -1,8 +1,11 @@
 package pagemodel
 
+import "github.com/globalsign/mgo/bson"
+
 type Menu struct {
-	User    string
+	User     string
+	UserID   bson.ObjectId
 	UserType int
-	Warning string
-	Success string
+	Warning  string
+	Success  string
 }
