@@ -137,16 +137,81 @@ func Product(w http.ResponseWriter, r *http.Request, v *middleware.ValueMap) {
 		header = defaultHeader
 	}
 
-	v.Set("next", false)
-	model := pagemodel.Stock{
+	model := pagemodel.Product{
 		Menu:  header,
 		Meats: []pagemodel.MeatModel{},
 	}
 
+	v.Set("next", false)
 	meats, err := db.GetAllMeats()
 	if err != nil {
-		w.WriteHeader(http.StatusNotFound)
+		meats = []dbmodel.Meat{}
+	}
+
+	for i := 0; i < len(meats); i++ {
+		model.Meats = append(model.Meats, GetMeatModel(meats[i]))
+	}
+
+	t.ExecuteTemplate(w, "product.html", model)
+}
+
+func ProductSortType(w http.ResponseWriter, r *http.Request, v *middleware.ValueMap) {
+	header, ok := v.Get("header").(pagemodel.Menu)
+	if !ok {
+		header = defaultHeader
+	}
+
+	model := pagemodel.Product{
+		Menu:  header,
+		Meats: []pagemodel.MeatModel{},
+	}
+
+	vars := mux.Vars(r)
+
+	v.Set("next", false)
+	meats, err := db.SortType(vars["meattype"], vars["price_sort"])
+	// meats, err := db.SortType(vars["meattype"], "price")
+	if err != nil {
+		meats = []dbmodel.Meat{}
+	}
+
+	for i := 0; i < len(meats); i++ {
+		model.Meats = append(model.Meats, GetMeatModel(meats[i]))
+	}
+
+	t.ExecuteTemplate(w, "product.html", model)
+}
+
+func ProductSearch(w http.ResponseWriter, r *http.Request, v *middleware.ValueMap) {
+	header, ok := v.Get("header").(pagemodel.Menu)
+	if !ok {
+		header = defaultHeader
+	}
+
+	model := pagemodel.Product{
+		Menu:  header,
+		Meats: []pagemodel.MeatModel{},
+	}
+
+	vars := mux.Vars(r)
+
+	startPrice, err := strconv.ParseFloat(vars["startPrice"], 64)
+	if err != nil {
+		v.Set("warning", "startPrice is not a number.")
+		v.Set("next", true)
 		return
+	}
+	endPrice, err := strconv.ParseFloat(vars["endPrice"], 64)
+	if err != nil {
+		v.Set("warning", "startPrice is not a number.")
+		v.Set("next", true)
+		return
+	}
+
+	v.Set("next", false)
+	meats, err := db.Search(vars["name"], startPrice, endPrice, vars["price_sort"])
+	if err != nil {
+		meats = []dbmodel.Meat{}
 	}
 
 	for i := 0; i < len(meats); i++ {
@@ -177,12 +242,11 @@ func ProductDetail(w http.ResponseWriter, r *http.Request, v *middleware.ValueMa
 		header = defaultHeader
 	}
 
-	v.Set("next", false)
 	vars := mux.Vars(r)
-	meat, err := db.GetMeat(string(vars["meatId"]))
+	v.Set("next", false)
+	meat, err := db.GetMeat(vars["meatId"])
 	if err != nil {
-		w.WriteHeader(http.StatusNotFound)
-		return
+		meat = dbmodel.Meat{}
 	}
 	meatModel := GetMeatModel(meat)
 

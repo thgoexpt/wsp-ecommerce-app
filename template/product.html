@@ -6,32 +6,32 @@
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<!--===============================================================================================-->
-	<link rel="icon" type="image/png" href="../static/assets/icon/favicon.ico">
+	<link rel="icon" type="image/png" href="/static/assets/icon/favicon.ico">
 	<!--===============================================================================================-->
-	<link rel="stylesheet" type="text/css" href="../static/animate/bootstrap/css/bootstrap.min.css">
+	<link rel="stylesheet" type="text/css" href="/static/animate/bootstrap/css/bootstrap.min.css">
 	<!--===============================================================================================-->
-	<link rel="stylesheet" type="text/css" href="../static/fonts/font-awesome-4.7.0/css/font-awesome.min.css">
+	<link rel="stylesheet" type="text/css" href="/static/fonts/font-awesome-4.7.0/css/font-awesome.min.css">
 	<!--===============================================================================================-->
-	<link rel="stylesheet" type="text/css" href="../static/fonts/themify/themify-icons.css">
+	<link rel="stylesheet" type="text/css" href="/static/fonts/themify/themify-icons.css">
 	<!--===============================================================================================-->
-	<link rel="stylesheet" type="text/css" href="../static/fonts/Linearicons-Free-v1.0.0/icon-font.min.css">
+	<link rel="stylesheet" type="text/css" href="/static/fonts/Linearicons-Free-v1.0.0/icon-font.min.css">
 	<!--===============================================================================================-->
-	<link rel="stylesheet" type="text/css" href="../static/fonts/elegant-font/html-css/style.css">
+	<link rel="stylesheet" type="text/css" href="/static/fonts/elegant-font/html-css/style.css">
 	<!--===============================================================================================-->
-	<link rel="stylesheet" type="text/css" href="../static/animate/animate/animate.css">
+	<link rel="stylesheet" type="text/css" href="/static/animate/animate/animate.css">
 	<!--===============================================================================================-->
-	<link rel="stylesheet" type="text/css" href="../static/animate/css-hamburgers/hamburgers.min.css">
+	<link rel="stylesheet" type="text/css" href="/static/animate/css-hamburgers/hamburgers.min.css">
 	<!--===============================================================================================-->
-	<link rel="stylesheet" type="text/css" href="../static/animate/animsition/css/animsition.min.css">
+	<link rel="stylesheet" type="text/css" href="/static/animate/animsition/css/animsition.min.css">
 	<!--===============================================================================================-->
-	<link rel="stylesheet" type="text/css" href="../static/animate/select2/select2.min.css">
+	<link rel="stylesheet" type="text/css" href="/static/animate/select2/select2.min.css">
 	<!--===============================================================================================-->
-	<link rel="stylesheet" type="text/css" href="../static/animate/slick/slick.css">
+	<link rel="stylesheet" type="text/css" href="/static/animate/slick/slick.css">
 	<!--===============================================================================================-->
-	<link rel="stylesheet" type="text/css" href="../static/animate/noui/nouislider.min.css">
+	<link rel="stylesheet" type="text/css" href="/static/animate/noui/nouislider.min.css">
 	<!--===============================================================================================-->
-	<link rel="stylesheet" type="text/css" href="../static/css/util.css">
-	<link rel="stylesheet" type="text/css" href="../static/css/style.css">
+	<link rel="stylesheet" type="text/css" href="/static/css/util.css">
+	<link rel="stylesheet" type="text/css" href="/static/css/style.css">
 	<!--===============================================================================================-->
 </head>
 
@@ -40,7 +40,7 @@
 	{{template "menu" .Menu}}
 
 	<!-- Title Page -->
-	<section class="parallax0 parallax100 bg-title-page p-t-50 p-b-40 flex-col-c-m" style="background-image: url(../static/assets/meat/product/home/product_wall.jpg);">
+	<section class="parallax0 parallax100 bg-title-page p-t-50 p-b-40 flex-col-c-m" style="background-image: url(/static/assets/meat/product/home/product_wall.jpg);">
 		<h2 class="l-text2 t-center">
 			Fresh Meat Everyday !!
 		</h2>
@@ -63,7 +63,7 @@
 
 						<ul class="p-b-54">
 							<li class="p-t-4">
-								<a href="#" class="s-text13 active1">
+								<a href="/product/sort?type=all&priceSort=price/" class="s-text13 active1">
 									All
 								</a>
 							</li>
@@ -188,7 +188,7 @@
 								</div>
 
 								<div class="block2-txt p-t-20">
-									<a href="/product-detail/" class="block2-name dis-block s-text3 p-b-5">
+									<a href="/product-detail/{{.ID}}" class="block2-name dis-block s-text3 p-b-5">
 										{{.ProName}} ({{.Type}})
 									</a>
 
@@ -230,14 +230,14 @@
 	{{template "register"}}
 
 	<!--===============================================================================================-->
-	<script type="text/javascript" src="../static/animate/jquery/jquery-3.2.1.min.js"></script>
+	<script type="text/javascript" src="/static/animate/jquery/jquery-3.2.1.min.js"></script>
 	<!--===============================================================================================-->
-	<script type="text/javascript" src="../static/animate/animsition/js/animsition.min.js"></script>
+	<script type="text/javascript" src="/static/animate/animsition/js/animsition.min.js"></script>
 	<!--===============================================================================================-->
-	<script type="text/javascript" src="../static/animate/bootstrap/js/popper.js"></script>
-	<script type="text/javascript" src="../static/animate/bootstrap/js/bootstrap.min.js"></script>
+	<script type="text/javascript" src="/static/animate/bootstrap/js/popper.js"></script>
+	<script type="text/javascript" src="/static/animate/bootstrap/js/bootstrap.min.js"></script>
 	<!--===============================================================================================-->
-	<script type="text/javascript" src="../static/animate/select2/select2.min.js"></script>
+	<script type="text/javascript" src="/static/animate/select2/select2.min.js"></script>
 	<script type="text/javascript">
 		$(".selection-1").select2({
 			minimumResultsForSearch: 20,
@@ -250,13 +250,13 @@
 		});
 	</script>
 	<!--===============================================================================================-->
-	<script type="text/javascript" src="../static/animate/daterangepicker/moment.min.js"></script>
-	<script type="text/javascript" src="../static/animate/daterangepicker/daterangepicker.js"></script>
+	<script type="text/javascript" src="/static/animate/daterangepicker/moment.min.js"></script>
+	<script type="text/javascript" src="/static/animate/daterangepicker/daterangepicker.js"></script>
 	<!--===============================================================================================-->
-	<script type="text/javascript" src="../static/animate/slick/slick.min.js"></script>
-	<script type="text/javascript" src="../static/js/slick-custom.js"></script>
+	<script type="text/javascript" src="/static/animate/slick/slick.min.js"></script>
+	<script type="text/javascript" src="/static/js/slick-custom.js"></script>
 	<!--===============================================================================================-->
-	<script type="text/javascript" src="../static/animate/sweetalert/sweetalert.min.js"></script>
+	<script type="text/javascript" src="/static/animate/sweetalert/sweetalert.min.js"></script>
 	<script type="text/javascript">
 		$('.block2-btn-addcart').each(function () {
 			var nameProduct = $(this).parent().parent().parent().find('.block2-name').html();
@@ -274,7 +274,7 @@
 	</script>
 
 	<!--===============================================================================================-->
-	<script type="text/javascript" src="../static/animate/noui/nouislider.min.js"></script>
+	<script type="text/javascript" src="/static/animate/noui/nouislider.min.js"></script>
 	<script type="text/javascript">
 		/*[ No ui ]
 	    ===========================================================*/
@@ -299,7 +299,7 @@
 		});
 	</script>
 	<!--===============================================================================================-->
-	<script src="../static/js/main.js"></script>
+	<script src="/static/js/main.js"></script>
 
 </body>
 
