@@ -2,6 +2,7 @@ package handler
 
 import (
 	"encoding/gob"
+	"github.com/guitarpawat/wsp-ecommerce/db/mock"
 	"log"
 	"net/http"
 	"path/filepath"
@@ -526,8 +527,7 @@ func EditProfile(w http.ResponseWriter, r *http.Request, v *middleware.ValueMap)
 }
 
 func Mock(w http.ResponseWriter, r *http.Request, v *middleware.ValueMap) {
-	db.MockUser()
-	db.MockMeat()
+	mock.Mock()
 	v.Set("next", true)
 }
 

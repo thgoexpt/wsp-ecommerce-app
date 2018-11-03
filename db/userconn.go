@@ -3,8 +3,6 @@ package db
 import (
 	"errors"
 
-	"github.com/guitarpawat/wsp-ecommerce/env"
-
 	"github.com/globalsign/mgo/bson"
 	"github.com/guitarpawat/wsp-ecommerce/model/dbmodel"
 )
@@ -14,12 +12,6 @@ var TestRegis, _ = dbmodel.MakeUser("regis", "regis", "Regis User", "regis@examp
 var TestEmployee, _ = dbmodel.MakeUser("emp", "emp", "Happy Employee", "emp@example.com", "Kasetsart, TH", dbmodel.TypeEmployee)
 var TestOwner, _ = dbmodel.MakeUser("owner", "owner", "Rich Owner", "owner@example.com", "Kasetsart, TH", dbmodel.TypeOwner)
 var TestLoginFailUserName = "fail"
-
-func init() {
-	if env.GetEnv() != env.Production {
-		MockUser()
-	}
-}
 
 func MockUser() {
 	db, err := GetDB()
