@@ -110,7 +110,7 @@ func SortType(meattype, sorting string) ([]dbmodel.Meat, error) {
 	}
 	defer db.Session.Close()
 
-	if meattype == "" {
+	if meattype == "" || meattype == "all" {
 		meattype = "."
 	}
 	if sorting != SortPrice && sorting != SortPriceReverse {
@@ -137,7 +137,7 @@ func Search(name string, startPrice, endPrice float64, sorting string) ([]dbmode
 	}
 	defer db.Session.Close()
 
-	if name == "" {
+	if name == "" || name == "all" {
 		name = "."
 	}
 	if startPrice < 0 {
