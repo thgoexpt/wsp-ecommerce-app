@@ -63,31 +63,31 @@
 
 						<ul class="p-b-54">
 							<li class="p-t-4">
-								<a href="/product/sort?type=all&priceSort=price/" class="s-text13 active1">
+								<a href="/product/sort/type=all&priceSort=price/" class="s-text13 active1">
 									All
 								</a>
 							</li>
 
 							<li class="p-t-4">
-								<a href="#" class="s-text13">
+								<a href="/product/sort/type=pig&priceSort=-price/" class="s-text13">
 									Pork
 								</a>
 							</li>
 
 							<li class="p-t-4">
-								<a href="#" class="s-text13">
+								<a href="/product/sort/type=beef&priceSort=-price/" class="s-text13">
 									Beef
 								</a>
 							</li>
 
 							<li class="p-t-4">
-								<a href="#" class="s-text13">
+								<a href="/product/sort/type=fish&priceSort=-price/" class="s-text13">
 									Fish
 								</a>
 							</li>
 
 							<li class="p-t-4">
-								<a href="#" class="s-text13">
+								<a href="/product/sort/type=other&priceSort=-price/" class="s-text13">
 									Other
 								</a>
 							</li>
@@ -95,36 +95,12 @@
 
 						<!--  -->
 						<h4 class="m-text14 p-b-32">
-							Filters
+							Search
 						</h4>
 
-						<div class="filter-price p-t-22 p-b-50 bo3">
-							<div class="m-text15 p-b-17">
-								Price
-							</div>
-
-							<div class="wra-filter-bar">
-								<div id="filter-bar"></div>
-							</div>
-
-							<div class="flex-sb-m flex-w p-t-16">
-								<div class="w-size11">
-									<!-- Button -->
-									<button class="flex-c-m size4 bg7 bo-rad-15 hov1 s-text14 trans-0-4">
-										Filter
-									</button>
-								</div>
-
-								<div class="s-text3 p-t-10 p-b-10">
-									Range: $<span id="value-lower">610</span> - $<span id="value-upper">980</span>
-								</div>
-							</div>
-						</div>
-
 						<div class="search-product pos-relative bo4 of-hidden">
-							<input class="s-text7 size6 p-l-23 p-r-50" type="text" name="search-product" placeholder="Search Products...">
-
-							<button class="flex-c-m size5 ab-r-m color2 color0-hov trans-0-4">
+							<input class="s-text7 size6 p-l-23 p-r-50" type="text" id="search" name="search-product" placeholder="Search Products...">
+							<button class="flex-c-m size5 ab-r-m color2 color0-hov trans-0-4" onclick="search()">
 								<i class="fs-12 fa fa-search" aria-hidden="true"></i>
 							</button>
 						</div>
@@ -136,30 +112,30 @@
 					<div class="flex-sb-m flex-w p-b-35">
 						<div class="flex-w">
 							<div class="rs2-select2 bo4 of-hidden w-size12 m-t-5 m-b-5 m-r-10">
-								<select class="selection-2" name="sorting">
+								<select class="selection-2" name="sorting" onchange="location = this.value">
 									<option>Default Sorting</option>
 									<option>Popularity</option>
-									<option>Price: low to high</option>
-									<option>Price: high to low</option>
+									<option value="/product/sort/type=all&priceSort=price/">Price: low to high</option>
+									<option value="/product/sort/type=all&priceSort=-price/">Price: high to low</option>
 								</select>
 							</div>
 
 							<div class="rs2-select2 bo4 of-hidden w-size12 m-t-5 m-b-5 m-r-10">
-								<select class="selection-2" name="sorting">
+								<select class="selection-2" name="sorting" onchange="location = this.value">
 									<option>Price</option>
-									<option>$0.00 - $50.00</option>
-									<option>$50.00 - $100.00</option>
-									<option>$100.00 - $150.00</option>
-									<option>$150.00 - $200.00</option>
-									<option>$200.00+</option>
+									<option value="/product/search/name=all&startPrice=0&endPrice=50&priceSort=price/">$0.00 - $50.00</option>
+									<option value="/product/search/name=all&startPrice=51&endPrice=100&priceSort=price/">$50.00 - $100.00</option>
+									<option value="/product/search/name=all&startPrice=101&endPrice=150&priceSort=price/">$100.00 - $150.00</option>
+									<option value="/product/search/name=all&startPrice=151&endPrice=200&priceSort=price/">$150.00 - $200.00</option>
+									<option value="/product/search/name=all&startPrice=200\1&endPrice=-1&priceSort=price/">$200.00+</option>
 
 								</select>
 							</div>
 						</div>
 
-						<span class="s-text8 p-t-5 p-b-5">
+						<!-- <span class="s-text8 p-t-5 p-b-5">
 							Showing 1–12 of 16 results
-						</span>
+						</span> -->
 					</div>
 
 					<!-- Product -->
@@ -205,7 +181,6 @@
 					<!-- Pagination -->
 					<div class="pagination flex-m flex-w p-t-26">
 						<a href="#" class="item-pagination flex-c-m trans-0-4 active-pagination">1</a>
-						<a href="#" class="item-pagination flex-c-m trans-0-4">2</a>
 					</div>
 				</div>
 			</div>
@@ -229,6 +204,13 @@
 	{{template "login"}}
 	{{template "register"}}
 
+	<!--===============================================================================================-->
+	<script>
+		function search() {
+			var searchText = document.getElementById("search").value;
+			window.location.href = "/product/search/name=" + searchText + "&startPrice=0&endPrice=-1&priceSort=price/";
+		}
+	</script>
 	<!--===============================================================================================-->
 	<script type="text/javascript" src="/static/animate/jquery/jquery-3.2.1.min.js"></script>
 	<!--===============================================================================================-->
