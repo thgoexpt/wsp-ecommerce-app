@@ -56,7 +56,8 @@
 							<th class="column-2">Date</th>
 							<th class="column-3">Time</th>
 							<th class="column-4">Product</th>
-							<th class="column-5">Tracking Number</th>
+                            <th class="column-5">Price</th>
+							<th class="column-6">Tracking Number</th>
 						</tr>
 
 						{{range $index,$sh := .SalesHistory}}
@@ -69,7 +70,8 @@
 										{{$meat.Name}}&nbsp;(Grade {{$meat.Grade}})&nbsp;x{{$val}}<br>
 									{{end}}
 								</td>
-                                <td class="column-5">{{$sh.TrackingNumber}}</td>
+                                <th class="column-5">Price</th>
+                                <td class="column-6">{{$sh.TrackingNumber}}</td>
                             </tr>
 						{{end}}
 

@@ -31,7 +31,7 @@ func MockSalesHistory() {
 		panic(err)
 	}
 
-	meatobj2id, err := GetMeatId(TestMeat2)
+	meatobj2id, err := GetMeatId(CupidWing)
 	if err != nil {
 		panic(err)
 	}
@@ -40,11 +40,20 @@ func MockSalesHistory() {
 		panic(err)
 	}
 
+	meatobj3id, err := GetMeatId(ChickWing)
+	if err != nil {
+		panic(err)
+	}
+	meatobj3, err := GetMeat(meatobj3id)
+	if err != nil {
+		panic(err)
+	}
+
 	MockSalesHistory1, err = dbmodel.MakeSalesHistory(TestTime, userobj, map[dbmodel.Meat]int{meatobj1: 3, meatobj2: 1}, 12.50, "EA123456788TH")
 	if err != nil {
 		panic(err)
 	}
-	MockSalesHistory2, err = dbmodel.MakeSalesHistory(TestTime, userobj, map[dbmodel.Meat]int{meatobj2: 5}, 12.50, "EA123456789TH")
+	MockSalesHistory2, err = dbmodel.MakeSalesHistory(TestTime, userobj, map[dbmodel.Meat]int{meatobj3: 5}, 15.00, "EA123456789TH")
 	if err != nil {
 		panic(err)
 	}

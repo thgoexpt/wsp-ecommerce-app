@@ -16,7 +16,7 @@ type SalesHistoryModel struct {
 	Date           string
 	Time           string
 	Meats          map[dbmodel.Meat]int
-	Price          float64
+	Price          string
 	TrackingNumber string
 }
 
@@ -55,7 +55,7 @@ func ToSalesHistoryModel(sh dbmodel.SalesHistory) (SalesHistoryModel, error) {
 	shm.Date = fmt.Sprintf("%02d/%02d/%04d", day, month, year)
 	shm.Time = fmt.Sprintf("%02d:%02d", sh.Time.Hour(), sh.Time.Minute())
 
-	shm.Price = sh.Price
+	shm.Price = fmt.Sprintf("%.2f", sh.Price)
 	shm.TrackingNumber = sh.TrackingNumber
 
 	return shm, nil
