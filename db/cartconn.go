@@ -100,10 +100,33 @@ func UpdateCart(userID, meat bson.ObjectId, quantity int) error {
 		Quantity: quantity,
 	}
 
-	_, err = db.C("Carts").Upsert(bson.M{"userID": userID},
+	//FIXME: First Time using this will not work
+	err = db.C("Carts").Update(bson.M{
+		"userID": userID,
+		// "meats": bson.M{
+		// 	"meat": meat,
+		// },
+	},
 		bson.M{
-			"$push": bson.M{"meats": cartMeat},
+			"$pull": bson.M{
+				"meats": bson.M{
+					"meat": meat,
+				},
+			},
 		})
+	if err != nil {
+		return err
+	}
+
+	_, err = db.C("Carts").Upsert(
+		bson.M{
+			"userID": userID,
+		},
+		bson.M{
+			// "$pull": bson.M{"meats": bson.M{"meat": meat}},
+			"$push": bson.M{"meats": cartMeat},
+		},
+	)
 	if err != nil {
 		return err
 	}

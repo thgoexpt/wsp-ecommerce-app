@@ -128,6 +128,7 @@ func Cart(w http.ResponseWriter, r *http.Request, v *middleware.ValueMap) {
 	model := pagemodel.Cart{
 		Menu:        header,
 		MeatsInCart: []pagemodel.CartMeatModel{},
+		CartTotal:   0,
 	}
 
 	v.Set("next", false)
@@ -142,6 +143,12 @@ func Cart(w http.ResponseWriter, r *http.Request, v *middleware.ValueMap) {
 				return
 			}
 			cart = dbmodel.InitialCart(user.ID)
+			err = db.RegisCart(cart)
+			if err != nil {
+				v.Set("warning", "Cart: unable to regis cart >> "+err.Error())
+				t.ExecuteTemplate(w, "cart.html", model)
+				return
+			}
 		} else {
 			// w.WriteHeader(http.StatusNotFound)
 			v.Set("warning", "Cart: unable to find cart >> "+err.Error())
@@ -165,7 +172,7 @@ func Cart(w http.ResponseWriter, r *http.Request, v *middleware.ValueMap) {
 			Quantity: meatFromCartDB.Quantity,
 			Total:    meat.Price * float64(meatFromCartDB.Quantity),
 		}
-
+		model.CartTotal = model.CartTotal * cartMeat.Total
 		model.MeatsInCart = append(model.MeatsInCart, cartMeat)
 	}
 
