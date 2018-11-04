@@ -137,14 +137,14 @@ func Cart(w http.ResponseWriter, r *http.Request, v *middleware.ValueMap) {
 			user, err := db.GetUserFromName(header.User)
 			if err != nil {
 				// w.WriteHeader(http.StatusNotFound)
-				v.Set("warning", "Cart: unable to find user.")
+				v.Set("warning", "Cart: unable to find user >> "+err.Error())
 				t.ExecuteTemplate(w, "cart.html", model)
 				return
 			}
 			cart = dbmodel.InitialCart(user.ID)
 		} else {
 			// w.WriteHeader(http.StatusNotFound)
-			v.Set("warning", "Cart: unable to find cart.")
+			v.Set("warning", "Cart: unable to find cart >> "+err.Error())
 			t.ExecuteTemplate(w, "cart.html", model)
 			return
 		}
@@ -153,7 +153,7 @@ func Cart(w http.ResponseWriter, r *http.Request, v *middleware.ValueMap) {
 		meat, err := db.GetMeat(meatFromCartDB.ID.Hex())
 		if err != nil {
 			// w.WriteHeader(http.StatusNotFound)
-			v.Set("warning", "Cart: unable to find meat.")
+			v.Set("warning", "Cart: unable to find meat >> "+err.Error())
 			t.ExecuteTemplate(w, "cart.html", model)
 			return
 		}
@@ -192,7 +192,7 @@ func AddCart(w http.ResponseWriter, r *http.Request, v *middleware.ValueMap) {
 	user, err := db.GetUserFromName(header.User)
 	if err != nil {
 		// w.WriteHeader(http.StatusNotFound)
-		v.Set("warning", "AddCart: unable to find user.")
+		v.Set("warning", "AddCart: unable to find user >> "+err.Error())
 		return
 	}
 
@@ -214,7 +214,7 @@ func Product(w http.ResponseWriter, r *http.Request, v *middleware.ValueMap) {
 	meats, err := db.GetAllMeats()
 	if err != nil {
 		// meats = []dbmodel.Meat{}
-		v.Set("warning", "Product: unable to get all meats.")
+		v.Set("warning", "Product: unable to get all meats >> "+err.Error())
 		t.ExecuteTemplate(w, "product.html", model)
 		return
 	}
@@ -244,7 +244,7 @@ func ProductSortType(w http.ResponseWriter, r *http.Request, v *middleware.Value
 	// meats, err := db.SortType(vars["meattype"], "price")
 	if err != nil {
 		// meats = []dbmodel.Meat{}
-		v.Set("warning", "ProductSortType: unable to get sorted meats.")
+		v.Set("warning", "ProductSortType: unable to get sorted meats >> "+err.Error())
 		t.ExecuteTemplate(w, "product.html", model)
 		return
 	}
@@ -286,7 +286,7 @@ func ProductSearch(w http.ResponseWriter, r *http.Request, v *middleware.ValueMa
 	meats, err := db.Search(vars["name"], startPrice, endPrice, vars["price_sort"])
 	if err != nil {
 		// meats = []dbmodel.Meat{}
-		v.Set("warning", "ProductSearch: unable to get searched meats.")
+		v.Set("warning", "ProductSearch: unable to get searched meats >> "+err.Error())
 		t.ExecuteTemplate(w, "product.html", model)
 		return
 	}
@@ -328,7 +328,7 @@ func ProductDetail(w http.ResponseWriter, r *http.Request, v *middleware.ValueMa
 	meat, err := db.GetMeat(vars["meatId"])
 	if err != nil {
 		// meat = dbmodel.Meat{}
-		v.Set("warning", "ProductDetail: "+err.Error())
+		v.Set("warning", "ProductDetail: >> "+err.Error())
 		t.ExecuteTemplate(w, "product-detail.html", model)
 		return
 	}
