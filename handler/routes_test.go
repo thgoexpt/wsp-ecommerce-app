@@ -164,3 +164,19 @@ func TestMock(t *testing.T) {
 		t.Errorf("expected next to be: %t, but get: %t", true, v.Get("next").(bool))
 	}
 }
+
+func TestAddProduct(t *testing.T) {
+	pageTest(AddProduct, t)
+}
+
+func TestProductStock(t *testing.T) {
+	pageTest(ProductStock, t)
+}
+
+func TestProfile(t *testing.T) {
+	pageTest(Profile, t)
+}
+
+func TestProfileEdit(t *testing.T) {
+	pageTest(ProfileEdit, t)
+}
