@@ -4,7 +4,6 @@ import (
 	"errors"
 
 	"github.com/globalsign/mgo/bson"
-	"github.com/guitarpawat/wsp-ecommerce/env"
 	"github.com/guitarpawat/wsp-ecommerce/model/dbmodel"
 )
 
@@ -12,12 +11,6 @@ var NonCart = errors.New("Carts Not Exist")
 
 var mockUserID1 = bson.ObjectIdHex("ba2946f27d9d403ce895633b")
 var mockUserID2 = bson.ObjectIdHex("f8f0b5922a47fef34a30327b")
-
-func init() {
-	if env.GetEnv() != env.Production {
-		MockCart()
-	}
-}
 
 func MockCart() {
 	db, err := GetDB()

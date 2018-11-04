@@ -319,6 +319,10 @@ func ProductDetail(w http.ResponseWriter, r *http.Request, v *middleware.ValueMa
 		header = defaultHeader
 	}
 
+	model := pagemodel.ProductDetail{
+		Menu: header,
+	}
+
 	vars := mux.Vars(r)
 	v.Set("next", false)
 	meat, err := db.GetMeat(vars["meatId"])
@@ -328,12 +332,7 @@ func ProductDetail(w http.ResponseWriter, r *http.Request, v *middleware.ValueMa
 		t.ExecuteTemplate(w, "product-detail.html", model)
 		return
 	}
-	meatModel := GetMeatModel(meat)
-
-	model := pagemodel.ProductDetail{
-		Menu:      header,
-		MeatModel: meatModel,
-	}
+	model.MeatModel = GetMeatModel(meat)
 
 	t.ExecuteTemplate(w, "product-detail.html", model)
 }
