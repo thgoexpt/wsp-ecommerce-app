@@ -36,7 +36,6 @@
 <body class="animsition">
 
 	{{template "menu" .Menu}}
-
 	<!-- breadcrumb -->
 	<div class="bread-crumb bgwhite flex-w p-l-52 p-r-15 p-t-30 p-l-15-sm">
 		<a href="/" class="s-text16">
@@ -520,7 +519,8 @@
 
 	<script>
 		// Set the date we're counting down to
-		var countDownDate = new Date("Oct 21, 2018 12:00:00").getTime();
+		var exp = "{{.MeatModel.Expire}}".replace("\\","/").replace("\\","/").split("/")
+		var countDownDate = new Date(exp[1]+'/'+exp[0]+'/'+exp[2]+'/'+' 23:59:59').getTime();
 
 		// Update the count down every 1 second
 		var x = setInterval(function () {
