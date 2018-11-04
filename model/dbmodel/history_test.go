@@ -1,6 +1,7 @@
 package dbmodel
 
 import (
+	"github.com/globalsign/mgo/bson"
 	"testing"
 	"time"
 )
@@ -48,7 +49,7 @@ func TestMakeSalesHistory_NoUser(t *testing.T) {
 
 func TestMakeSalesHistory_SomeMeat(t *testing.T) {
 	user := User{ID: "1"}
-	mockMeat1 := Meat{ID: "10"}
+	mockMeat1 := Meat{ID: bson.Ma}
 	mockMeat2 := Meat{ID: "11"}
 	expectedTime := time.Now()
 	expectedMeat := []Meats{{mockMeat1.ID, 1}, {mockMeat2.ID, 3}}
