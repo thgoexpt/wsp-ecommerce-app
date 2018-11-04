@@ -87,6 +87,12 @@ func main() {
 		middleware.DoableFunc(handler.Profile))).
 		Methods("POST")
 
+	r.Handle("/product/add_cart:{meatId}&quantity={quantity}", middleware.MakeMiddleware(nil,
+		middleware.DoableFunc(handler.CheckSession),
+		middleware.DoableFunc(handler.BuildHeader),
+		middleware.DoableFunc(handler.AddCart),
+		middleware.DoableFunc(handler.Product)))
+
 	httpr := mux.NewRouter()
 	httpr.PathPrefix("/").HandlerFunc(handler.RedirectToHTTPS)
 

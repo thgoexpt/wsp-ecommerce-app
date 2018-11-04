@@ -5,23 +5,23 @@ import (
 )
 
 type Cart struct {
-	ID     bson.ObjectId         `bson:"_id,omitempty"`
+	ID     bson.ObjectId  `bson:"_id,omitempty"`
 	UserID bson.ObjectId         `bson:"userId"`
-	Meats  map[bson.ObjectId]int `bson:"meats"`
+	Meats  map[string]int `bson:"meats"`
 }
 
 func (c Cart) RemoveMeat(meat bson.ObjectId) {
-	delete(c.Meats, meat)
+	delete(c.Meats, meat.Hex())
 }
 
 func (c Cart) SetMeat(meat bson.ObjectId, quantity int) {
-	c.Meats[meat] = quantity
+	c.Meats[meat.Hex()] = quantity
 }
 
 func InitialCart(userId bson.ObjectId) Cart {
 	cart := Cart{
 		UserID: userId,
-		Meats:  make(map[bson.ObjectId]int),
+		Meats:  make(map[string]int),
 	}
 
 	return cart

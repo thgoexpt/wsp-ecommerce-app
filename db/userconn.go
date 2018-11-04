@@ -75,6 +75,16 @@ func RegisUser(user dbmodel.User) error {
 	if err != nil {
 		return err
 	}
+	userDB := dbmodel.User{}
+	err = db.C("Users").Find(bson.M{"name": user.Username}).One(&userDB)
+	if err != nil {
+		return err
+	}
+	cart := dbmodel.InitialCart(userDB.ID)
+	err = RegisCart(cart)
+	if err != nil {
+		return err
+	}
 
 	return nil
 }
@@ -88,6 +98,18 @@ func GetUser(id bson.ObjectId) (dbmodel.User, error) {
 
 	user := dbmodel.User{}
 	err = db.C("Users").Find(bson.M{"_id": id}).One(&user)
+	return user, err
+}
+
+func GetUserFromName(name string) (dbmodel.User, error) {
+	db, err := GetDB()
+	if err != nil {
+		return dbmodel.User{}, err
+	}
+	defer db.Session.Close()
+
+	user := dbmodel.User{}
+	err = db.C("Users").Find(bson.M{"name": name}).One(&user)
 	return user, err
 }
 

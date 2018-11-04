@@ -2,6 +2,7 @@ package handler
 
 import (
 	"encoding/gob"
+	"fmt"
 	"log"
 	"net/http"
 	"path/filepath"
@@ -123,12 +124,82 @@ func Cart(w http.ResponseWriter, r *http.Request, v *middleware.ValueMap) {
 		header = defaultHeader
 	}
 
-	model := pagemodel.Card{
-		Menu: header,
+	model := pagemodel.Cart{
+		Menu:        header,
+		MeatsInCart: []pagemodel.CartMeatModel{},
+	}
+	v.Set("next", false)
+	cart, err := db.GetCart(header.User)
+	if err != nil {
+		if err != db.NonCart {
+			fmt.Println(err.Error())
+			w.WriteHeader(http.StatusNotFound)
+			return
+		} else {
+			user, err := db.GetUserFromName(header.User)
+			if err != nil {
+				w.WriteHeader(http.StatusNotFound)
+				return
+			}
+			cart = dbmodel.InitialCart(user.ID)
+		}
+	}
+	for meatID, quantity := range cart.Meats {
+		meat, err := db.GetMeat(meatID)
+		if err != nil {
+			continue
+		}
+		cartMeatModel := pagemodel.CartMeatModel{
+			ID:       meatID,
+			Pic:      "/image/meat_" + meat.ID.Hex() + meat.ImageExtension,
+			ProName:  meat.Name,
+			Price:    meat.Price,
+			Quantity: quantity,
+			Total:    meat.Price * float64(quantity),
+		}
+		model.MeatsInCart = append(model.MeatsInCart, cartMeatModel)
 	}
 
-	v.Set("next", false)
 	t.ExecuteTemplate(w, "cart.html", model)
+}
+
+func AddCart(w http.ResponseWriter, r *http.Request, v *middleware.ValueMap) {
+	header, ok := v.Get("header").(pagemodel.Menu)
+	if !ok {
+		header = defaultHeader
+	}
+
+	v.Set("next", true)
+	vars := mux.Vars(r)
+	cart, err := db.GetCart(header.User)
+	if err != nil {
+		w.WriteHeader(http.StatusNotFound)
+		return
+	}
+	meat, err := db.GetMeat(vars["meatId"])
+	if err != nil {
+		w.WriteHeader(http.StatusNotFound)
+		return
+	}
+	quantity64, err := strconv.ParseInt(vars["quantity"], 10, 64)
+	if err != nil {
+		w.WriteHeader(http.StatusNotFound)
+		return
+	}
+	quantity := int(quantity64)
+	empty := dbmodel.Cart{}
+	if cart.ID != empty.ID {
+		user, err := db.GetUserFromName(header.User)
+		if err != nil {
+			w.WriteHeader(http.StatusNotFound)
+			return
+		}
+		dbmodel.InitialCart(user.ID)
+		db.RegisCart(cart)
+	} else {
+		cart.SetMeat(meat.ID, quantity)
+		db.UpdateCart(cart)
+	}
 }
 
 func Product(w http.ResponseWriter, r *http.Request, v *middleware.ValueMap) {
