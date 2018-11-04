@@ -94,6 +94,8 @@ func main() {
 		middleware.DoableFunc(handler.Cart))).
 		Methods("GET")
 
+	r.Handle("/sales_history/", handlePage(handler.SaleHistory))
+
 	httpr := mux.NewRouter()
 	httpr.PathPrefix("/").HandlerFunc(handler.RedirectToHTTPS)
 
@@ -124,7 +126,7 @@ func main() {
 		log.Fatalln(http.ListenAndServe(":8000", httpr))
 	}
 
-	db.Mock()
+	db.MockUser()
 }
 
 func handlePage(df middleware.DoableFunc) http.Handler {

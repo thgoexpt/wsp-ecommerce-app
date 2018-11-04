@@ -30,7 +30,7 @@
 	<!--===============================================================================================-->
 	<link rel="stylesheet" type="text/css" href="../static/css/util.css">
 	<link rel="stylesheet" type="text/css" href="../static/css/style.css">
-	
+
 </head>
 
 <body class="animsition">
@@ -46,47 +46,51 @@
 
 	<!-- Add product -->
 	<section class="cart bgwhite p-t-70 p-b-100">
-        <form enctype="multipart/form-data" method="post" action="/regis_meat/" class="add-product">
+		<form enctype="multipart/form-data" method="post" action="/regis_meat/" class="add-product">
 			<div class="container">
 				<div class="row">
 					<div class="col-md-6 p-b-30">
 						<div id="img-preview-block" class="img-circle avatar avatar-original center-block" style="background-size:cover;
-						background-image:url(http://robohash.org/sitsequiquia.png?size=120x120)"></div>
+						background-image:url(https://media.giphy.com/media/gw3EiGp565rb3oOc/giphy.gif)"></div>
 						<br>
-						<span class="btn btn-link btn-file">Edit avatar <input type="file" id="upload-img" name="uploadfile" required></span>
+						<span class="btn btn-link btn-file">Add Product Picture <input type="file" id="upload-img" name="uploadfile"
+							 required></span>
 					</div>
 
 					<div class="col-md-6 p-b-30">
 						<h4 class="m-text26 p-b-36 p-t-15">
-								Add product
+							Add product
 						</h4>
-		
+
 						<div class="bo4 of-hidden size15 m-b-20">
 							<input class="sizefull s-text7 p-l-22 p-r-22" type="text" name="name" placeholder="Product Name" required>
 						</div>
-	
+
 						<div class="bo4 of-hidden size15 m-b-20">
-								<input class="sizefull s-text7 p-l-22 p-r-22" type="text" name="type" placeholder="Category (Meat, Pork, Fish, Other)" required>
+							<input class="sizefull s-text7 p-l-22 p-r-22" type="text" name="type" placeholder="Category (Beef, Pork, Fish, Other)"
+							 required>
 						</div>
-	
+
 						<div class="bo4 of-hidden size15 m-b-20">
-								<input class="sizefull s-text7 p-l-22 p-r-22" type="text" name="grade" placeholder="Grade (A, B, C, D)" required>
+							<input class="sizefull s-text7 p-l-22 p-r-22" type="text" name="grade" placeholder="Grade (A, B, C, D)" required>
 						</div>
-	
-						<textarea class="dis-block s-text7 size20 bo4 p-l-22 p-r-22 p-t-13 m-b-20" name="des" placeholder="Description" required></textarea>
-	
+
+						<textarea class="dis-block s-text7 size20 bo4 p-l-22 p-r-22 p-t-13 m-b-20" name="des" placeholder="Description"
+						 required></textarea>
+
 						<div class="bo4 of-hidden size15 m-b-20">
-								<input class="sizefull s-text7 p-l-22 p-r-22" type="text" name="price" placeholder="Price" required>
+							<input class="sizefull s-text7 p-l-22 p-r-22" type="text" name="price" placeholder="Price" required>
 						</div>
-	
+
 						<div class="bo4 of-hidden size15 m-b-20">
 							<input class="sizefull s-text7 p-l-22 p-r-22" type="text" name="quantity" placeholder="Quantity" required>
 						</div>
-	
+
 						<div class="bo4 of-hidden size15 m-b-20">
-								<input class="sizefull s-text7 p-l-22 p-r-22" type="text" name="expire" placeholder="Expire Date (DD/MM/YYYY)" required>
+							<input class="sizefull s-text7 p-l-22 p-r-22" type="text" name="expire" placeholder="Expire Date (DD/MM/YYYY)"
+							 required>
 						</div>
-	
+
 						<div class="w-size25">
 							<!-- Button -->
 							<button class="flex-c-m size2 bg1 bo-rad-23 hov1 m-text3 trans-0-4">
@@ -96,7 +100,7 @@
 					</div>
 				</div>
 			</div>
-        </form>
+		</form>
 	</section>
 
 	{{template "footer"}}

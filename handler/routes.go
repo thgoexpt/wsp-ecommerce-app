@@ -2,7 +2,6 @@ package handler
 
 import (
 	"encoding/gob"
-	"fmt"
 	"log"
 	"net/http"
 	"path/filepath"
@@ -11,10 +10,10 @@ import (
 
 	"github.com/globalsign/mgo/bson"
 	"github.com/gorilla/mux"
-
 	"github.com/gorilla/sessions"
 	"github.com/guitarpawat/middleware"
 	"github.com/guitarpawat/wsp-ecommerce/db"
+	"github.com/guitarpawat/wsp-ecommerce/db/mock"
 	"github.com/guitarpawat/wsp-ecommerce/model/dbmodel"
 	"github.com/guitarpawat/wsp-ecommerce/model/pagemodel"
 	"golang.org/x/crypto/bcrypt"
@@ -27,8 +26,10 @@ var defaultHeader = pagemodel.Menu{
 }
 
 func init() {
+	gob.Register(bson.ObjectId(""))
 	gob.Register(dbmodel.User{})
 	gob.Register(dbmodel.Meat{})
+	gob.Register(dbmodel.SalesHistory{})
 }
 
 func CheckSession(w http.ResponseWriter, r *http.Request, v *middleware.ValueMap) {
@@ -52,9 +53,8 @@ func BuildHeader(w http.ResponseWriter, r *http.Request, v *middleware.ValueMap)
 	header := pagemodel.Menu{}
 
 	user, ok := v.Get("user").(dbmodel.User)
-	if !ok {
-		header.User = ""
-	} else {
+	if ok {
+		header.UserID = user.ID
 		header.User = user.Username
 		header.UserType = user.Type
 	}
@@ -132,7 +132,6 @@ func Cart(w http.ResponseWriter, r *http.Request, v *middleware.ValueMap) {
 
 	v.Set("next", false)
 	cart, err := db.GetCart(header.User)
-	fmt.Println(cart)
 	if err != nil {
 		if err == db.NonCart {
 			user, err := db.GetUserFromName(header.User)
@@ -142,7 +141,6 @@ func Cart(w http.ResponseWriter, r *http.Request, v *middleware.ValueMap) {
 			}
 			cart = dbmodel.InitialCart(user.ID)
 		} else {
-			fmt.Println(err.Error())
 			w.WriteHeader(http.StatusNotFound)
 			return
 		}
@@ -652,7 +650,7 @@ func EditProfile(w http.ResponseWriter, r *http.Request, v *middleware.ValueMap)
 }
 
 func Mock(w http.ResponseWriter, r *http.Request, v *middleware.ValueMap) {
-	db.Mock()
+	mock.Mock()
 	v.Set("next", true)
 }
 
@@ -673,8 +671,20 @@ func SaleHistory(w http.ResponseWriter, r *http.Request, v *middleware.ValueMap)
 		header = defaultHeader
 	}
 
-	model := pagemodel.ProductDetail{
-		Menu: header,
+	sh, err := db.GetUserSalesHistory(header.UserID)
+	if err != nil {
+		w.WriteHeader(http.StatusInternalServerError)
+		return
+	}
+
+	if len(sh) == 0 {
+		header.Warning = "No sale record found"
+	}
+
+	model, err := pagemodel.ToSalesHistoryPageModel(sh, header)
+	if err != nil {
+		w.WriteHeader(http.StatusInternalServerError)
+		return
 	}
 
 	v.Set("next", false)

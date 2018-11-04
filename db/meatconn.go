@@ -4,7 +4,6 @@ import (
 	"time"
 
 	"github.com/globalsign/mgo/bson"
-	"github.com/guitarpawat/wsp-ecommerce/env"
 	"github.com/guitarpawat/wsp-ecommerce/model/dbmodel"
 )
 
@@ -18,12 +17,6 @@ var ChickWing, _ = dbmodel.MakeMeat("Chick's Wing", "Chicken", "D", "Chick's Mea
 
 const SortPrice = "price"
 const SortPriceReverse = "-price"
-
-func init() {
-	if env.GetEnv() != env.Production {
-		MockMeat()
-	}
-}
 
 func MockMeat() {
 	db, err := GetDB()

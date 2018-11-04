@@ -2,7 +2,7 @@
 <html lang="en">
 
 <head>
-	<title>Product Stock</title>
+	<title>Sales History</title>
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<!--===============================================================================================-->
@@ -56,24 +56,40 @@
 							<th class="column-2">Date</th>
 							<th class="column-3">Time</th>
 							<th class="column-4">Product</th>
-							<th class="column-5">Tracking Number</th>
+                            <th class="column-5">Price</th>
+							<th class="column-6">Tracking Number</th>
 						</tr>
 
-						<tr class="table-row">
-							<td class="column-1">TD12345-00</td>
-							<td class="column-2">12/10/2018</td>
-							<td class="column-3">13:00:45</td>
-							<td class="column-4">Beef Brisket</td>
-							<td class="column-5">ED12304563TH</td>
-						</tr>
+						{{range $index,$sh := .SalesHistory}}
+                            <tr class="table-row">
+                                <td class="column-1">{{$sh.ID}}&emsp;</td>
+                                <td class="column-2">{{$sh.Date}}</td>
+                                <td class="column-3">{{$sh.Time}}</td>
+                                <td class="column-4">
+									{{range $meat,$val := $sh.Meats}}
+										{{$meat.Name}}&nbsp;(Grade {{$meat.Grade}})&nbsp;x{{$val}}<br>
+									{{end}}
+								</td>
+                                <td class="column-5">{{$sh.Price}}</td>
+                                <td class="column-6">{{$sh.TrackingNumber}}</td>
+                            </tr>
+						{{end}}
 
-						<tr class="table-row">
-							<td class="column-1">TD43345-02</td>
-							<td class="column-2">15/10/2018</td>
-							<td class="column-3">09:00:45</td>
-							<td class="column-4">Otoro</td>
-							<td class="column-5">EF15234553TH</td>
-						</tr>
+						{{/*<tr class="table-row">*/}}
+							{{/*<td class="column-1">TD12345-00</td>*/}}
+							{{/*<td class="column-2">12/10/2018</td>*/}}
+							{{/*<td class="column-3">13:00:45</td>*/}}
+							{{/*<td class="column-4">Beef Brisket</td>*/}}
+							{{/*<td class="column-5">ED12304563TH</td>*/}}
+						{{/*</tr>*/}}
+
+						{{/*<tr class="table-row">*/}}
+							{{/*<td class="column-1">TD43345-02</td>*/}}
+							{{/*<td class="column-2">15/10/2018</td>*/}}
+							{{/*<td class="column-3">09:00:45</td>*/}}
+							{{/*<td class="column-4">Otoro</td>*/}}
+							{{/*<td class="column-5">EF15234553TH</td>*/}}
+						{{/*</tr>*/}}
 					</table>
 				</div>
 			</div>

@@ -36,7 +36,6 @@
 <body class="animsition">
 
 	{{template "menu" .Menu}}
-
 	<!-- breadcrumb -->
 	<div class="bread-crumb bgwhite flex-w p-l-52 p-r-15 p-t-30 p-l-15-sm">
 		<a href="/" class="s-text16">
@@ -78,45 +77,15 @@
 				</h4>
 
 				<span class="m-text17">
-					${{.Price}}
+					${{printf "%.2f" .Price}}
 				</span>
 
 				<p class="s-text8 p-t-10">
-					
+
 				</p>
 
 
 				<div class="p-t-33 p-b-60">
-					<div class="flex-m flex-w p-b-10">
-						<div class="s-text15 w-size15 t-center">
-							Size
-						</div>
-
-						<div class="rs2-select2 rs3-select2 bo4 of-hidden w-size16">
-							<select class="selection-2" name="size">
-								<option>Choose which size you want.</option>
-								<option>Small (100 grams)</option>
-								<option>Medium (300 grams)</option>
-								<option>Large (500 grams)</option>
-								<option>Extra Large (1 kilograms) </option>
-							</select>
-						</div>
-					</div>
-
-					<div class="flex-m flex-w">
-						<div class="s-text15 w-size15 t-center">
-							Region
-						</div>
-
-						<div class="rs2-select2 rs3-select2 bo4 of-hidden w-size16">
-							<select class="selection-2" name="color">
-								<option>Choose region of your pork</option>
-								<option>England</option>
-								<option>Japan</option>
-							</select>
-						</div>
-					</div>
-
 					<div class="flex-r-m flex-w p-t-10">
 						<div class="w-size16 flex-m flex-w">
 							<div class="flex-w bo5 of-hidden m-r-22 m-t-10 m-b-10">
@@ -550,7 +519,8 @@
 
 	<script>
 		// Set the date we're counting down to
-		var countDownDate = new Date("Oct 21, 2018 12:00:00").getTime();
+		var exp = "{{.MeatModel.Expire}}".replace("\\","/").replace("\\","/").split("/")
+		var countDownDate = new Date(exp[1]+'/'+exp[0]+'/'+exp[2]+'/'+' 23:59:59').getTime();
 
 		// Update the count down every 1 second
 		var x = setInterval(function () {
