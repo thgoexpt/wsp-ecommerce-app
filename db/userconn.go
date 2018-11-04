@@ -67,16 +67,6 @@ func RegisUser(user dbmodel.User) error {
 	if err != nil {
 		return err
 	}
-	userDB := dbmodel.User{}
-	err = db.C("Users").Find(bson.M{"name": user.Username}).One(&userDB)
-	if err != nil {
-		return err
-	}
-	cart := dbmodel.InitialCart(userDB.ID)
-	err = RegisCart(cart)
-	if err != nil {
-		return err
-	}
 
 	return nil
 }
