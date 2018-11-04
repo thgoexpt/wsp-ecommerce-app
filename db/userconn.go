@@ -109,7 +109,7 @@ func GetUserFromName(name string) (dbmodel.User, error) {
 	defer db.Session.Close()
 
 	user := dbmodel.User{}
-	err = db.C("Users").Find(bson.M{"name": name}).One(&user)
+	err = db.C("Users").Find(bson.M{"username": name}).One(&user)
 	return user, err
 }
 

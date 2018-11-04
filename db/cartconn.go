@@ -10,27 +10,13 @@ import (
 
 var NonCart = errors.New("Carts Not Exist")
 
+var mockUserID1 = bson.ObjectIdHex("ba2946f27d9d403ce895633b")
+var mockUserID2 = bson.ObjectIdHex("f8f0b5922a47fef34a30327b")
+
 func init() {
 	if env.GetEnv() != env.Production {
 		MockCart()
 	}
-
-	db, err := GetDB()
-	if err != nil {
-		return
-	}
-	defer db.Session.Close()
-
-	var users []dbmodel.User
-	err = db.C("User").Find(nil).Iter().All(&users)
-	if err != nil {
-		return
-	}
-	for i := 0; i < len(users); i++ {
-		cart := dbmodel.InitialCart(users[i].ID)
-		RegisCart(cart)
-	}
-
 }
 
 func MockCart() {
@@ -40,6 +26,14 @@ func MockCart() {
 	}
 	defer db.Session.Close()
 
+	cart1 := dbmodel.InitialCart(mockUserID1)
+	cart2 := dbmodel.InitialCart(mockUserID2)
+
+	db.C("Carts").Remove(bson.M{"userID": cart1.UserID})
+	db.C("Carts").Remove(bson.M{"userID": cart2.UserID})
+
+	RegisCart(cart1)
+	RegisCart(cart2)
 }
 
 func RegisCart(cart dbmodel.Cart) error {
@@ -51,7 +45,7 @@ func RegisCart(cart dbmodel.Cart) error {
 
 	// Check case
 
-	err = db.C("Carts").Insert(cart)
+	_, err = db.C("Carts").Upsert(bson.M{"userID": cart.UserID}, cart)
 	if err != nil {
 		return err
 	}
@@ -79,26 +73,44 @@ func GetCart(userName string) (dbmodel.Cart, error) {
 	}
 	defer db.Session.Close()
 
-	user, err := GetUserFromName("userName")
+	user, err := GetUserFromName(userName)
+	if err != nil {
+		return dbmodel.Cart{}, errors.New("Unable to find user")
+	}
+	return GetCartID(user.ID)
+}
+
+func GetCartID(id bson.ObjectId) (dbmodel.Cart, error) {
+	db, err := GetDB()
 	if err != nil {
 		return dbmodel.Cart{}, err
 	}
+	defer db.Session.Close()
+
 	var cart dbmodel.Cart
-	err = db.C("Carts").Find(bson.M{"UserID": user.ID}).One(&cart)
+	err = db.C("Carts").Find(bson.M{"userID": id}).One(&cart)
 	if err != nil {
 		return dbmodel.Cart{}, NonCart
 	}
 	return cart, nil
 }
 
-func UpdateCart(c dbmodel.Cart) error {
+func UpdateCart(userID, meat bson.ObjectId, quantity int) error {
 	db, err := GetDB()
 	if err != nil {
 		return err
 	}
 	defer db.Session.Close()
 
-	err = db.C("Carts").Update(bson.M{"_id": c.ID}, c)
+	cartMeat := dbmodel.CartMeats{
+		ID:       meat,
+		Quantity: quantity,
+	}
+
+	_, err = db.C("Carts").Upsert(bson.M{"userID": userID},
+		bson.M{
+			"$push": bson.M{"meats": cartMeat},
+		})
 	if err != nil {
 		return err
 	}

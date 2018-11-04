@@ -9,6 +9,7 @@ import (
 	"strconv"
 	"time"
 
+	"github.com/globalsign/mgo/bson"
 	"github.com/gorilla/mux"
 
 	"github.com/gorilla/sessions"
@@ -128,36 +129,40 @@ func Cart(w http.ResponseWriter, r *http.Request, v *middleware.ValueMap) {
 		Menu:        header,
 		MeatsInCart: []pagemodel.CartMeatModel{},
 	}
+
 	v.Set("next", false)
 	cart, err := db.GetCart(header.User)
+	fmt.Println(cart)
 	if err != nil {
-		if err != db.NonCart {
-			fmt.Println(err.Error())
-			w.WriteHeader(http.StatusNotFound)
-			return
-		} else {
+		if err == db.NonCart {
 			user, err := db.GetUserFromName(header.User)
 			if err != nil {
 				w.WriteHeader(http.StatusNotFound)
 				return
 			}
 			cart = dbmodel.InitialCart(user.ID)
+		} else {
+			fmt.Println(err.Error())
+			w.WriteHeader(http.StatusNotFound)
+			return
 		}
 	}
-	for meatID, quantity := range cart.Meats {
-		meat, err := db.GetMeat(meatID)
+	for _, meatFromCartDB := range cart.Meats {
+		meat, err := db.GetMeat(meatFromCartDB.ID.Hex())
 		if err != nil {
-			continue
+			w.WriteHeader(http.StatusNotFound)
+			return
 		}
-		cartMeatModel := pagemodel.CartMeatModel{
-			ID:       meatID,
+		cartMeat := pagemodel.CartMeatModel{
+			ID:       meat.ID.Hex(),
 			Pic:      "/image/meat_" + meat.ID.Hex() + meat.ImageExtension,
 			ProName:  meat.Name,
 			Price:    meat.Price,
-			Quantity: quantity,
-			Total:    meat.Price * float64(quantity),
+			Quantity: meatFromCartDB.Quantity,
+			Total:    meat.Price * float64(meatFromCartDB.Quantity),
 		}
-		model.MeatsInCart = append(model.MeatsInCart, cartMeatModel)
+
+		model.MeatsInCart = append(model.MeatsInCart, cartMeat)
 	}
 
 	t.ExecuteTemplate(w, "cart.html", model)
@@ -171,35 +176,21 @@ func AddCart(w http.ResponseWriter, r *http.Request, v *middleware.ValueMap) {
 
 	v.Set("next", true)
 	vars := mux.Vars(r)
-	cart, err := db.GetCart(header.User)
-	if err != nil {
-		w.WriteHeader(http.StatusNotFound)
-		return
-	}
-	meat, err := db.GetMeat(vars["meatId"])
-	if err != nil {
-		w.WriteHeader(http.StatusNotFound)
-		return
-	}
+
 	quantity64, err := strconv.ParseInt(vars["quantity"], 10, 64)
 	if err != nil {
 		w.WriteHeader(http.StatusNotFound)
 		return
 	}
 	quantity := int(quantity64)
-	empty := dbmodel.Cart{}
-	if cart.ID != empty.ID {
-		user, err := db.GetUserFromName(header.User)
-		if err != nil {
-			w.WriteHeader(http.StatusNotFound)
-			return
-		}
-		dbmodel.InitialCart(user.ID)
-		db.RegisCart(cart)
-	} else {
-		cart.SetMeat(meat.ID, quantity)
-		db.UpdateCart(cart)
+
+	user, err := db.GetUserFromName(header.User)
+	if err != nil {
+		w.WriteHeader(http.StatusNotFound)
+		return
 	}
+
+	db.UpdateCart(user.ID, bson.ObjectIdHex(vars["meatId"]), quantity)
 }
 
 func Product(w http.ResponseWriter, r *http.Request, v *middleware.ValueMap) {
