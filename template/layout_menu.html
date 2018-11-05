@@ -208,7 +208,11 @@
                         </li>
                         {{if ge .UserType 4}}
                         <li class="sale-noti">
-                            <a href="/add_meat/">Add Product</a>
+                            <a style="color: tomato">Admin Action</a>
+                            <ul class="sub_menu">
+                                <li><a href="/add_meat/" id="lastDropdownMenuItem">Add Product</a></li>
+                                <li><a href="/product-stock/" id="lastDropdownMenuItem">Stock</a></li>
+                            </ul>
                         </li>
                         {{end}}
                     </ul>
@@ -336,8 +340,12 @@
                         </li>
 
                         {{if ge .UserType 4}}
-                        <li class="item-menu-mobile">
-                            <a href="/add_meat/" id="lastDropdownMenuItem">Add Product</a>
+                        <li class="item-menu-mobile sale-noti">
+                            <a style="color: tomato">Admin Action</a>
+                            <ul class="sub_menu">
+                                <li><a href="/add_meat/" id="lastDropdownMenuItem">Add Product</a></li>
+                                <li><a href="/product-stock/" id="lastDropdownMenuItem">Stock</a></li>
+                            </ul>
                         </li>
                         {{end}}
                     </ul>
