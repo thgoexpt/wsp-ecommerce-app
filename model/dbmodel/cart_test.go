@@ -30,13 +30,13 @@ func TestMakeCart(t *testing.T) {
 
 	cart.SetMeat(meatA.ID, aQuantity)
 	cart.SetMeat(meatB.ID, bQuantity)
-	cartA := cart.GetQuantity(meatA.ID)
-	if aQuantity != cartA {
-		t.Errorf("expected meatA quantity: %d, but get: %d", aQuantity, cartA)
+	cartAQuantity := cart.GetQuantity(meatA.ID)
+	if aQuantity != cartAQuantity {
+		t.Errorf("expected meatA quantity: %d, but get: %d", aQuantity, cartAQuantity)
 	}
-	cartB := cart.GetQuantity(meatB.ID)
-	if bQuantity != cartB {
-		t.Errorf("expected meatB quantity: %d, but get: %d", bQuantity, cartB)
+	cartBQuantity := cart.GetQuantity(meatB.ID)
+	if bQuantity != cartBQuantity {
+		t.Errorf("expected meatB quantity: %d, but get: %d", bQuantity, cartBQuantity)
 	}
 
 	cart.RemoveMeat(meatB.ID)
