@@ -2192,6 +2192,10 @@ li.sale-noti>a {
   font-size: 15px;
 }
 
+.table-shopping-cart .table-row .column-6 {
+  padding-right: 25px;
+}
+
 
 /* ------------------------------------ */
 .cart-img-product {
