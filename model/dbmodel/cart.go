@@ -39,9 +39,6 @@ func (c *Cart) GetQuantity(meatID bson.ObjectId) int {
 }
 
 func (c *Cart) SetMeat(meat bson.ObjectId, quantity int) {
-	if len(c.Meats) == 0 {
-		return
-	}
 	for i := 0; i < len(c.Meats); i++ {
 		if c.Meats[i].ID == meat {
 			c.Meats[i].Quantity = quantity
