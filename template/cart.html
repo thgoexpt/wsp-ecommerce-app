@@ -68,7 +68,7 @@
 								</div>
 							</td>
 							<td class="column-2"><a href="/product-detail/{{.ID}}/">{{.ProName}}</a></td>
-							<td class="column-3">${{.Price}}</td>
+							<td class="column-3">${{printf "%.2f" .Price}}</td>
 							<td class="column-4">
 								<div class="flex-w bo5 of-hidden w-size17">
 									<button class="btn-num-product-down color1 flex-c-m size7 bg8 eff2">
@@ -82,7 +82,7 @@
 									</button>
 								</div>
 							</td>
-							<td class="column-5">${{.Total}}</td>
+							<td class="column-5">${{printf "%.2f" .Total}}</td>
 							<td class="column-6">
 								<!-- Button -->
 								<button class="btn btn-outline-danger">
