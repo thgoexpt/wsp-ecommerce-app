@@ -289,25 +289,25 @@ Test search product with some part of product's name
     User can sees the product
     End of test
 
-Test search product with full name of product on mobile
-    User opens a home page on mobile phone
-    User opens dropdown menu
-    User opens a product page on mobile
-    Wait Until Element Is Visible    alertBox    30
-    User type full name of product
-    User clicks search button
-    Wait Until Element Is Visible    alertBox    30
-    User can sees the product
-    End of test
+##Test search product with full name of product on mobile
+    ##User opens a home page on mobile phone
+    ##User opens dropdown menu
+    ##User opens a product page on mobile
+    ##Wait Until Element Is Visible    alertBox    30
+    ##User type full name of product
+    ##User clicks search button
+    ##Wait Until Element Is Visible    alertBox    30
+    ##User can sees the product
+    ##End of test
 
 
-Test search product with some part of product's name on mobile
-    User opens a home page on mobile phone
-    User opens dropdown menu
-    User opens a product page on mobile
-    Wait Until Element Is Visible    alertBox    30
-    User type some part of product's name
-    User clicks search button
-    Wait Until Element Is Visible    alertBox    30
-    User can sees the product
-    End of test
+##Test search product with some part of product's name on mobile
+    ##User opens a home page on mobile phone
+    ##User opens dropdown menu
+    ##User opens a product page on mobile
+    ##Wait Until Element Is Visible    alertBox    30
+    ##User type some part of product's name
+    ##User clicks search button
+    ##Wait Until Element Is Visible    alertBox    30
+    ##User can sees the product
+    ##End of test
