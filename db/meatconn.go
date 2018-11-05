@@ -89,7 +89,8 @@ func GetAllMeats() ([]dbmodel.Meat, error) {
 	defer db.Session.Close()
 
 	var meats []dbmodel.Meat
-	err = db.C("Meats").Find(nil).Limit(10).Iter().All(&meats)
+	// err = db.C("Meats").Find(nil).Limit(10).Iter().All(&meats)
+	err = db.C("Meats").Find(nil).Iter().All(&meats)
 	if err != nil {
 		return nil, err
 	}
@@ -116,7 +117,8 @@ func SortType(meattype, sorting string) ([]dbmodel.Meat, error) {
 			Pattern: "(" + meattype + ")",
 			Options: "i", //insensitive
 		},
-	}).Limit(10).Sort(sorting).Iter().All(&meats)
+		// }).Limit(10).Sort(sorting).Iter().All(&meats)
+	}).Sort(sorting).Iter().All(&meats)
 	if err != nil {
 		return nil, err
 	}
@@ -151,7 +153,8 @@ func Search(name string, startPrice, endPrice float64, sorting string) ([]dbmode
 				"$gte": startPrice,
 				"$lte": endPrice,
 			},
-		}).Limit(10).Sort(sorting).Iter().All(&meats)
+			// }).Limit(10).Sort(sorting).Iter().All(&meats)
+		}).Sort(sorting).Iter().All(&meats)
 	} else {
 		err = db.C("Meats").Find(bson.M{
 			"name": bson.RegEx{
@@ -161,7 +164,8 @@ func Search(name string, startPrice, endPrice float64, sorting string) ([]dbmode
 			"price": bson.M{
 				"$gte": startPrice,
 			},
-		}).Limit(10).Sort(sorting).Iter().All(&meats)
+			// }).Limit(10).Sort(sorting).Iter().All(&meats)
+		}).Sort(sorting).Iter().All(&meats)
 	}
 
 	if err != nil {
