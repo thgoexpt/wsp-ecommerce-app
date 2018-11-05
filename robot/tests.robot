@@ -135,7 +135,7 @@ User sees that he is logged in on mobile phone
 
 User opens dropdown menu
     Click Element    id:dropdownMenu
-    Wait Until Element Is Visible    id:welcomeUser-mobile    30
+    Wait Until Element Is Visible    id:lastDropdownMenuItem    30
 
 User opens a login page on mobile phone
     Click Element    id:loginIcon-mobile
