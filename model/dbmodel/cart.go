@@ -23,6 +23,15 @@ func (c Cart) RemoveMeat(meat bson.ObjectId) {
 	}
 }
 
+func (c Cart) GetQuantity(meatID bson.ObjectId) int {
+	for i := 0; i < len(c.Meats); i++ {
+		if c.Meats[i].ID == meatID {
+			return c.Meats[i].Quantity
+		}
+	}
+	return 0
+}
+
 func (c Cart) SetMeat(meat bson.ObjectId, quantity int) {
 	for _, cartMeat := range c.Meats {
 		if cartMeat.ID == meat {

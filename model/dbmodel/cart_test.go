@@ -20,7 +20,7 @@ func TestMakeCart(t *testing.T) {
 		t.Errorf("expected id: %s, but get: %s", user.ID, cart.UserID)
 	}
 
-	i, _ := cart.Meats[meatA.ID]
+	i := cart.GetQuantity(meatA.ID)
 	if i != 0 {
 		t.Errorf("expected non exist meat quantity: %d, but get: %d", 0, i)
 	}
@@ -30,24 +30,19 @@ func TestMakeCart(t *testing.T) {
 
 	cart.SetMeat(meatA.ID, aQuantity)
 	cart.SetMeat(meatB.ID, bQuantity)
-	cartA, ok := cart.Meats[meatA.ID]
-	if !ok {
-		t.Errorf("expected meatA exist in cart.Meats: %t, but get: %t", true, ok)
-	}
+	cartA := cart.GetQuantity(meatA.ID)
 	if aQuantity != cartA {
 		t.Errorf("expected meatA quantity: %d, but get: %d", aQuantity, cartA)
 	}
-	cartB, ok := cart.Meats[meatB.ID]
-	if !ok {
-		t.Errorf("expected meatB exist in cart.Meats: %t, but get: %t", true, ok)
-	}
+	cartB := cart.GetQuantity(meatB.ID)
 	if bQuantity != cartB {
 		t.Errorf("expected meatB quantity: %d, but get: %d", bQuantity, cartB)
 	}
 
 	cart.RemoveMeat(meatB.ID)
-	if cart.Meats[meatB.ID] != 0 {
-		t.Errorf("expected meatB quantity: %d, but get: %d", 0, cart.Meats[meatB.ID])
+	qty := cart.GetQuantity(meatB.ID)
+	if qty != 0 {
+		t.Errorf("expected meatB quantity: %d, but get: %d", 0, qty)
 	}
 }
 
