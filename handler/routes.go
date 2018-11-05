@@ -2,19 +2,18 @@ package handler
 
 import (
 	"encoding/gob"
-	"github.com/globalsign/mgo/bson"
-	"github.com/guitarpawat/wsp-ecommerce/db/mock"
 	"log"
 	"net/http"
 	"path/filepath"
 	"strconv"
 	"time"
 
+	"github.com/globalsign/mgo/bson"
 	"github.com/gorilla/mux"
-
 	"github.com/gorilla/sessions"
 	"github.com/guitarpawat/middleware"
 	"github.com/guitarpawat/wsp-ecommerce/db"
+	"github.com/guitarpawat/wsp-ecommerce/db/mock"
 	"github.com/guitarpawat/wsp-ecommerce/model/dbmodel"
 	"github.com/guitarpawat/wsp-ecommerce/model/pagemodel"
 	"golang.org/x/crypto/bcrypt"
@@ -126,12 +125,85 @@ func Cart(w http.ResponseWriter, r *http.Request, v *middleware.ValueMap) {
 		header = defaultHeader
 	}
 
-	model := pagemodel.Card{
-		Menu: header,
+	model := pagemodel.Cart{
+		Menu:        header,
+		MeatsInCart: []pagemodel.CartMeatModel{},
+		CartTotal:   0,
 	}
 
 	v.Set("next", false)
+	cart, err := db.GetCart(header.User)
+	if err != nil {
+		if err == db.NonCart {
+			user, err := db.GetUserFromName(header.User)
+			if err != nil {
+				// w.WriteHeader(http.StatusNotFound)
+				v.Set("warning", "Cart: unable to find user >> "+err.Error())
+				t.ExecuteTemplate(w, "cart.html", model)
+				return
+			}
+			cart = dbmodel.InitialCart(user.ID)
+			err = db.RegisCart(cart)
+			if err != nil {
+				v.Set("warning", "Cart: unable to regis cart >> "+err.Error())
+				t.ExecuteTemplate(w, "cart.html", model)
+				return
+			}
+		} else {
+			// w.WriteHeader(http.StatusNotFound)
+			v.Set("warning", "Cart: unable to find cart >> "+err.Error())
+			t.ExecuteTemplate(w, "cart.html", model)
+			return
+		}
+	}
+	for _, meatFromCartDB := range cart.Meats {
+		meat, err := db.GetMeat(meatFromCartDB.ID.Hex())
+		if err != nil {
+			// w.WriteHeader(http.StatusNotFound)
+			v.Set("warning", "Cart: unable to find meat >> "+err.Error())
+			t.ExecuteTemplate(w, "cart.html", model)
+			return
+		}
+		cartMeat := pagemodel.CartMeatModel{
+			ID:       meat.ID.Hex(),
+			Pic:      "/image/meat_" + meat.ID.Hex() + meat.ImageExtension,
+			ProName:  meat.Name,
+			Price:    meat.Price,
+			Quantity: meatFromCartDB.Quantity,
+			Total:    meat.Price * float64(meatFromCartDB.Quantity),
+		}
+		model.CartTotal = model.CartTotal * cartMeat.Total
+		model.MeatsInCart = append(model.MeatsInCart, cartMeat)
+	}
+
 	t.ExecuteTemplate(w, "cart.html", model)
+}
+
+func AddCart(w http.ResponseWriter, r *http.Request, v *middleware.ValueMap) {
+	header, ok := v.Get("header").(pagemodel.Menu)
+	if !ok {
+		header = defaultHeader
+	}
+
+	v.Set("next", true)
+	vars := mux.Vars(r)
+
+	quantity64, err := strconv.ParseInt(vars["quantity"], 10, 64)
+	if err != nil {
+		// w.WriteHeader(http.StatusNotFound)
+		v.Set("warning", "AddCart: quantity parameter is wrong.")
+		return
+	}
+	quantity := int(quantity64)
+
+	user, err := db.GetUserFromName(header.User)
+	if err != nil {
+		// w.WriteHeader(http.StatusNotFound)
+		v.Set("warning", "AddCart: unable to find user >> "+err.Error())
+		return
+	}
+
+	db.UpdateCart(user.ID, bson.ObjectIdHex(vars["meatId"]), quantity)
 }
 
 func Product(w http.ResponseWriter, r *http.Request, v *middleware.ValueMap) {
@@ -148,7 +220,10 @@ func Product(w http.ResponseWriter, r *http.Request, v *middleware.ValueMap) {
 	v.Set("next", false)
 	meats, err := db.GetAllMeats()
 	if err != nil {
-		meats = []dbmodel.Meat{}
+		// meats = []dbmodel.Meat{}
+		v.Set("warning", "Product: unable to get all meats >> "+err.Error())
+		t.ExecuteTemplate(w, "product.html", model)
+		return
 	}
 
 	for i := 0; i < len(meats); i++ {
@@ -175,7 +250,10 @@ func ProductSortType(w http.ResponseWriter, r *http.Request, v *middleware.Value
 	meats, err := db.SortType(vars["meattype"], vars["price_sort"])
 	// meats, err := db.SortType(vars["meattype"], "price")
 	if err != nil {
-		meats = []dbmodel.Meat{}
+		// meats = []dbmodel.Meat{}
+		v.Set("warning", "ProductSortType: unable to get sorted meats >> "+err.Error())
+		t.ExecuteTemplate(w, "product.html", model)
+		return
 	}
 
 	for i := 0; i < len(meats); i++ {
@@ -200,13 +278,13 @@ func ProductSearch(w http.ResponseWriter, r *http.Request, v *middleware.ValueMa
 
 	startPrice, err := strconv.ParseFloat(vars["startPrice"], 64)
 	if err != nil {
-		v.Set("warning", "startPrice is not a number.")
+		v.Set("warning", "ProductSearch: startPrice is not a number.")
 		v.Set("next", true)
 		return
 	}
 	endPrice, err := strconv.ParseFloat(vars["endPrice"], 64)
 	if err != nil {
-		v.Set("warning", "startPrice is not a number.")
+		v.Set("warning", "ProductSearch: startPrice is not a number.")
 		v.Set("next", true)
 		return
 	}
@@ -214,7 +292,10 @@ func ProductSearch(w http.ResponseWriter, r *http.Request, v *middleware.ValueMa
 	v.Set("next", false)
 	meats, err := db.Search(vars["name"], startPrice, endPrice, vars["price_sort"])
 	if err != nil {
-		meats = []dbmodel.Meat{}
+		// meats = []dbmodel.Meat{}
+		v.Set("warning", "ProductSearch: unable to get searched meats >> "+err.Error())
+		t.ExecuteTemplate(w, "product.html", model)
+		return
 	}
 
 	for i := 0; i < len(meats); i++ {
@@ -245,18 +326,20 @@ func ProductDetail(w http.ResponseWriter, r *http.Request, v *middleware.ValueMa
 		header = defaultHeader
 	}
 
+	model := pagemodel.ProductDetail{
+		Menu: header,
+	}
+
 	vars := mux.Vars(r)
 	v.Set("next", false)
 	meat, err := db.GetMeat(vars["meatId"])
 	if err != nil {
-		meat = dbmodel.Meat{}
+		// meat = dbmodel.Meat{}
+		v.Set("warning", "ProductDetail: >> "+err.Error())
+		t.ExecuteTemplate(w, "product-detail.html", model)
+		return
 	}
-	meatModel := GetMeatModel(meat)
-
-	model := pagemodel.ProductDetail{
-		Menu:      header,
-		MeatModel: meatModel,
-	}
+	model.MeatModel = GetMeatModel(meat)
 
 	t.ExecuteTemplate(w, "product-detail.html", model)
 }
