@@ -10,6 +10,9 @@ ${VALID_PASSWORD}    test
 ${VALID_EMAIL}    test@example.com
 ${NAME}    Charin
 ${MOCK_EMAIL}    ta@ku.th
+${SOME_PRODUCT_NAME}    Kuro
+${PRODUCT_NAME}    Kurobuta
+${FULL_PRODUCT_NAME}    Kurobuta (Chicken)
 
 *** Keywords ***
 # Global
@@ -35,6 +38,10 @@ User sees the already have that username dialog
 User sees the already have that email dialog
     Wait Until Element Is Visible    alertBox    30
     Element Text Should Be    id:warningBox    Warning: Email already in use
+
+User can sees the product
+    Wait Until Element Is Visible    alertBox    30
+    Element Text Should Be    id:product-name   ${FULL_PRODUCT_NAME}
 
 
 
@@ -79,6 +86,8 @@ User clicks login button
 User clicks register button
     Click Element    id:regisBtn
 
+User clicks search button
+    Click Element    id:search-BTN
 
 
 # PC
@@ -100,6 +109,15 @@ User sees that he is not logged in on PC
 
 User sees that he is logged in on PC
     Element Text Should Be    id:welcomeUser    Welcome, test
+
+User opens a product page
+    Click Element    id:Shop-BTN
+
+User type full name of product
+    Input Text    id:search    ${PRODUCT_NAME}
+
+User type some part of product's name
+    Input Text    id:search    ${SOME_PRODUCT_NAME}
 
 
 
@@ -123,6 +141,13 @@ User opens a login page on mobile phone
     Click Element    id:loginIcon-mobile
     Wait Until Element Is Visible    myModal    30
 
+User opens a register page on mobile phone
+    Click Element    id:registerIcon-mobile
+    Wait Until Element Is Visible    myModal_regis    30
+
+User opens a product page on mobile
+    Click Element    id:Shop-BTN-Mobile
+
 *** Test Cases ***
 Test Login on PC failure because of invalid username and password on PC
     User opens a home page on PC
@@ -133,6 +158,7 @@ Test Login on PC failure because of invalid username and password on PC
     User clicks login button
     User sees the invalid username or password dialog
     User sees that he is not logged in on PC
+    End of test
 
 Test Login failure because of invalid username and password on mobile phone
     User opens a home page on mobile phone
@@ -145,6 +171,7 @@ Test Login failure because of invalid username and password on mobile phone
     User sees the invalid username or password dialog
     User opens dropdown menu
     User sees that he is not logged in on mobile phone
+    End of test
 
 Test Login on PC failure because of invalid password on PC
     User opens a home page on PC
@@ -155,6 +182,7 @@ Test Login on PC failure because of invalid password on PC
     User clicks login button
     User sees the invalid username or password dialog
     User sees that he is not logged in on PC
+    End of test
 
 Test Login failure because of invalid password on mobile phone
     User opens a home page on mobile phone
@@ -167,6 +195,7 @@ Test Login failure because of invalid password on mobile phone
     User sees the invalid username or password dialog
     User opens dropdown menu
     User sees that he is not logged in on mobile phone
+    End of test
 
 
 Test Login on PC with valid username and password
@@ -178,6 +207,7 @@ Test Login on PC with valid username and password
     User clicks login button
     User sees the login successful dialog
     User sees that he is logged in on PC
+    End of test
 
 Test Login with valid username and password on mobile phone
     User opens a home page on mobile phone
@@ -190,6 +220,7 @@ Test Login with valid username and password on mobile phone
     User sees the login successful dialog
     User opens dropdown menu
     User sees that he is logged in on mobile phone
+    End of test
 
 Test Register on PC with valid username
     User opens a home page on PC
@@ -201,6 +232,7 @@ Test Register on PC with valid username
     User types address in register modal
     User clicks register button
     User sees the already have that username dialog
+    End of test
 
 Test Register on PC with valid email
     User opens a home page on PC
@@ -212,3 +244,66 @@ Test Register on PC with valid email
     User types address in register modal
     User clicks register button
     User sees the already have that email dialog
+    End of test
+
+Test Register on mobile phone with valid username
+    User opens a home page on mobile phone
+    User opens dropdown menu
+    User opens a register page on mobile phone
+    User types valid username in register modal
+    User types valid password in register modal
+    User types name in register modal
+    User types email in register modal
+    User types address in register modal
+    User clicks register button
+    User sees the already have that username dialog
+    End of test
+
+Test Register on mobile phone with valid email
+    User opens a home page on mobile phone
+    User opens dropdown menu
+    User opens a register page on mobile phone
+    User types username in register modal
+    User types valid password in register modal
+    User types name in register modal
+    User types valid email in register modal
+    User types address in register modal
+    User clicks register button
+    User sees the already have that email dialog
+    End of test
+
+Test search product with full name of product
+    User opens a home page on PC
+    User opens a product page
+    User type full name of product
+    User clicks search button
+    User can sees the product
+    End of test
+
+
+Test search product with some part of product's name
+    User opens a home page on PC
+    User opens a product page
+    User type some part of product's name
+    User clicks search button
+    User can sees the product
+    End of test
+
+Test search product with full name of product on mobile
+    User opens a home page on mobile phone
+    User opens dropdown menu
+    User opens a product page on mobile
+    User type full name of product
+    User clicks search button
+    User can sees the product
+    End of test
+
+
+Test search product with some part of product's name on mobile
+    User opens a home page on mobile phone
+    User opens dropdown menu
+    User opens a product page on mobile
+    User type some part of product's name
+    User clicks search button
+    User can sees the product
+    End of test
