@@ -6,30 +6,30 @@
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<!--===============================================================================================-->
-	<link rel="icon" type="image/png" href="../static/images/icons/favicon.png" />
+	<link rel="icon" type="image/png" href="/static/images/icons/favicon.png" />
 	<!--===============================================================================================-->
-	<link rel="stylesheet" type="text/css" href="../static//bootstrap/css/bootstrap.min.css">
+	<link rel="stylesheet" type="text/css" href="/static//bootstrap/css/bootstrap.min.css">
 	<!--===============================================================================================-->
-	<link rel="stylesheet" type="text/css" href="../static/fonts/font-awesome-4.7.0/css/font-awesome.min.css">
+	<link rel="stylesheet" type="text/css" href="/static/fonts/font-awesome-4.7.0/css/font-awesome.min.css">
 	<!--===============================================================================================-->
-	<link rel="stylesheet" type="text/css" href="../static/fonts/themify/themify-icons.css">
+	<link rel="stylesheet" type="text/css" href="/static/fonts/themify/themify-icons.css">
 	<!--===============================================================================================-->
-	<link rel="stylesheet" type="text/css" href="../static/fonts/Linearicons-Free-v1.0.0/icon-font.min.css">
+	<link rel="stylesheet" type="text/css" href="/static/fonts/Linearicons-Free-v1.0.0/icon-font.min.css">
 	<!--===============================================================================================-->
-	<link rel="stylesheet" type="text/css" href="../static/fonts/elegant-font/html-css/style.css">
+	<link rel="stylesheet" type="text/css" href="/static/fonts/elegant-font/html-css/style.css">
 	<!--===============================================================================================-->
-	<link rel="stylesheet" type="text/css" href="../static/animate/animate/animate.css">
+	<link rel="stylesheet" type="text/css" href="/static/animate/animate/animate.css">
 	<!--===============================================================================================-->
-	<link rel="stylesheet" type="text/css" href="../static/animate/css-hamburgers/hamburgers.min.css">
+	<link rel="stylesheet" type="text/css" href="/static/animate/css-hamburgers/hamburgers.min.css">
 	<!--===============================================================================================-->
-	<link rel="stylesheet" type="text/css" href="../static/animate/animsition/css/animsition.min.css">
+	<link rel="stylesheet" type="text/css" href="/static/animate/animsition/css/animsition.min.css">
 	<!--===============================================================================================-->
-	<link rel="stylesheet" type="text/css" href="../static/animate/select2/select2.min.css">
+	<link rel="stylesheet" type="text/css" href="/static/animate/select2/select2.min.css">
 	<!--===============================================================================================-->
-	<link rel="stylesheet" type="text/css" href="../static/animate/slick/slick.css">
+	<link rel="stylesheet" type="text/css" href="/static/animate/slick/slick.css">
 	<!--===============================================================================================-->
-	<link rel="stylesheet" type="text/css" href="../static/css/util.css">
-	<link rel="stylesheet" type="text/css" href="../static/css/style.css">
+	<link rel="stylesheet" type="text/css" href="/static/css/util.css">
+	<link rel="stylesheet" type="text/css" href="/static/css/style.css">
 	<!--===============================================================================================-->
 </head>
 
@@ -93,7 +93,7 @@
 									<i class="fs-12 fa fa-minus" aria-hidden="true"></i>
 								</button>
 
-								<input class="size8 m-text18 t-center num-product" type="number" name="num-product" value="1">
+								<input id="quantity-{{.ID}}" class="size8 m-text18 t-center num-product" type="number" name="num-product" value="1">
 
 								<button class="btn-num-product-up color1 flex-c-m size7 bg8 eff2">
 									<i class="fs-12 fa fa-plus" aria-hidden="true"></i>
@@ -102,7 +102,7 @@
 
 							<div class="btn-addcart-product-detail size9 trans-0-4 m-t-10 m-b-10">
 								<!-- Button -->
-								<button class="flex-c-m sizefull bg1 bo-rad-23 hov1 s-text1 trans-0-4">
+								<button class="flex-c-m sizefull bg1 bo-rad-23 hov1 s-text1 trans-0-4 addCart" value="{{.ID}}" type="submit">
 									Add to Cart
 								</button>
 							</div>
@@ -194,7 +194,7 @@
 					<div class="item-slick2 p-l-15 p-r-15">
 						<div class="block2">
 							<div class="block2-img wrap-pic-w of-hidden pos-relative block2-labelnew">
-								<img src="../static/assets/meat/product/fish/anago.jpg" alt="IMG-PRODUCT">
+								<img src="/static/assets/meat/product/fish/anago.jpg" alt="IMG-PRODUCT">
 
 								<div class="block2-overlay trans-0-4">
 									<a href="#" class="block2-btn-addwishlist hov-pointer trans-0-4">
@@ -226,7 +226,7 @@
 					<div class="item-slick2 p-l-15 p-r-15">
 						<div class="block2">
 							<div class="block2-img wrap-pic-w of-hidden pos-relative">
-								<img src="../static/assets/meat/product/fish/hamachi.jpg" alt="IMG-PRODUCT">
+								<img src="/static/assets/meat/product/fish/hamachi.jpg" alt="IMG-PRODUCT">
 
 								<div class="block2-overlay trans-0-4">
 									<a href="#" class="block2-btn-addwishlist hov-pointer trans-0-4">
@@ -257,7 +257,7 @@
 					<div class="item-slick2 p-l-15 p-r-15">
 						<div class="block2">
 							<div class="block2-img wrap-pic-w of-hidden pos-relative">
-								<img src="../static/assets/meat/product/meat/brisket_beef.jpg" alt="IMG-PRODUCT">
+								<img src="/static/assets/meat/product/meat/brisket_beef.jpg" alt="IMG-PRODUCT">
 
 								<div class="block2-overlay trans-0-4">
 									<a href="#" class="block2-btn-addwishlist hov-pointer trans-0-4">
@@ -288,7 +288,7 @@
 					<div class="item-slick2 p-l-15 p-r-15">
 						<div class="block2">
 							<div class="block2-img wrap-pic-w of-hidden pos-relative block2-labelsale">
-								<img src="../static/assets/meat/product/meat/tomahawk_beef.jpg" alt="IMG-PRODUCT">
+								<img src="/static/assets/meat/product/meat/tomahawk_beef.jpg" alt="IMG-PRODUCT">
 
 								<div class="block2-overlay trans-0-4">
 									<a href="#" class="block2-btn-addwishlist hov-pointer trans-0-4">
@@ -323,7 +323,7 @@
 					<div class="item-slick2 p-l-15 p-r-15">
 						<div class="block2">
 							<div class="block2-img wrap-pic-w of-hidden pos-relative block2-labelnew">
-								<img src="../static/assets/meat/product/meat/ribeye_beef.jpg" alt="IMG-PRODUCT">
+								<img src="/static/assets/meat/product/meat/ribeye_beef.jpg" alt="IMG-PRODUCT">
 
 								<div class="block2-overlay trans-0-4">
 									<a href="#" class="block2-btn-addwishlist hov-pointer trans-0-4">
@@ -354,7 +354,7 @@
 					<div class="item-slick2 p-l-15 p-r-15">
 						<div class="block2">
 							<div class="block2-img wrap-pic-w of-hidden pos-relative">
-								<img src="../static/assets/meat/product/meat/ribs_beef.jpg" alt="IMG-PRODUCT">
+								<img src="/static/assets/meat/product/meat/ribs_beef.jpg" alt="IMG-PRODUCT">
 
 								<div class="block2-overlay trans-0-4">
 									<a href="#" class="block2-btn-addwishlist hov-pointer trans-0-4">
@@ -385,7 +385,7 @@
 					<div class="item-slick2 p-l-15 p-r-15">
 						<div class="block2">
 							<div class="block2-img wrap-pic-w of-hidden pos-relative">
-								<img src="../static/assets/meat/product/pork/bacon.jpg" alt="IMG-PRODUCT">
+								<img src="/static/assets/meat/product/pork/bacon.jpg" alt="IMG-PRODUCT">
 								<div class="block2-overlay trans-0-4">
 									<a href="#" class="block2-btn-addwishlist hov-pointer trans-0-4">
 										<i class="icon-wishlist icon_heart_alt" aria-hidden="true"></i>
@@ -416,7 +416,7 @@
 					<div class="item-slick2 p-l-15 p-r-15">
 						<div class="block2">
 							<div class="block2-img wrap-pic-w of-hidden pos-relative block2-labelsale">
-								<img src="../static/assets/meat/product/pork/pork_belly.jpg" alt="IMG-PRODUCT">
+								<img src="/static/assets/meat/product/pork/pork_belly.jpg" alt="IMG-PRODUCT">
 
 								<div class="block2-overlay trans-0-4">
 									<a href="#" class="block2-btn-addwishlist hov-pointer trans-0-4">
@@ -469,14 +469,14 @@
 
 
 	<!--===============================================================================================-->
-	<script type="text/javascript" src="../static/animate/jquery/jquery-3.2.1.min.js"></script>
+	<script type="text/javascript" src="/static/animate/jquery/jquery-3.2.1.min.js"></script>
 	<!--===============================================================================================-->
-	<script type="text/javascript" src="../static/animate/animsition/js/animsition.min.js"></script>
+	<script type="text/javascript" src="/static/animate/animsition/js/animsition.min.js"></script>
 	<!--===============================================================================================-->
-	<script type="text/javascript" src="../static/animate/bootstrap/js/popper.js"></script>
-	<script type="text/javascript" src="../static/animate/bootstrap/js/bootstrap.min.js"></script>
+	<script type="text/javascript" src="/static/animate/bootstrap/js/popper.js"></script>
+	<script type="text/javascript" src="/static/animate/bootstrap/js/bootstrap.min.js"></script>
 	<!--===============================================================================================-->
-	<script type="text/javascript" src="../static/animate/select2/select2.min.js"></script>
+	<script type="text/javascript" src="/static/animate/select2/select2.min.js"></script>
 	<script type="text/javascript">
 		$(".selection-1").select2({
 			minimumResultsForSearch: 20,
@@ -489,10 +489,10 @@
 		});
 	</script>
 	<!--===============================================================================================-->
-	<script type="text/javascript" src="../static/animate/slick/slick.min.js"></script>
-	<script type="text/javascript" src="../static/js/slick-custom.js"></script>
+	<script type="text/javascript" src="/static/animate/slick/slick.min.js"></script>
+	<script type="text/javascript" src="/static/js/slick-custom.js"></script>
 	<!--===============================================================================================-->
-	<script type="text/javascript" src="../static/animate/sweetalert/sweetalert.min.js"></script>
+	<script type="text/javascript" src="/static/animate/sweetalert/sweetalert.min.js"></script>
 
 	<script type="text/javascript">
 		$('.block2-btn-addcart').each(function () {
@@ -549,7 +549,8 @@
 		}, 1000);
 	</script>
 	<!--===============================================================================================-->
-	<script src="../static/js/main.js"></script>
+	<script src="/static/js/main.js"></script>
+	<script src="/static/js/addCart.js"></script>
 
 </body>
 
