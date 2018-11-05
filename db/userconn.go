@@ -80,6 +80,24 @@ func GetUser(id bson.ObjectId) (dbmodel.User, error) {
 
 	user := dbmodel.User{}
 	err = db.C("Users").Find(bson.M{"_id": id}).One(&user)
+	if err != nil {
+		return user, err
+	}
+	return user, err
+}
+
+func GetUserFromName(name string) (dbmodel.User, error) {
+	db, err := GetDB()
+	if err != nil {
+		return dbmodel.User{}, err
+	}
+	defer db.Session.Close()
+
+	user := dbmodel.User{}
+	err = db.C("Users").Find(bson.M{"username": name}).One(&user)
+	if err != nil {
+		return user, err
+	}
 	return user, err
 }
 

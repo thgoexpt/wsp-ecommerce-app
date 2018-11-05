@@ -35,7 +35,7 @@ func main() {
 	r.Handle("/product/sort/type={meattype}&priceSort={price_sort}/", handlePage(handler.ProductSortType))
 	r.Handle("/product/search/name={name}&startPrice={startPrice}&endPrice={endPrice}&priceSort={price_sort}/", handlePage(handler.ProductSearch))
 
-	r.Handle("/product-detail/{meatId}", handlePage(handler.ProductDetail))
+	r.Handle("/product-detail/{meatId}/", handlePage(handler.ProductDetail))
 
 	r.Handle("/profile/", handlePage(handler.Profile))
 
@@ -86,6 +86,13 @@ func main() {
 		middleware.DoableFunc(handler.BuildHeader),
 		middleware.DoableFunc(handler.Profile))).
 		Methods("POST")
+
+	r.Handle("/product/add_cart:{meatId}&quantity={quantity}/", middleware.MakeMiddleware(nil,
+		middleware.DoableFunc(handler.CheckSession),
+		middleware.DoableFunc(handler.BuildHeader),
+		middleware.DoableFunc(handler.AddCart),
+		middleware.DoableFunc(handler.Cart))).
+		Methods("GET")
 
 	r.Handle("/sales_history/", handlePage(handler.SaleHistory))
 
