@@ -38,7 +38,7 @@
 	{{template "menu" .Menu}}
 
 	<!-- Title Page -->
-	<section class="parallax0 parallax100 bg-title-page p-t-40 p-b-50 flex-col-c-m" style="background-image: url(../static/assets/about_us/aboutus_wall.jpg);">
+	<section class="parallax0 parallax100 bg-title-page p-t-40 p-b-50 flex-col-c-m" style="background-image: url(../static/assets/yourprofile_bg.jpg);">
 		<h2 class="l-text2 t-center">
 			Your Profile
 		</h2>
@@ -62,102 +62,110 @@
 
 			</div>
 
-				<!--/col-3-->
-				<div class="col-sm-9">
-					<div class="tab-content">
-						<div class="tab-pane active" id="home">
-							<hr>
-							<form class="form" action="##" method="post" id="registrationForm">
-								<div class="form-group">
+			<!--/col-3-->
+			<div class="col-sm-9">
+				<div class="tab-content">
+					<div class="tab-pane active" id="home">
+						<hr>
+						<form class="form" action="##" method="post" id="registrationForm">
+							<div class="form-group">
 
-									<div class="col-xs-6">
-										<label for="first_name"><h4>Name</h4></label>
-										<input type="text" class="form-control" name="first_name" id="first_name" title="enter your first name if any." disabled="true" value="{{.Fullname}}">
+								<div class="col-xs-6">
+									<label for="first_name">
+										<h4>Name</h4>
+									</label>
+									<input type="text" class="form-control" name="first_name" id="first_name" title="enter your first name if any."
+									 disabled="true" value="{{.Fullname}}">
 								</div>
-									</div>
-									<div class="form-group">
+							</div>
+							<div class="form-group">
 
-										<div class="col-xs-6">
-											<label for="email"><h4>Email</h4></label>
-											<input type="email" class="form-control" name="email" id="email" title="enter your email." disabled="true" value="{{.Email}}">
+								<div class="col-xs-6">
+									<label for="email">
+										<h4>Email</h4>
+									</label>
+									<input type="email" class="form-control" name="email" id="email" title="enter your email." disabled="true"
+									 value="{{.Email}}">
 								</div>
-										</div>
-										<div class="form-group">
+							</div>
+							<div class="form-group">
 
-											<div class="col-xs-6">
-												<label for="email"><h4>Address</h4></label>
-												<input type="text" class="form-control" id="location" title="enter a address" disabled="true" value="{{.Address}}">
+								<div class="col-xs-6">
+									<label for="email">
+										<h4>Address</h4>
+									</label>
+									<input type="text" class="form-control" id="location" title="enter a address" disabled="true" value="{{.Address}}">
 								</div>
-											</div>
-											<div class="form-group">
+							</div>
+							<div class="form-group">
 
-													</div>
-													<div class="form-group">
-														<div class="col-xs-12">
-															<br>
-															<a href="/profile-edit/">
-																<button class="btn btn-lg btn-success" type="button"><i class="glyphicon glyphicon-ok-sign"></i>Edit Profile</button>
-															</a>
-                                                            &emsp;
-                                                            <a href="/sales_history/">
-                                                                <button class="btn btn-lg btn-info" type="button"><i class="glyphicon glyphicon-ok-sign"></i>Sales History</button>
-                                                            </a>
-														</div>
-													</div>
-							</form>
+							</div>
+							<div class="form-group">
+								<div class="col-xs-12">
+									<br>
+									<a href="/profile-edit/">
+										<button class="btn btn-lg btn-success" type="button"><i class="glyphicon glyphicon-ok-sign"></i>Edit Profile</button>
+									</a>
+									&emsp;
+									<a href="/sales_history/">
+										<button class="btn btn-lg btn-info" type="button"><i class="glyphicon glyphicon-ok-sign"></i>Sales History</button>
+									</a>
+								</div>
+							</div>
+						</form>
 
-							<hr>
-
-						</div>
+						<hr>
 
 					</div>
-					<!--/tab-pane-->
+
 				</div>
-				<!--/tab-content-->
-
+				<!--/tab-pane-->
 			</div>
-			<!--/col-9-->
+			<!--/tab-content-->
+
 		</div>
-		<!--/row-->
+		<!--/col-9-->
+	</div>
+	<!--/row-->
 
-		{{template "footer"}}
+	{{template "footer"}}
 
-		<!-- Back to top -->
-		<div class="btn-back-to-top bg0-hov" id="myBtn">
-			<span class="symbol-btn-back-to-top">
+	<!-- Back to top -->
+	<div class="btn-back-to-top bg0-hov" id="myBtn">
+		<span class="symbol-btn-back-to-top">
 			<i class="fa fa-angle-double-up" aria-hidden="true"></i>
 		</span>
-		</div>
+	</div>
 
-		<!-- Container Selection -->
-		<div id="dropDownSelect1"></div>
-		<div id="dropDownSelect2"></div>
+	<!-- Container Selection -->
+	<div id="dropDownSelect1"></div>
+	<div id="dropDownSelect2"></div>
 
-		<!-- Login pop-up -->
-		{{template "login"}} {{template "register"}}
+	<!-- Login pop-up -->
+	{{template "login"}} {{template "register"}}
 
-		<!--===============================================================================================-->
-		<script type="text/javascript" src="../static/animate/jquery/jquery-3.2.1.min.js"></script>
-		<!--===============================================================================================-->
-		<script type="text/javascript" src="../static/animate/animsition/js/animsition.min.js"></script>
-		<!--===============================================================================================-->
-		<script type="text/javascript" src="../static/animate/bootstrap/js/popper.js"></script>
-		<script type="text/javascript" src="../static/animate/bootstrap/js/bootstrap.min.js"></script>
-		<!--===============================================================================================-->
-		<script type="text/javascript" src="../static/animate/select2/select2.min.js"></script>
-		<script type="text/javascript">
-			$(".selection-1").select2({
-				minimumResultsForSearch: 20,
-				dropdownParent: $('#dropDownSelect1')
-			});
+	<!--===============================================================================================-->
+	<script type="text/javascript" src="../static/animate/jquery/jquery-3.2.1.min.js"></script>
+	<!--===============================================================================================-->
+	<script type="text/javascript" src="../static/animate/animsition/js/animsition.min.js"></script>
+	<!--===============================================================================================-->
+	<script type="text/javascript" src="../static/animate/bootstrap/js/popper.js"></script>
+	<script type="text/javascript" src="../static/animate/bootstrap/js/bootstrap.min.js"></script>
+	<!--===============================================================================================-->
+	<script type="text/javascript" src="../static/animate/select2/select2.min.js"></script>
+	<script type="text/javascript">
+		$(".selection-1").select2({
+			minimumResultsForSearch: 20,
+			dropdownParent: $('#dropDownSelect1')
+		});
 
-			$(".selection-2").select2({
-				minimumResultsForSearch: 20,
-				dropdownParent: $('#dropDownSelect2')
-			});
-		</script>
-		<!--===============================================================================================-->
-		<script src="../static/js/main.js"></script>
+		$(".selection-2").select2({
+			minimumResultsForSearch: 20,
+			dropdownParent: $('#dropDownSelect2')
+		});
+	</script>
+	<!--===============================================================================================-->
+	<script src="../static/js/main.js"></script>
 
 </body>
 
