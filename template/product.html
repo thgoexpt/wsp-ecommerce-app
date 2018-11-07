@@ -100,7 +100,7 @@
 
 						<div class="search-product pos-relative bo4 of-hidden">
 							<input class="s-text7 size6 p-l-23 p-r-50" type="text" id="search" name="search-product" placeholder="Search Products...">
-							<button class="flex-c-m size5 ab-r-m color2 color0-hov trans-0-4" onclick="search()">
+							<button class="flex-c-m size5 ab-r-m color2 color0-hov trans-0-4" onclick="search()" id="search-BTN">
 								<i class="fs-12 fa fa-search" aria-hidden="true"></i>
 							</button>
 						</div>
@@ -122,12 +122,12 @@
 
 							<div class="rs2-select2 bo4 of-hidden w-size12 m-t-5 m-b-5 m-r-10">
 								<select class="selection-2" name="sorting" onchange="location = this.value">
-									<option>Price</option>
+									<option value="/product/">Price</option>
 									<option value="/product/search/name=all&startPrice=0&endPrice=50&priceSort=price/">$0.00 - $50.00</option>
 									<option value="/product/search/name=all&startPrice=51&endPrice=100&priceSort=price/">$50.00 - $100.00</option>
 									<option value="/product/search/name=all&startPrice=101&endPrice=150&priceSort=price/">$100.00 - $150.00</option>
 									<option value="/product/search/name=all&startPrice=151&endPrice=200&priceSort=price/">$150.00 - $200.00</option>
-									<option value="/product/search/name=all&startPrice=200\1&endPrice=-1&priceSort=price/">$200.00+</option>
+									<option value="/product/search/name=all&startPrice=201&endPrice=-1&priceSort=price/">$200.00+</option>
 
 								</select>
 							</div>
@@ -164,11 +164,11 @@
 								</div>
 
 								<div class="block2-txt p-t-20">
-									<a href="/product-detail/{{.ID}}/" class="block2-name dis-block s-text3 p-b-5">
+									<a href="/product-detail/{{.ID}}/" class="block2-name dis-block s-text3 p-b-5" id="product-name">
 										{{.ProName}} ({{.Type}})
 									</a>
 
-									<span class="block2-price m-text6 p-r-5">
+									<span class="block2-price m-text6 p-r-5" id="product-price">
 										${{printf "%.2f" .Price}}
 									</span>
 								</div>
