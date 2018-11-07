@@ -47,6 +47,8 @@ func main() {
 
 	r.Handle("/sale-history/", handlePage(handler.SaleHistory))
 
+	r.Handle("/checkout/", handlePage(handler.Checkout))
+
 	r.Handle("/regis/", middleware.MakeMiddleware(nil,
 		middleware.DoableFunc(handler.Regis),
 		middleware.DoableFunc(handler.CheckSession),
