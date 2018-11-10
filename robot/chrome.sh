@@ -1,11 +1,10 @@
 #!/bin/bash
 
-curl -s --ssl --insecure https://localhost:4433/mock/ > /dev/null
-
 if [[ "$SOLID_ENV" == "CI" ]]; then
         BROWSER=headlesschrome
 else
         BROWSER=chrome
+        curl -s --ssl --insecure https://localhost:4433/mock/ > /dev/null
 fi
 
 if [[ "$OSTYPE" == "msys" ]] || [[ "$OSTYPE" == "win32" ]]; then
