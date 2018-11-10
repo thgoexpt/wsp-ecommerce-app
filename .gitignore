@@ -40,5 +40,8 @@ robot/output.xml
 
 robot/selenium-screenshot-*
 
+pabot_results
+
+# Mac
 .DS_Store
 wsp-ecommerce
