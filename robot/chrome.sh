@@ -13,6 +13,6 @@ else
         if [[ "$GOPATH" == "" ]]; then
                 export GOPATH=~/go
         fi
-        PABOT_CMD=pabot.bat
+        PABOT_CMD=pabot
 fi
 $PABOT_CMD --processes 6 --variable browser:$BROWSER $GOPATH/src/github.com/guitarpawat/wsp-ecommerce/robot/*.robot
