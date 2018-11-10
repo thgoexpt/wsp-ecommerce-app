@@ -16,7 +16,7 @@ else
         PABOT_CMD=pabot
 fi
 
-$PABOT_CMD --processes 6 --variable browser:$BROWSER $GOPATH/src/github.com/guitarpawat/wsp-ecommerce/robot/*.robot
+$PABOT_CMD --processes 8 --variable browser:$BROWSER $GOPATH/src/github.com/guitarpawat/wsp-ecommerce/robot/*.robot
 
 CODE=$?
 if [[ "$CODE" == 0 ]]; then
@@ -27,7 +27,7 @@ fi
 for i in 2 3 4 5; do
         echo ""
         echo -e "\e[33mTest Failed, Attempt $i of 5\e[0m"
-        $PABOT_CMD --processes 6 --rerunfailed $GOPATH/src/github.com/guitarpawat/wsp-ecommerce/robot/output.xml --variable browser:$BROWSER $GOPATH/src/github.com/guitarpawat/wsp-ecommerce/robot/*.robot
+        $PABOT_CMD --processes 8 --rerunfailed $GOPATH/src/github.com/guitarpawat/wsp-ecommerce/robot/output.xml --variable browser:$BROWSER $GOPATH/src/github.com/guitarpawat/wsp-ecommerce/robot/*.robot
         
         CODE=$?
         if [[ "$CODE" == 0 ]] || [[ "$CODE" == 252 ]]; then
