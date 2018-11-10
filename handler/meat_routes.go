@@ -6,8 +6,24 @@ import (
 	"github.com/gorilla/mux"
 	"github.com/guitarpawat/middleware"
 	"github.com/guitarpawat/wsp-ecommerce/db"
+	"github.com/guitarpawat/wsp-ecommerce/model/dbmodel"
 	"github.com/guitarpawat/wsp-ecommerce/model/pagemodel"
 )
+
+func GetMeatModel(meat dbmodel.Meat) pagemodel.MeatModel {
+	return pagemodel.MeatModel{
+		ID:          meat.ID.Hex(),
+		Pic:         "/image/meat_" + meat.ID.Hex() + meat.ImageExtension,
+		ProName:     meat.Name,
+		Type:        meat.Type,
+		Grade:       meat.Grade,
+		Description: meat.Description,
+		Price:       meat.Price,
+		Expire:      meat.Expire.Format(dbmodel.TimeFormat),
+		Quantity:    meat.Quantity,
+		Total:       meat.Price * float64(meat.Quantity),
+	}
+}
 
 func MeatDetailEdit(w http.ResponseWriter, r *http.Request, v *middleware.ValueMap) {
 	html := "~~meat_edit~~.html"

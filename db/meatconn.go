@@ -94,10 +94,14 @@ func GetMeatsPaging(limit, page int) ([]dbmodel.Meat, error) {
 	defer db.Session.Close()
 
 	var meats []dbmodel.Meat
+	query := db.C("Meats").Find(bson.M{
+		"quantity": bson.M{"$gt": 0},
+		"expire":   bson.M{"$gt": time.Now()},
+	})
 	if limit > 0 {
-		err = db.C("Meats").Find(nil).Limit(limit).Skip((page - 1) * limit).Iter().All(&meats)
+		err = query.Limit(limit).Skip((page - 1) * limit).Iter().All(&meats)
 	} else {
-		err = db.C("Meats").Find(nil).Iter().All(&meats)
+		err = query.Iter().All(&meats)
 	}
 	if err != nil {
 		return nil, err
@@ -145,6 +149,8 @@ func SearchSort(name, meattype string, startPrice, endPrice float64, sorting str
 				Pattern: "(" + meattype + ")",
 				Options: "i", //insensitive
 			},
+			"quantity": bson.M{"$gt": 0},
+			"expire":   bson.M{"$gt": time.Now()},
 			"price": bson.M{
 				"$gte": startPrice,
 				"$lte": endPrice,
@@ -160,6 +166,8 @@ func SearchSort(name, meattype string, startPrice, endPrice float64, sorting str
 				Pattern: "(" + meattype + ")",
 				Options: "i", //insensitive
 			},
+			"quantity": bson.M{"$gt": 0},
+			"expire":   bson.M{"$gt": time.Now()},
 			"price": bson.M{
 				"$gte": startPrice,
 			},
