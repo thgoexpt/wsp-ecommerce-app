@@ -10,7 +10,7 @@ branches:
 jobs:
   include:
   - stage: test
-    name: "go 1.10.x - Backend Test"
+    name: "Backend Test - go 1.10"
     if: branch != master
     go: 1.10.x
     services: mongodb
@@ -23,7 +23,7 @@ jobs:
     after_success:
     - travis_retry bash <(curl -s https://codecov.io/bash)
   - stage: test
-    name: "go 1.11.x - Backend Test"
+    name: "Backend Test - go 1.11"
     if: branch != master
     go: 1.11.x
     services: mongodb
@@ -36,7 +36,7 @@ jobs:
     after_success:
     - travis_retry bash <(curl -s https://codecov.io/bash)
   - stage: test
-    name: "go 1.10.x - Frontend Test"
+    name: "Frontend Test go 1.10"
     if: branch != master
     go: 1.10.x
     services: mongodb
@@ -64,7 +64,7 @@ jobs:
     script: robot/chrome.sh
     after-script: skip
   - stage: test
-    name: "go 1.11.x - Frontend Test"
+    name: "Frontend Test go 1.11"
     if: branch != master
     go: 1.11.x
     services: mongodb
