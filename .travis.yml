@@ -9,32 +9,32 @@ branches:
   - "/.*/"
 jobs:
   include:
-  - stage: Backend Test
-    name: go 1.10.x
-    if: branch != master
-    go: 1.10.x
-    services: mongodb
-    before_install: skip
-    install:
-    - travis_retry go get -t -v ./...
-    before_script: skip
-    script: travis_retry go test -race -coverprofile=coverage.txt -covermode=atomic ./...
-    after_script: skip
-    after_success:
-    - travis_retry bash <(curl -s https://codecov.io/bash)
-  - stage: Backend Test
-    name: go 1.11.x
-    if: branch != master
-    go: 1.11.x
-    services: mongodb
-    before_install: skip
-    install:
-    - travis_retry go get -t -v ./...
-    before_script: skip
-    script: travis_retry go test -race -coverprofile=coverage.txt -covermode=atomic ./...
-    after_script: skip
-    after_success:
-    - travis_retry bash <(curl -s https://codecov.io/bash)
+  # - stage: Backend Test
+  #   name: go 1.10.x
+  #   if: branch != master
+  #   go: 1.10.x
+  #   services: mongodb
+  #   before_install: skip
+  #   install:
+  #   - travis_retry go get -t -v ./...
+  #   before_script: skip
+  #   script: travis_retry go test -race -coverprofile=coverage.txt -covermode=atomic ./...
+  #   after_script: skip
+  #   after_success:
+  #   - travis_retry bash <(curl -s https://codecov.io/bash)
+  # - stage: Backend Test
+  #   name: go 1.11.x
+  #   if: branch != master
+  #   go: 1.11.x
+  #   services: mongodb
+  #   before_install: skip
+  #   install:
+  #   - travis_retry go get -t -v ./...
+  #   before_script: skip
+  #   script: travis_retry go test -race -coverprofile=coverage.txt -covermode=atomic ./...
+  #   after_script: skip
+  #   after_success:
+  #   - travis_retry bash <(curl -s https://codecov.io/bash)
   - stage: Frontend Test
     name: go 1.10.x
     if: branch != master
@@ -61,7 +61,7 @@ jobs:
     - travis_retry google-chrome-stable --no-sandbox --ignore-certificate-errors --headless --window-size=1920,1080
       --disable-gpu --disable-dev-shm-usage --remote-debugging-port=51232 http://localhost:8000 &
     - sleep 10
-    script: travis_retry robot --variable browser:headlesschrome robot/tests.robot
+    script: travis_retry robot robot/chrome.sh
     after-script: skip
   - stage: Frontend Test
     name: go 1.11.x
@@ -89,7 +89,7 @@ jobs:
     - travis_retry google-chrome-stable --no-sandbox --ignore-certificate-errors --headless --window-size=1920,1080
       --disable-gpu --disable-dev-shm-usage --remote-debugging-port=51232 http://localhost:8000 &
     - sleep 10
-    script: travis_retry robot --variable browser:headlesschrome robot/tests.robot
+    script: travis_retry robot robot/chrome.sh
     after-script: skip
   - stage: Deploy Build
     if: branch = master
