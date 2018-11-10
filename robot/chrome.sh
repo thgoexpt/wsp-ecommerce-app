@@ -15,4 +15,11 @@ else
         fi
         PABOT_CMD=pabot
 fi
-$PABOT_CMD --processes 6 --variable browser:$BROWSER $GOPATH/src/github.com/guitarpawat/wsp-ecommerce/robot/*.robot
+$PABOT_CMD --processes 8 --variable browser:$BROWSER $GOPATH/src/github.com/guitarpawat/wsp-ecommerce/robot/*.robot
+
+CODE=$?
+if [[ "$CODE" == 1 ]]; then
+        exit 1
+else
+        exit 0
+fi
