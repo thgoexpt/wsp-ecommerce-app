@@ -185,3 +185,27 @@ func SearchSort(name, meattype string, startPrice, endPrice float64, sorting str
 	}
 	return meats, nil
 }
+
+func GetRelate(id string) ([]dbmodel.Meat, error) {
+	db, err := GetDB()
+	if err != nil {
+		return nil, err
+	}
+	defer db.Session.Close()
+
+	meat, err := GetMeat(id)
+	query := db.C("Meats").Find(bson.M{
+		"type": bson.RegEx{
+			Pattern: "(" + meat.Type + ")",
+			Options: "i", //insensitive
+		},
+		"quantity": bson.M{"$gt": 0},
+		"expire":   bson.M{"$gt": time.Now()},
+	})
+	var meats []dbmodel.Meat
+	err = query.Limit(5).Sort("price").Iter().All(&meats)
+	if err != nil {
+		return nil, err
+	}
+	return meats, nil
+}
