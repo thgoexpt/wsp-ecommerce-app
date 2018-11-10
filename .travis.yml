@@ -9,34 +9,34 @@ branches:
   - "/.*/"
 jobs:
   include:
-  # - stage: Backend Test
-  #   name: go 1.10.x
-  #   if: branch != master
-  #   go: 1.10.x
-  #   services: mongodb
-  #   before_install: skip
-  #   install:
-  #   - travis_retry go get -t -v ./...
-  #   before_script: skip
-  #   script: travis_retry go test -race -coverprofile=coverage.txt -covermode=atomic ./...
-  #   after_script: skip
-  #   after_success:
-  #   - travis_retry bash <(curl -s https://codecov.io/bash)
-  # - stage: Backend Test
-  #   name: go 1.11.x
-  #   if: branch != master
-  #   go: 1.11.x
-  #   services: mongodb
-  #   before_install: skip
-  #   install:
-  #   - travis_retry go get -t -v ./...
-  #   before_script: skip
-  #   script: travis_retry go test -race -coverprofile=coverage.txt -covermode=atomic ./...
-  #   after_script: skip
-  #   after_success:
-  #   - travis_retry bash <(curl -s https://codecov.io/bash)
-  - stage: Frontend Test
-    name: go 1.10.x
+  - stage: test
+    name: "go 1.10.x - Backend Test"
+    if: branch != master
+    go: 1.10.x
+    services: mongodb
+    before_install: skip
+    install:
+    - travis_retry go get -t -v ./...
+    before_script: skip
+    script: travis_retry go test -race -coverprofile=coverage.txt -covermode=atomic ./...
+    after_script: skip
+    after_success:
+    - travis_retry bash <(curl -s https://codecov.io/bash)
+  - stage: test
+    name: "go 1.11.x - Backend Test"
+    if: branch != master
+    go: 1.11.x
+    services: mongodb
+    before_install: skip
+    install:
+    - travis_retry go get -t -v ./...
+    before_script: skip
+    script: travis_retry go test -race -coverprofile=coverage.txt -covermode=atomic ./...
+    after_script: skip
+    after_success:
+    - travis_retry bash <(curl -s https://codecov.io/bash)
+  - stage: test
+    name: "go 1.10.x - Frontend Test"
     if: branch != master
     go: 1.10.x
     services: mongodb
@@ -63,8 +63,8 @@ jobs:
     - sleep 10
     script: robot/chrome.sh
     after-script: skip
-  - stage: Frontend Test
-    name: go 1.11.x
+  - stage: test
+    name: "go 1.11.x - Frontend Test"
     if: branch != master
     go: 1.11.x
     services: mongodb
@@ -91,7 +91,7 @@ jobs:
     - sleep 10
     script: travis_retry robot/chrome.sh
     after-script: skip
-  - stage: Deploy Build
+  - stage: deploy
     if: branch = master
     script: skip
     deploy: &heroku
