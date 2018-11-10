@@ -123,7 +123,7 @@ User type some part of product's name
 
 # Mobile Phone
 User opens a home page on mobile phone
-    Open Browser    http://localhost:8000/mock/    ${browser}
+    Open Browser    http://localhost:8000/    ${browser}
     Set Window Size    600    800
     Wait Until Element Is Visible    alertBox    30
 
