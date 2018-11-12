@@ -47,7 +47,11 @@ func main() {
 
 	r.Handle("/sale-history/", handlePage(handler.SaleHistory))
 
+<<<<<<< HEAD
 	r.Handle("/owner/", handlePage(handler.Owner))
+=======
+	r.Handle("/checkout/", handlePage(handler.Checkout))
+>>>>>>> master
 
 	r.Handle("/regis/", middleware.MakeMiddleware(nil,
 		middleware.DoableFunc(handler.Regis),

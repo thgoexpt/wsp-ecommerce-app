@@ -57,6 +57,7 @@
 							<th class="column-3">Price</th>
 							<th class="column-4 p-l-70">Quantity</th>
 							<th class="column-5">Total</th>
+							<th class="column-6"></th>
 						</tr>
 
 						{{range .MeatsInCart}}
@@ -82,6 +83,12 @@
 								</div>
 							</td>
 							<td class="column-5">${{.Total}}</td>
+							<td class="column-6">
+									<!-- Button -->
+									<button class="btn btn-outline-danger">
+										X
+									</button>
+								</td>
 						</tr>
 						{{end}}
 
