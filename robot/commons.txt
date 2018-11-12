@@ -1,7 +1,3 @@
-*** Settings ***
-Library    SeleniumLibrary
-Test Teardown     End of test
-
 *** Variables ***
 ${INVALID_USERNAME}    fail
 ${INVALID_PASSWORD}    fail
@@ -19,28 +15,32 @@ ${FULL_PRODUCT_NAME}    Kurobuta (Chicken)
 End of test
     Close Browser
 
+Initialize mock data
+    Open Browser    http://localhost:8000/    ${browser}
+    Close Browser
+
 User sees the invalid username or password dialog
-    Wait Until Element Is Visible    alertBox    30
+    Wait Until Element Is Visible    alertBox    15
     Element Text Should Be    id:warningBox    Warning: Invalid username/password
 
 User sees the login successful dialog
-    Wait Until Element Is Visible    alertBox    30
+    Wait Until Element Is Visible    alertBox    15
     Element Text Should Be    id:successBox    Login successful
 
 User sees the success to registration dialog
-    Wait Until Element Is Visible    alertBox    30
+    Wait Until Element Is Visible    alertBox    15
     Element Text Should Be    id:successBox    User created successful, please login.
 
 User sees the already have that username dialog
-    Wait Until Element Is Visible    alertBox    30
+    Wait Until Element Is Visible    alertBox    15
     Element Text Should Be    id:warningBox    Warning: Username already exists
 
 User sees the already have that email dialog
-    Wait Until Element Is Visible    alertBox    30
+    Wait Until Element Is Visible    alertBox    15
     Element Text Should Be    id:warningBox    Warning: Email already in use
 
 User can sees the product
-    Wait Until Element Is Visible    alertBox    30
+    Wait Until Element Is Visible    alertBox    15
     Element Text Should Be    id:product-name   ${FULL_PRODUCT_NAME}
 
 
@@ -92,17 +92,17 @@ User clicks search button
 
 # PC
 User opens a home page on PC
-    Open Browser    http://localhost:8000/mock/    ${browser}
+    Open Browser    http://localhost:8000/    ${browser}
     Set Window Size    1920    1080
-    Wait Until Element Is Visible    alertBox    30
+    Wait Until Element Is Visible    alertBox    15
 
 User opens a login page on PC
     Click Element    id:loginIcon
-    Wait Until Element Is Visible    myModal    30
+    Wait Until Element Is Visible    myModal    15
 
 User opens a register page on PC
     Click Element    id:registerIcon
-    Wait Until Element Is Visible    myModal_regis    30
+    Wait Until Element Is Visible    myModal_regis    15
 
 User sees that he is not logged in on PC
     Element Text Should Be    id:welcomeUser    Welcome, Guest
@@ -123,51 +123,29 @@ User type some part of product's name
 
 # Mobile Phone
 User opens a home page on mobile phone
-    Open Browser    http://localhost:8000/mock/    ${browser}
+    Open Browser    http://localhost:8000/    ${browser}
     Set Window Size    600    800
-    Wait Until Element Is Visible    alertBox    30
+    Wait Until Element Is Visible    alertBox    15
 
 User sees that he is not logged in on mobile phone
     Element Text Should Be    id:welcomeUser-mobile    Welcome, Guest
 
 User sees that he is logged in on mobile phone
+    Wait Until Element Is Visible    id:welcomeUser-mobile    15
     Element Text Should Be    id:welcomeUser-mobile    Welcome, test
 
 User opens dropdown menu
     Click Element    id:dropdownMenu
-    Wait Until Element Is Visible    id:lastDropdownMenuItem    30
+    Wait Until Element Is Visible    id:lastDropdownMenuItem    15
 
 User opens a login page on mobile phone
     Click Element    id:loginIcon-mobile
-    Wait Until Element Is Visible    myModal    30
+    Wait Until Element Is Visible    myModal    15
 
 User opens a register page on mobile phone
     Click Element    id:registerIcon-mobile
-    Wait Until Element Is Visible    myModal_regis    30
+    Wait Until Element Is Visible    myModal_regis    15
 
 User opens a product page on mobile
+    Wait Until Element Is Visible    id:lastDropdownMenuItem
     Click Element    id:Shop-BTN-Mobile
-
-*** Test Cases ***
-Test search product with full name of product on mobile
-    User opens a home page on mobile phone
-    User opens dropdown menu
-    User opens a product page on mobile
-    Wait Until Element Is Visible    alertBox    30
-    User type full name of product
-    User clicks search button
-    Wait Until Element Is Visible    alertBox    30
-    User can sees the product
-    End of test
-
-
-Test search product with some part of product's name on mobile
-    User opens a home page on mobile phone
-    User opens dropdown menu
-    User opens a product page on mobile
-    Wait Until Element Is Visible    alertBox    30
-    User type some part of product's name
-    User clicks search button
-    Wait Until Element Is Visible    alertBox    30
-    User can sees the product
-    End of test
