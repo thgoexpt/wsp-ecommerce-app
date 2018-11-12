@@ -21,11 +21,11 @@
         </div>
 
         <div class="block2-txt p-t-20">
-            <a href="/product-detail/{{.ID}}/" class="block2-name dis-block s-text3 p-b-5">
+            <a href="/product-detail/{{.ID}}/" class="block2-name dis-block s-text3 p-b-5" id="product-name">
                 {{.ProName}} ({{.Type}})
             </a>
 
-            <span class="block2-price m-text6 p-r-5">
+            <span class="block2-price m-text6 p-r-5" id="product-price">
                 ${{printf "%.2f" .Price}}
             </span>
         </div>
