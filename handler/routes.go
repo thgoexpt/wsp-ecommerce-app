@@ -2,6 +2,7 @@ package handler
 
 import (
 	"encoding/gob"
+	"fmt"
 	"log"
 	"net/http"
 	"path/filepath"
@@ -233,6 +234,7 @@ func AddCart(w http.ResponseWriter, r *http.Request, v *middleware.ValueMap) {
 
 	user, err := db.GetUserFromName(header.User)
 	if err != nil {
+		fmt.Println("Get User From Name Error! >> " + err.Error())
 		// w.WriteHeader(http.StatusNotFound)
 		v.Set("warning", "AddCart: unable to find user >> "+err.Error())
 		return
@@ -246,11 +248,6 @@ func Product(w http.ResponseWriter, r *http.Request, v *middleware.ValueMap) {
 	if !ok {
 		header = defaultHeader
 	}
-
-	// model := pagemodel.Product{
-	// 	Menu:  header,
-	// 	Meats: []pagemodel.MeatModel{},
-	// }
 
 	proCount, _ := db.CountProduct("", "", 0, -1)
 	model := PrepareProductPageModel(header,
