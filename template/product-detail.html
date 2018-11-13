@@ -7,7 +7,7 @@
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<!--===============================================================================================-->
-	<link rel="icon" type="image/png" href="/static/images/icons/favicon.png" />
+	<link rel="icon" type="image/png" href="/static/assets/icon/favicon.ico" />
 	<!--===============================================================================================-->
 	<link rel="stylesheet" type="text/css" href="/static/animate/bootstrap/css/bootstrap.css">
 	<!--===============================================================================================-->
@@ -171,9 +171,13 @@
 				<br>
 				<div class="btn-addcart-product-detail size9 trans-0-4 m-t-10 m-b-10">
 					<!-- Button -->
-					<button class="flex-c-m sizefull bg1 bo-rad-23 hov1 s-text1 trans-0-4 addCart" value="edit_product.html" type="submit">
-						Edit Product
-					</button>
+					{{if .Menu.IsPermissable}}
+					<a href="/edit_meat/{{.ID}}/">
+						<button class="flex-c-m sizefull bg1 bo-rad-23 hov1 s-text1 trans-0-4 editProduct" type="submit">
+							Edit Product
+						</button>
+					</a>
+					{{end}}
 				</div>
 			</div>
 		</div>

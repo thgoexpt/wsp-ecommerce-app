@@ -52,6 +52,20 @@ func RegisMeat(meat dbmodel.Meat) error {
 	return nil
 }
 
+func UpdateMeat(id bson.ObjectId, meat dbmodel.Meat) error {
+	db, err := GetDB()
+	if err != nil {
+		return err
+	}
+	defer db.Session.Close()
+
+	err = db.C("Meats").UpdateId(id, meat)
+	if err != nil {
+		return err
+	}
+	return nil
+}
+
 func GetMeatId(meat dbmodel.Meat) (string, error) {
 	db, err := GetDB()
 	if err != nil {
