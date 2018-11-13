@@ -86,6 +86,16 @@ func main() {
 		middleware.DoableFunc(handler.Home))).
 		Methods("POST")
 
+	r.Handle("/edit_meat/{meatID}/", handlePage(handler.EditMeat))
+
+	r.Handle("/update_meat/", middleware.MakeMiddleware(nil,
+		middleware.DoableFunc(handler.CheckSession),
+		middleware.DoableFunc(handler.BuildHeader),
+		middleware.DoableFunc(handler.UpdateMeat),
+		middleware.DoableFunc(handler.BuildHeader),
+		middleware.DoableFunc(handler.Home))).
+		Methods("POST")
+
 	r.Handle("/edit-profile/", middleware.MakeMiddleware(nil,
 		middleware.DoableFunc(handler.CheckSession),
 		middleware.DoableFunc(handler.BuildHeader),

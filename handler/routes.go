@@ -509,8 +509,9 @@ func AddMeat(w http.ResponseWriter, r *http.Request, v *middleware.ValueMap) {
 		return
 	}
 
-	model := pagemodel.ProductDetail{
-		Menu: header,
+	model := pagemodel.MeatEdit{
+		Menu:  header,
+		State: pagemodel.AddMeatTxt,
 	}
 	t.ExecuteTemplate(w, "add-product.html", model)
 	v.Set("next", false)
