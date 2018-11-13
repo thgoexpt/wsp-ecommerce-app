@@ -237,10 +237,17 @@ func Product(w http.ResponseWriter, r *http.Request, v *middleware.ValueMap) {
 		header = defaultHeader
 	}
 
-	model := pagemodel.Product{
-		Menu:  header,
-		Meats: []pagemodel.MeatModel{},
-	}
+	// model := pagemodel.Product{
+	// 	Menu:  header,
+	// 	Meats: []pagemodel.MeatModel{},
+	// }
+
+	proCount, _ := db.CountProduct("", "", 0, -1)
+	model := PrepareProductPageModel(header,
+		"/product/",
+		proCount,
+		1,
+	)
 
 	v.Set("next", false)
 	meats, err := db.GetAllMeats()
@@ -264,12 +271,17 @@ func ProductSortType(w http.ResponseWriter, r *http.Request, v *middleware.Value
 		header = defaultHeader
 	}
 
-	model := pagemodel.Product{
-		Menu:  header,
-		Meats: []pagemodel.MeatModel{},
-	}
-
+	// model := pagemodel.Product{
+	// 	Menu:  header,
+	// 	Meats: []pagemodel.MeatModel{},
+	// }
 	vars := mux.Vars(r)
+	proCount, _ := db.CountProduct("", vars["meattype"], 0, -1)
+	model := PrepareProductPageModel(header,
+		"/product/sort/type="+vars["meattype"]+"&priceSort="+vars["price_sort"]+"/",
+		proCount,
+		1,
+	)
 
 	v.Set("next", false)
 	meats, err := db.SortType(vars["meattype"], vars["price_sort"])
@@ -294,10 +306,10 @@ func ProductSearch(w http.ResponseWriter, r *http.Request, v *middleware.ValueMa
 		header = defaultHeader
 	}
 
-	model := pagemodel.Product{
-		Menu:  header,
-		Meats: []pagemodel.MeatModel{},
-	}
+	// model := pagemodel.Product{
+	// 	Menu:  header,
+	// 	Meats: []pagemodel.MeatModel{},
+	// }
 
 	vars := mux.Vars(r)
 
@@ -313,6 +325,14 @@ func ProductSearch(w http.ResponseWriter, r *http.Request, v *middleware.ValueMa
 		v.Set("next", true)
 		return
 	}
+
+	proCount, _ := db.CountProduct(vars["name"], "", startPrice, endPrice)
+	model := PrepareProductPageModel(
+		header,
+		"/product/search/name="+vars["name"]+"&startPrice="+vars["startPrice"]+"&endPrice="+vars["endPrice"]+"&priceSort="+vars["price_sort"]+"/",
+		proCount,
+		1,
+	)
 
 	v.Set("next", false)
 	meats, err := db.Search(vars["name"], startPrice, endPrice, vars["price_sort"])
