@@ -467,10 +467,17 @@ func RegisMeat(w http.ResponseWriter, r *http.Request, v *middleware.ValueMap) {
 	}
 	priceStr := r.PostFormValue("price")
 	price, err := strconv.ParseFloat(priceStr, 64)
-	if err != nil {
-		v.Set("warning", "Price is not a number.")
-		v.Set("next", true)
-		return
+	discountStr := r.PostFormValue("discount")
+	var discount float64
+	if discountStr == "" {
+		discount = -1.0
+	} else {
+		discount, err = strconv.ParseFloat(discountStr, 64)
+		if err != nil {
+			v.Set("warning", "Price is not a number.")
+			v.Set("next", true)
+			return
+		}
 	}
 	quantityStr := r.PostFormValue("quantity")
 	quantity64, err := strconv.ParseInt(quantityStr, 10, 64)
@@ -502,7 +509,7 @@ func RegisMeat(w http.ResponseWriter, r *http.Request, v *middleware.ValueMap) {
 	ext := filepath.Ext(h.Filename)
 
 	meat, err := dbmodel.MakeMeat(r.PostFormValue("name"), r.PostFormValue("type"),
-		r.PostFormValue("grade"), r.PostFormValue("des"), price, quantity, expire, ext)
+		r.PostFormValue("grade"), r.PostFormValue("des"), price, discount, quantity, expire, ext)
 	if err != nil {
 		v.Set("warning", err.Error())
 	} else {
