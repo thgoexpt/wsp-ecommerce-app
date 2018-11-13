@@ -99,6 +99,8 @@ func main() {
 
 	r.Handle("/sales_history/", handlePage(handler.SaleHistory))
 
+	r.Handle("/owner/", handlePage(handler.Owner))
+
 	httpr := mux.NewRouter()
 	httpr.PathPrefix("/").HandlerFunc(handler.RedirectToHTTPS)
 
