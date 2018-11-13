@@ -86,15 +86,25 @@ func Home(w http.ResponseWriter, r *http.Request, v *middleware.ValueMap) {
 	model := pagemodel.Home{
 		Menu:     header,
 		ShowCase: []pagemodel.MeatModel{},
+		Sale:     []pagemodel.MeatModel{},
 	}
 
 	meats, err := db.GetMeatsPaging(8, 1)
 	if err != nil {
-		v.Set("warning", "Home: unable to get showcase meat >> "+err.Error())
+		v.Set("warning", "Home: unable to get showcase meats >> "+err.Error())
 	} else {
 		for i := 0; i < len(meats); i++ {
 			meat := GetMeatModel(meats[i])
 			model.ShowCase = append(model.ShowCase, meat)
+		}
+	}
+	saleMeats, err := db.GetSaleMeat(8, 1)
+	if err != nil {
+		v.Set("warning", "Home: unable to get sale meats >> "+err.Error())
+	} else {
+		for i := 0; i < len(saleMeats); i++ {
+			saleMeats := GetMeatModel(saleMeats[i])
+			model.Sale = append(model.Sale, saleMeats)
 		}
 	}
 

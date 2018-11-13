@@ -19,6 +19,9 @@ var ChickWing, _ = dbmodel.MakeMeat("Chick's Wing", "Chicken", "D", "Chick's Mea
 const SortPrice = "price"
 const SortPriceReverse = "-price"
 
+var perProductPage = 10
+var perHomePage = 8
+
 func MockMeat() {
 	db, err := GetDB()
 	if err != nil {
@@ -276,4 +279,31 @@ func CountProduct(name, meattype string, startPrice, endPrice float64) (int, err
 		return 1, err
 	}
 	return pageCount, nil
+}
+
+func GetSaleMeat(limit, page int) ([]dbmodel.Meat, error) {
+	db, err := GetDB()
+	if err != nil {
+		return []dbmodel.Meat{}, err
+	}
+	defer db.Session.Close()
+
+	if page <= 1 {
+		page = 1
+	}
+
+	var saleMeats []dbmodel.Meat
+	var query *mgo.Query
+	query = db.C("Meats").Find(bson.M{
+		"discount": bson.M{
+			"$gt": 0.0,
+		},
+	})
+
+	err = query.Limit(limit).Skip((page - 1) * limit).Sort("price").Iter().All(&saleMeats)
+	if err != nil {
+		return []dbmodel.Meat{}, err
+	}
+
+	return saleMeats, nil
 }
