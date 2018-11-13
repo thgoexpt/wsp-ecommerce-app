@@ -2,8 +2,9 @@ package dbmodel
 
 import (
 	"errors"
-	"github.com/globalsign/mgo/bson"
 	"time"
+
+	"github.com/globalsign/mgo/bson"
 )
 
 type SalesHistory struct {
@@ -44,4 +45,13 @@ func MakeSalesHistory(time time.Time, user User, meats map[Meat]int, price float
 	}
 
 	return sh, nil
+}
+
+func (sh SalesHistory) GetMeat(ID bson.ObjectId) Meats {
+	for i := 0; i < len(sh.Meats); i++ {
+		if sh.Meats[i].Meat == ID {
+			return sh.Meats[i]
+		}
+	}
+	return Meats{}
 }

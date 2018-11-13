@@ -15,18 +15,20 @@ type Meat struct {
 	Grade          string        `bson:"grade"`
 	Description    string        `bson:"des"`
 	Price          float64       `bson:"price"`
+	Discount       float64       `bson:"discount"`
 	Quantity       int           `bson:"quantity"`
 	Expire         time.Time     `bson:"expire"`
 	ImageExtension string        `bson:"imageExtension"`
 }
 
-func MakeMeat(name, meattype, grade, des string, price float64, quantity int, expire time.Time, imageExt string) (Meat, error) {
+func MakeMeat(name, meattype, grade, des string, price, discount float64, quantity int, expire time.Time, imageExt string) (Meat, error) {
 	meat := Meat{
 		Name:           name,
 		Type:           meattype,
 		Grade:          grade,
 		Description:    des,
 		Price:          price,
+		Discount:       discount,
 		Quantity:       quantity,
 		Expire:         expire,
 		ImageExtension: imageExt,
