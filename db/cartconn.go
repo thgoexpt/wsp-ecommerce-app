@@ -100,12 +100,19 @@ func UpdateCart(userID, meat bson.ObjectId, quantity int) error {
 		Quantity: quantity,
 	}
 
-	//FIXME: First Time using this will not work
+	count, err := db.C("Carts").Find(bson.M{
+		"userID": userID,
+	}).Count()
+	if err != nil {
+		return err
+	}
+	if count == 0 {
+		cart := dbmodel.InitialCart(userID)
+		RegisCart(cart)
+	}
+
 	err = db.C("Carts").Update(bson.M{
 		"userID": userID,
-		// "meats": bson.M{
-		// 	"meat": meat,
-		// },
 	},
 		bson.M{
 			"$pull": bson.M{
@@ -123,7 +130,6 @@ func UpdateCart(userID, meat bson.ObjectId, quantity int) error {
 			"userID": userID,
 		},
 		bson.M{
-			// "$pull": bson.M{"meats": bson.M{"meat": meat}},
 			"$push": bson.M{"meats": cartMeat},
 		},
 	)
