@@ -12,9 +12,9 @@ var TestTime, _ = time.Parse(dbmodel.TimeFormat, "15/04/2019")
 var TestTime2, _ = time.Parse(dbmodel.TimeFormat, "14/02/2019")
 var ChickWingTime, _ = time.Parse(dbmodel.TimeFormat, "20/01/2019")
 
-var TestMeat, _ = dbmodel.MakeMeat("Kurobuta", "Chicken", "C", "Black Pig's Meat", 300.1, 50, TestTime, ".jpg")
-var CupidWing, _ = dbmodel.MakeMeat("Cupid's Wing", "Angle", "R", "Juicy wing meat of an angelic creature!", 400.0, 69, TestTime2, ".jpg")
-var ChickWing, _ = dbmodel.MakeMeat("Chick's Wing", "Chicken", "D", "Chick's Meat", 500.0, 100, ChickWingTime, ".jpg")
+var TestMeat, _ = dbmodel.MakeMeat("Kurobuta", "Chicken", "C", "Black Pig's Meat", 300.1, 299.00, 50, TestTime, ".jpg")
+var CupidWing, _ = dbmodel.MakeMeat("Cupid's Wing", "Angle", "R", "Juicy wing meat of an angelic creature!", 400.0, -1.00, 69, TestTime2, ".jpg")
+var ChickWing, _ = dbmodel.MakeMeat("Chick's Wing", "Chicken", "D", "Chick's Meat", 500.0, 449.99, 100, ChickWingTime, ".jpg")
 
 const SortPrice = "price"
 const SortPriceReverse = "-price"
