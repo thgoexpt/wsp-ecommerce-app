@@ -35,6 +35,9 @@ func main() {
 	r.Handle("/product/sort/type={meattype}&priceSort={price_sort}/", handlePage(handler.ProductSortType))
 	r.Handle("/product/search/name={name}&startPrice={startPrice}&endPrice={endPrice}&priceSort={price_sort}/", handlePage(handler.ProductSearch))
 
+	r.Handle("/product/sort/type={meattype}&priceSort={price_sort}/page={page}/", handlePage(handler.ProductSortTypePaging))
+	r.Handle("/product/search/name={name}&startPrice={startPrice}&endPrice={endPrice}&priceSort={price_sort}/page={page}/", handlePage(handler.ProductSearchPaging))
+
 	r.Handle("/product-detail/{meatId}/", handlePage(handler.ProductDetail))
 
 	r.Handle("/profile/", handlePage(handler.Profile))
@@ -48,7 +51,6 @@ func main() {
 	r.Handle("/sale-history/", handlePage(handler.SaleHistory))
 
 	r.Handle("/checkout/", handlePage(handler.Checkout))
-
 
 	r.Handle("/regis/", middleware.MakeMiddleware(nil,
 		middleware.DoableFunc(handler.Regis),
