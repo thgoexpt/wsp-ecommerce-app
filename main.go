@@ -32,10 +32,12 @@ func main() {
 	r.Handle("/contact/", handlePage(handler.Contact))
 
 	r.Handle("/product/", handlePage(handler.Product))
+	r.Handle("/product/sale/", handlePage(handler.Sale))
 	r.Handle("/product/sort/type={meattype}&priceSort={price_sort}/", handlePage(handler.ProductSortType))
 	r.Handle("/product/search/name={name}&startPrice={startPrice}&endPrice={endPrice}&priceSort={price_sort}/", handlePage(handler.ProductSearch))
 
 	r.Handle("/product/page={page}/", handlePage(handler.ProductPaging))
+	r.Handle("/product/sale/page={page}/", handlePage(handler.Sale))
 	r.Handle("/product/sort/type={meattype}&priceSort={price_sort}/page={page}/", handlePage(handler.ProductSortTypePaging))
 	r.Handle("/product/search/name={name}&startPrice={startPrice}&endPrice={endPrice}&priceSort={price_sort}/page={page}/", handlePage(handler.ProductSearchPaging))
 

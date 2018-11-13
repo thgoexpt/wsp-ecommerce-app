@@ -381,6 +381,47 @@ func ProductDetail(w http.ResponseWriter, r *http.Request, v *middleware.ValueMa
 	t.ExecuteTemplate(w, "product-detail.html", model)
 }
 
+func Sale(w http.ResponseWriter, r *http.Request, v *middleware.ValueMap) {
+	header, ok := v.Get("header").(pagemodel.Menu)
+	if !ok {
+		header = defaultHeader
+	}
+
+	vars := mux.Vars(r)
+	page, err := strconv.Atoi(vars["page"])
+	if err != nil || page == 0 {
+		page = 1
+	}
+
+	model := PrepareProductPageModel(header,
+		"/product/",
+		0,
+		page,
+	)
+
+	v.Set("next", false)
+	meats, err := db.GetSaleMeat(80, page)
+	if err != nil {
+		// meats = []dbmodel.Meat{}
+		v.Set("warning", "Product: unable to get all meats >> "+err.Error())
+		t.ExecuteTemplate(w, "product.html", model)
+		return
+	}
+
+	proCount := len(meats)
+	model = PrepareProductPageModel(header,
+		"/product/sale/",
+		proCount,
+		page,
+	)
+
+	for i := 0; i < len(meats); i++ {
+		model.Meats = append(model.Meats, GetMeatModel(meats[i]))
+	}
+
+	t.ExecuteTemplate(w, "product.html", model)
+}
+
 func ComingSoon(w http.ResponseWriter, r *http.Request, v *middleware.ValueMap) {
 	header, ok := v.Get("header").(pagemodel.Menu)
 	if !ok {
