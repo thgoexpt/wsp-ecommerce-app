@@ -354,6 +354,10 @@ func ProductDetail(w http.ResponseWriter, r *http.Request, v *middleware.ValueMa
 	t.ExecuteTemplate(w, "product-detail.html", model)
 }
 
+func Sale(w http.ResponseWriter, r *http.Request, v *middleware.ValueMap) {
+
+}
+
 func ComingSoon(w http.ResponseWriter, r *http.Request, v *middleware.ValueMap) {
 	header, ok := v.Get("header").(pagemodel.Menu)
 	if !ok {
