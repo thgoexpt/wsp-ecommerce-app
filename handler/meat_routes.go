@@ -50,7 +50,7 @@ func EditMeat(w http.ResponseWriter, r *http.Request, v *middleware.ValueMap) {
 	vars := mux.Vars(r)
 	meat, err := db.GetMeat(vars["meatID"])
 	if err != nil {
-		v.Set("warning", "Product: unable to get all meats >> "+err.Error())
+		v.Set("warning", "EditMeat: unable to get all meats >> "+err.Error())
 		t.ExecuteTemplate(w, "add-product.html", model)
 		return
 	}
