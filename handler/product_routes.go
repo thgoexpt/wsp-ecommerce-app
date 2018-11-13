@@ -10,6 +10,50 @@ import (
 	"github.com/guitarpawat/wsp-ecommerce/model/pagemodel"
 )
 
+func ProductPaging(w http.ResponseWriter, r *http.Request, v *middleware.ValueMap) {
+	header, ok := v.Get("header").(pagemodel.Menu)
+	if !ok {
+		header = defaultHeader
+	}
+
+	// model := pagemodel.Product{
+	// 	Menu:  header,
+	// 	Meats: []pagemodel.MeatModel{},
+	// }
+	vars := mux.Vars(r)
+
+	page := 1
+	page64, err := strconv.ParseInt(vars["page"], 10, 64)
+	if err != nil {
+		v.Set("warning", "ProductSortTypePaging: page is not integer >> "+err.Error())
+		v.Set("next", false)
+		return
+	}
+	page = int(page64)
+
+	proCount, _ := db.CountProduct("", "", 0, -1)
+	model := PrepareProductPageModel(header,
+		"/product/",
+		proCount,
+		page,
+	)
+
+	v.Set("next", false)
+	meats, err := db.GetAllMeats()
+	if err != nil {
+		// meats = []dbmodel.Meat{}
+		v.Set("warning", "Product: unable to get all meats >> "+err.Error())
+		t.ExecuteTemplate(w, "product.html", model)
+		return
+	}
+
+	for i := 0; i < len(meats); i++ {
+		model.Meats = append(model.Meats, GetMeatModel(meats[i]))
+	}
+
+	t.ExecuteTemplate(w, "product.html", model)
+}
+
 func ProductSortTypePaging(w http.ResponseWriter, r *http.Request, v *middleware.ValueMap) {
 	header, ok := v.Get("header").(pagemodel.Menu)
 	if !ok {

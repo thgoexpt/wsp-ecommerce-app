@@ -152,7 +152,7 @@
 						{{$link := .OldLink}}
 						{{$page := .Page}}
 						{{ range  $i,$k := Iterate .PageCount }}
-							<a href="{{$link}}page={{$k}}" class="item-pagination flex-c-m trans-0-4
+							<a href="{{$link}}page={{$k}}/" class="item-pagination flex-c-m trans-0-4
 							{{if eq $k $page}}
 							active-pagination
 							{{end}}

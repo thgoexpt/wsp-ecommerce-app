@@ -35,6 +35,7 @@ func main() {
 	r.Handle("/product/sort/type={meattype}&priceSort={price_sort}/", handlePage(handler.ProductSortType))
 	r.Handle("/product/search/name={name}&startPrice={startPrice}&endPrice={endPrice}&priceSort={price_sort}/", handlePage(handler.ProductSearch))
 
+	r.Handle("/product/page={page}/", handlePage(handler.ProductPaging))
 	r.Handle("/product/sort/type={meattype}&priceSort={price_sort}/page={page}/", handlePage(handler.ProductSortTypePaging))
 	r.Handle("/product/search/name={name}&startPrice={startPrice}&endPrice={endPrice}&priceSort={price_sort}/page={page}/", handlePage(handler.ProductSearchPaging))
 
