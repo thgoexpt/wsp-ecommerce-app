@@ -28,9 +28,19 @@
                 {{.ProName}} ({{.Type}})
             </a>
 
-            <span class="block2-price m-text6 p-r-5" id="product-price">
-                ${{printf "%.2f" .Price}}
-            </span>
+            {{if gt .Discount 0.0}}
+                <span class="block2-oldprice m-text7 p-r-5">
+                    ${{printf "%.2f" .Price}}
+                </span>
+
+                <span class="block2-newprice m-text8 p-r-5" id="product-price">
+                    ${{printf "%.2f" .Discount}}
+                </span>
+            {{else}}
+                <span class="block2-price m-text6 p-r-5" id="product-price">
+                    ${{printf "%.2f" .Price}}
+                </span>
+            {{end}}
         </div>
     </div>
 </div>
