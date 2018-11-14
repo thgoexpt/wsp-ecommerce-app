@@ -84,7 +84,18 @@ func Home(w http.ResponseWriter, r *http.Request, v *middleware.ValueMap) {
 	}
 
 	model := pagemodel.Home{
-		Menu: header,
+		Menu:     header,
+		ShowCase: []pagemodel.MeatModel{},
+	}
+
+	meats, err := db.GetMeatsPaging(8, 1)
+	if err != nil {
+		v.Set("warning", "Home: unable to get showcase meat >> "+err.Error())
+	} else {
+		for i := 0; i < len(meats); i++ {
+			meat := GetMeatModel(meats[i])
+			model.ShowCase = append(model.ShowCase, meat)
+		}
 	}
 
 	v.Set("next", false)
@@ -319,21 +330,6 @@ func ProductSearch(w http.ResponseWriter, r *http.Request, v *middleware.ValueMa
 	t.ExecuteTemplate(w, "product.html", model)
 }
 
-func GetMeatModel(meat dbmodel.Meat) pagemodel.MeatModel {
-	return pagemodel.MeatModel{
-		ID:          meat.ID.Hex(),
-		Pic:         "/image/meat_" + meat.ID.Hex() + meat.ImageExtension,
-		ProName:     meat.Name,
-		Type:        meat.Type,
-		Grade:       meat.Grade,
-		Description: meat.Description,
-		Price:       meat.Price,
-		Expire:      meat.Expire.Format(dbmodel.TimeFormat),
-		Quantity:    meat.Quantity,
-		Total:       meat.Price * float64(meat.Quantity),
-	}
-}
-
 func ProductDetail(w http.ResponseWriter, r *http.Request, v *middleware.ValueMap) {
 	header, ok := v.Get("header").(pagemodel.Menu)
 	if !ok {
@@ -471,10 +467,17 @@ func RegisMeat(w http.ResponseWriter, r *http.Request, v *middleware.ValueMap) {
 	}
 	priceStr := r.PostFormValue("price")
 	price, err := strconv.ParseFloat(priceStr, 64)
-	if err != nil {
-		v.Set("warning", "Price is not a number.")
-		v.Set("next", true)
-		return
+	discountStr := r.PostFormValue("discount")
+	var discount float64
+	if discountStr == "" {
+		discount = -1.0
+	} else {
+		discount, err = strconv.ParseFloat(discountStr, 64)
+		if err != nil {
+			v.Set("warning", "Price is not a number.")
+			v.Set("next", true)
+			return
+		}
 	}
 	quantityStr := r.PostFormValue("quantity")
 	quantity64, err := strconv.ParseInt(quantityStr, 10, 64)
@@ -506,7 +509,7 @@ func RegisMeat(w http.ResponseWriter, r *http.Request, v *middleware.ValueMap) {
 	ext := filepath.Ext(h.Filename)
 
 	meat, err := dbmodel.MakeMeat(r.PostFormValue("name"), r.PostFormValue("type"),
-		r.PostFormValue("grade"), r.PostFormValue("des"), price, quantity, expire, ext)
+		r.PostFormValue("grade"), r.PostFormValue("des"), price, discount, quantity, expire, ext)
 	if err != nil {
 		v.Set("warning", err.Error())
 	} else {
