@@ -32,8 +32,14 @@ func main() {
 	r.Handle("/contact/", handlePage(handler.Contact))
 
 	r.Handle("/product/", handlePage(handler.Product))
+	r.Handle("/product/sale/", handlePage(handler.Sale))
 	r.Handle("/product/sort/type={meattype}&priceSort={price_sort}/", handlePage(handler.ProductSortType))
 	r.Handle("/product/search/name={name}&startPrice={startPrice}&endPrice={endPrice}&priceSort={price_sort}/", handlePage(handler.ProductSearch))
+
+	r.Handle("/product/page={page}/", handlePage(handler.ProductPaging))
+	r.Handle("/product/sale/page={page}/", handlePage(handler.Sale))
+	r.Handle("/product/sort/type={meattype}&priceSort={price_sort}/page={page}/", handlePage(handler.ProductSortTypePaging))
+	r.Handle("/product/search/name={name}&startPrice={startPrice}&endPrice={endPrice}&priceSort={price_sort}/page={page}/", handlePage(handler.ProductSearchPaging))
 
 	r.Handle("/product-detail/{meatId}/", handlePage(handler.ProductDetail))
 
@@ -48,7 +54,6 @@ func main() {
 	r.Handle("/sale-history/", handlePage(handler.SaleHistory))
 
 	r.Handle("/checkout/", handlePage(handler.Checkout))
-
 
 	r.Handle("/regis/", middleware.MakeMiddleware(nil,
 		middleware.DoableFunc(handler.Regis),
@@ -77,6 +82,16 @@ func main() {
 		middleware.DoableFunc(handler.CheckSession),
 		middleware.DoableFunc(handler.BuildHeader),
 		middleware.DoableFunc(handler.RegisMeat),
+		middleware.DoableFunc(handler.BuildHeader),
+		middleware.DoableFunc(handler.Home))).
+		Methods("POST")
+
+	r.Handle("/edit_meat/{meatID}/", handlePage(handler.EditMeat))
+
+	r.Handle("/update_meat/", middleware.MakeMiddleware(nil,
+		middleware.DoableFunc(handler.CheckSession),
+		middleware.DoableFunc(handler.BuildHeader),
+		middleware.DoableFunc(handler.UpdateMeat),
 		middleware.DoableFunc(handler.BuildHeader),
 		middleware.DoableFunc(handler.Home))).
 		Methods("POST")

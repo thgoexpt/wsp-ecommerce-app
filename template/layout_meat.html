@@ -2,7 +2,10 @@
 <div class="col-sm-6 col-md-4 col-lg-3 p-b-50">
     <!-- Block2 -->
     <div class="block2">
-        <div class="block2-img wrap-pic-w of-hidden pos-relative">
+        <div class="block2-img wrap-pic-w of-hidden pos-relative 
+        {{if gt .Discount 0.0}}
+            block2-labelsale
+        {{end}} ">
             <img src="{{.Pic}}" alt="IMG-PRODUCT">
 
             <div class="block2-overlay trans-0-4">
@@ -13,7 +16,7 @@
 
                 <div class="block2-btn-addcart w-size1 trans-0-4">
                     <!-- Button -->
-                    <button class="flex-c-m size1 bg4 bo-rad-23 hov1 s-text1 trans-0-4 addCart" value="{{.ID}}">
+                    <button class="flex-c-m size1 bg4 bo-rad-23 hov1 s-text1 trans-0-4 addCart" value="{{.ID}}"  type="submit">
                         Add to Cart
                     </button>
                 </div>
@@ -25,9 +28,19 @@
                 {{.ProName}} ({{.Type}})
             </a>
 
-            <span class="block2-price m-text6 p-r-5" id="product-price">
-                ${{printf "%.2f" .Price}}
-            </span>
+            {{if gt .Discount 0.0}}
+                <span class="block2-oldprice m-text7 p-r-5">
+                    ${{printf "%.2f" .Price}}
+                </span>
+
+                <span class="block2-newprice m-text8 p-r-5" id="product-price">
+                    ${{printf "%.2f" .Discount}}
+                </span>
+            {{else}}
+                <span class="block2-price m-text6 p-r-5" id="product-price">
+                    ${{printf "%.2f" .Price}}
+                </span>
+            {{end}}
         </div>
     </div>
 </div>

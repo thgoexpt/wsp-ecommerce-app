@@ -66,6 +66,14 @@
   pruneopts = "UT"
   revision = "0c41d7ab0a0ee717d4590a44bcb987dfd9e183eb"
 
+[[projects]]
+  branch = "master"
+  digest = "1:6bb2e1cbcf253307a88a531a75aa4d38fecb8d56a0dc9e837e288fe3189954f6"
+  name = "golang.org/x/tools"
+  packages = ["container/intsets"]
+  pruneopts = "UT"
+  revision = "a8570e12b66263a4d2bc406de590d7651e494615"
+
 [solve-meta]
   analyzer-name = "dep"
   analyzer-version = 1
@@ -76,6 +84,7 @@
     "github.com/gorilla/sessions",
     "github.com/guitarpawat/middleware",
     "golang.org/x/crypto/bcrypt",
+    "golang.org/x/tools/container/intsets",
   ]
   solver-name = "gps-cdcl"
   solver-version = 1

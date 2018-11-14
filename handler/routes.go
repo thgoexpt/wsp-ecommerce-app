@@ -2,6 +2,7 @@ package handler
 
 import (
 	"encoding/gob"
+	"fmt"
 	"log"
 	"net/http"
 	"path/filepath"
@@ -86,15 +87,25 @@ func Home(w http.ResponseWriter, r *http.Request, v *middleware.ValueMap) {
 	model := pagemodel.Home{
 		Menu:     header,
 		ShowCase: []pagemodel.MeatModel{},
+		Sale:     []pagemodel.MeatModel{},
 	}
 
 	meats, err := db.GetMeatsPaging(8, 1)
 	if err != nil {
-		v.Set("warning", "Home: unable to get showcase meat >> "+err.Error())
+		v.Set("warning", "Home: unable to get showcase meats >> "+err.Error())
 	} else {
 		for i := 0; i < len(meats); i++ {
 			meat := GetMeatModel(meats[i])
 			model.ShowCase = append(model.ShowCase, meat)
+		}
+	}
+	saleMeats, err := db.GetSaleMeat(8, 1)
+	if err != nil {
+		v.Set("warning", "Home: unable to get sale meats >> "+err.Error())
+	} else {
+		for i := 0; i < len(saleMeats); i++ {
+			saleMeats := GetMeatModel(saleMeats[i])
+			model.Sale = append(model.Sale, saleMeats)
 		}
 	}
 
@@ -223,6 +234,7 @@ func AddCart(w http.ResponseWriter, r *http.Request, v *middleware.ValueMap) {
 
 	user, err := db.GetUserFromName(header.User)
 	if err != nil {
+		fmt.Println("Get User From Name Error! >> " + err.Error())
 		// w.WriteHeader(http.StatusNotFound)
 		v.Set("warning", "AddCart: unable to find user >> "+err.Error())
 		return
@@ -237,10 +249,12 @@ func Product(w http.ResponseWriter, r *http.Request, v *middleware.ValueMap) {
 		header = defaultHeader
 	}
 
-	model := pagemodel.Product{
-		Menu:  header,
-		Meats: []pagemodel.MeatModel{},
-	}
+	proCount, _ := db.CountProduct("", "", 0, -1)
+	model := PrepareProductPageModel(header,
+		"/product/",
+		proCount,
+		1,
+	)
 
 	v.Set("next", false)
 	meats, err := db.GetAllMeats()
@@ -264,12 +278,17 @@ func ProductSortType(w http.ResponseWriter, r *http.Request, v *middleware.Value
 		header = defaultHeader
 	}
 
-	model := pagemodel.Product{
-		Menu:  header,
-		Meats: []pagemodel.MeatModel{},
-	}
-
+	// model := pagemodel.Product{
+	// 	Menu:  header,
+	// 	Meats: []pagemodel.MeatModel{},
+	// }
 	vars := mux.Vars(r)
+	proCount, _ := db.CountProduct("", vars["meattype"], 0, -1)
+	model := PrepareProductPageModel(header,
+		"/product/sort/type="+vars["meattype"]+"&priceSort="+vars["price_sort"]+"/",
+		proCount,
+		1,
+	)
 
 	v.Set("next", false)
 	meats, err := db.SortType(vars["meattype"], vars["price_sort"])
@@ -294,10 +313,10 @@ func ProductSearch(w http.ResponseWriter, r *http.Request, v *middleware.ValueMa
 		header = defaultHeader
 	}
 
-	model := pagemodel.Product{
-		Menu:  header,
-		Meats: []pagemodel.MeatModel{},
-	}
+	// model := pagemodel.Product{
+	// 	Menu:  header,
+	// 	Meats: []pagemodel.MeatModel{},
+	// }
 
 	vars := mux.Vars(r)
 
@@ -313,6 +332,14 @@ func ProductSearch(w http.ResponseWriter, r *http.Request, v *middleware.ValueMa
 		v.Set("next", true)
 		return
 	}
+
+	proCount, _ := db.CountProduct(vars["name"], "", startPrice, endPrice)
+	model := PrepareProductPageModel(
+		header,
+		"/product/search/name="+vars["name"]+"&startPrice="+vars["startPrice"]+"&endPrice="+vars["endPrice"]+"&priceSort="+vars["price_sort"]+"/",
+		proCount,
+		1,
+	)
 
 	v.Set("next", false)
 	meats, err := db.Search(vars["name"], startPrice, endPrice, vars["price_sort"])
@@ -352,6 +379,47 @@ func ProductDetail(w http.ResponseWriter, r *http.Request, v *middleware.ValueMa
 	model.MeatModel = GetMeatModel(meat)
 
 	t.ExecuteTemplate(w, "product-detail.html", model)
+}
+
+func Sale(w http.ResponseWriter, r *http.Request, v *middleware.ValueMap) {
+	header, ok := v.Get("header").(pagemodel.Menu)
+	if !ok {
+		header = defaultHeader
+	}
+
+	vars := mux.Vars(r)
+	page, err := strconv.Atoi(vars["page"])
+	if err != nil || page == 0 {
+		page = 1
+	}
+
+	model := PrepareProductPageModel(header,
+		"/product/",
+		0,
+		page,
+	)
+
+	v.Set("next", false)
+	meats, err := db.GetSaleMeat(80, page)
+	if err != nil {
+		// meats = []dbmodel.Meat{}
+		v.Set("warning", "Product: unable to get all meats >> "+err.Error())
+		t.ExecuteTemplate(w, "product.html", model)
+		return
+	}
+
+	proCount := len(meats)
+	model = PrepareProductPageModel(header,
+		"/product/sale/",
+		proCount,
+		page,
+	)
+
+	for i := 0; i < len(meats); i++ {
+		model.Meats = append(model.Meats, GetMeatModel(meats[i]))
+	}
+
+	t.ExecuteTemplate(w, "product.html", model)
 }
 
 func ComingSoon(w http.ResponseWriter, r *http.Request, v *middleware.ValueMap) {
@@ -441,8 +509,9 @@ func AddMeat(w http.ResponseWriter, r *http.Request, v *middleware.ValueMap) {
 		return
 	}
 
-	model := pagemodel.ProductDetail{
-		Menu: header,
+	model := pagemodel.MeatEdit{
+		Menu:  header,
+		State: pagemodel.AddMeatTxt,
 	}
 	t.ExecuteTemplate(w, "add-product.html", model)
 	v.Set("next", false)
