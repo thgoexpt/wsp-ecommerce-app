@@ -2,6 +2,7 @@ package handler
 
 import (
 	"encoding/gob"
+	"fmt"
 	"log"
 	"net/http"
 	"path/filepath"
@@ -84,7 +85,28 @@ func Home(w http.ResponseWriter, r *http.Request, v *middleware.ValueMap) {
 	}
 
 	model := pagemodel.Home{
-		Menu: header,
+		Menu:     header,
+		ShowCase: []pagemodel.MeatModel{},
+		Sale:     []pagemodel.MeatModel{},
+	}
+
+	meats, err := db.GetMeatsPaging(8, 1)
+	if err != nil {
+		v.Set("warning", "Home: unable to get showcase meats >> "+err.Error())
+	} else {
+		for i := 0; i < len(meats); i++ {
+			meat := GetMeatModel(meats[i])
+			model.ShowCase = append(model.ShowCase, meat)
+		}
+	}
+	saleMeats, err := db.GetSaleMeat(8, 1)
+	if err != nil {
+		v.Set("warning", "Home: unable to get sale meats >> "+err.Error())
+	} else {
+		for i := 0; i < len(saleMeats); i++ {
+			saleMeats := GetMeatModel(saleMeats[i])
+			model.Sale = append(model.Sale, saleMeats)
+		}
 	}
 
 	v.Set("next", false)
@@ -212,6 +234,7 @@ func AddCart(w http.ResponseWriter, r *http.Request, v *middleware.ValueMap) {
 
 	user, err := db.GetUserFromName(header.User)
 	if err != nil {
+		fmt.Println("Get User From Name Error! >> " + err.Error())
 		// w.WriteHeader(http.StatusNotFound)
 		v.Set("warning", "AddCart: unable to find user >> "+err.Error())
 		return
@@ -226,10 +249,12 @@ func Product(w http.ResponseWriter, r *http.Request, v *middleware.ValueMap) {
 		header = defaultHeader
 	}
 
-	model := pagemodel.Product{
-		Menu:  header,
-		Meats: []pagemodel.MeatModel{},
-	}
+	proCount, _ := db.CountProduct("", "", 0, -1)
+	model := PrepareProductPageModel(header,
+		"/product/",
+		proCount,
+		1,
+	)
 
 	v.Set("next", false)
 	meats, err := db.GetAllMeats()
@@ -253,12 +278,17 @@ func ProductSortType(w http.ResponseWriter, r *http.Request, v *middleware.Value
 		header = defaultHeader
 	}
 
-	model := pagemodel.Product{
-		Menu:  header,
-		Meats: []pagemodel.MeatModel{},
-	}
-
+	// model := pagemodel.Product{
+	// 	Menu:  header,
+	// 	Meats: []pagemodel.MeatModel{},
+	// }
 	vars := mux.Vars(r)
+	proCount, _ := db.CountProduct("", vars["meattype"], 0, -1)
+	model := PrepareProductPageModel(header,
+		"/product/sort/type="+vars["meattype"]+"&priceSort="+vars["price_sort"]+"/",
+		proCount,
+		1,
+	)
 
 	v.Set("next", false)
 	meats, err := db.SortType(vars["meattype"], vars["price_sort"])
@@ -283,10 +313,10 @@ func ProductSearch(w http.ResponseWriter, r *http.Request, v *middleware.ValueMa
 		header = defaultHeader
 	}
 
-	model := pagemodel.Product{
-		Menu:  header,
-		Meats: []pagemodel.MeatModel{},
-	}
+	// model := pagemodel.Product{
+	// 	Menu:  header,
+	// 	Meats: []pagemodel.MeatModel{},
+	// }
 
 	vars := mux.Vars(r)
 
@@ -303,6 +333,14 @@ func ProductSearch(w http.ResponseWriter, r *http.Request, v *middleware.ValueMa
 		return
 	}
 
+	proCount, _ := db.CountProduct(vars["name"], "", startPrice, endPrice)
+	model := PrepareProductPageModel(
+		header,
+		"/product/search/name="+vars["name"]+"&startPrice="+vars["startPrice"]+"&endPrice="+vars["endPrice"]+"&priceSort="+vars["price_sort"]+"/",
+		proCount,
+		1,
+	)
+
 	v.Set("next", false)
 	meats, err := db.Search(vars["name"], startPrice, endPrice, vars["price_sort"])
 	if err != nil {
@@ -317,21 +355,6 @@ func ProductSearch(w http.ResponseWriter, r *http.Request, v *middleware.ValueMa
 	}
 
 	t.ExecuteTemplate(w, "product.html", model)
-}
-
-func GetMeatModel(meat dbmodel.Meat) pagemodel.MeatModel {
-	return pagemodel.MeatModel{
-		ID:          meat.ID.Hex(),
-		Pic:         "/image/meat_" + meat.ID.Hex() + meat.ImageExtension,
-		ProName:     meat.Name,
-		Type:        meat.Type,
-		Grade:       meat.Grade,
-		Description: meat.Description,
-		Price:       meat.Price,
-		Expire:      meat.Expire.Format(dbmodel.TimeFormat),
-		Quantity:    meat.Quantity,
-		Total:       meat.Price * float64(meat.Quantity),
-	}
 }
 
 func ProductDetail(w http.ResponseWriter, r *http.Request, v *middleware.ValueMap) {
@@ -356,6 +379,47 @@ func ProductDetail(w http.ResponseWriter, r *http.Request, v *middleware.ValueMa
 	model.MeatModel = GetMeatModel(meat)
 
 	t.ExecuteTemplate(w, "product-detail.html", model)
+}
+
+func Sale(w http.ResponseWriter, r *http.Request, v *middleware.ValueMap) {
+	header, ok := v.Get("header").(pagemodel.Menu)
+	if !ok {
+		header = defaultHeader
+	}
+
+	vars := mux.Vars(r)
+	page, err := strconv.Atoi(vars["page"])
+	if err != nil || page == 0 {
+		page = 1
+	}
+
+	model := PrepareProductPageModel(header,
+		"/product/",
+		0,
+		page,
+	)
+
+	v.Set("next", false)
+	meats, err := db.GetSaleMeat(80, page)
+	if err != nil {
+		// meats = []dbmodel.Meat{}
+		v.Set("warning", "Product: unable to get all meats >> "+err.Error())
+		t.ExecuteTemplate(w, "product.html", model)
+		return
+	}
+
+	proCount := len(meats)
+	model = PrepareProductPageModel(header,
+		"/product/sale/",
+		proCount,
+		page,
+	)
+
+	for i := 0; i < len(meats); i++ {
+		model.Meats = append(model.Meats, GetMeatModel(meats[i]))
+	}
+
+	t.ExecuteTemplate(w, "product.html", model)
 }
 
 func ComingSoon(w http.ResponseWriter, r *http.Request, v *middleware.ValueMap) {
@@ -445,8 +509,9 @@ func AddMeat(w http.ResponseWriter, r *http.Request, v *middleware.ValueMap) {
 		return
 	}
 
-	model := pagemodel.ProductDetail{
-		Menu: header,
+	model := pagemodel.MeatEdit{
+		Menu:  header,
+		State: pagemodel.AddMeatTxt,
 	}
 	t.ExecuteTemplate(w, "add-product.html", model)
 	v.Set("next", false)
@@ -471,10 +536,17 @@ func RegisMeat(w http.ResponseWriter, r *http.Request, v *middleware.ValueMap) {
 	}
 	priceStr := r.PostFormValue("price")
 	price, err := strconv.ParseFloat(priceStr, 64)
-	if err != nil {
-		v.Set("warning", "Price is not a number.")
-		v.Set("next", true)
-		return
+	discountStr := r.PostFormValue("discount")
+	var discount float64
+	if discountStr == "" {
+		discount = -1.0
+	} else {
+		discount, err = strconv.ParseFloat(discountStr, 64)
+		if err != nil {
+			v.Set("warning", "Price is not a number.")
+			v.Set("next", true)
+			return
+		}
 	}
 	quantityStr := r.PostFormValue("quantity")
 	quantity64, err := strconv.ParseInt(quantityStr, 10, 64)
@@ -506,7 +578,7 @@ func RegisMeat(w http.ResponseWriter, r *http.Request, v *middleware.ValueMap) {
 	ext := filepath.Ext(h.Filename)
 
 	meat, err := dbmodel.MakeMeat(r.PostFormValue("name"), r.PostFormValue("type"),
-		r.PostFormValue("grade"), r.PostFormValue("des"), price, quantity, expire, ext)
+		r.PostFormValue("grade"), r.PostFormValue("des"), price, discount, quantity, expire, ext)
 	if err != nil {
 		v.Set("warning", err.Error())
 	} else {
@@ -729,4 +801,18 @@ func SaleHistory(w http.ResponseWriter, r *http.Request, v *middleware.ValueMap)
 
 	v.Set("next", false)
 	t.ExecuteTemplate(w, "sale-history.html", model)
+}
+
+func Owner(w http.ResponseWriter, r *http.Request, v *middleware.ValueMap) {
+	header, ok := v.Get("header").(pagemodel.Menu)
+	if !ok {
+		header = defaultHeader
+	}
+
+	model := pagemodel.ProductDetail{
+		Menu: header,
+	}
+
+	v.Set("next", false)
+	t.ExecuteTemplate(w, "owner.html", model)
 }

@@ -6,30 +6,30 @@
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<!--===============================================================================================-->
-	<link rel="icon" type="image/png" href="../static/assets/icon/favicon.ico">
+	<link rel="icon" type="image/png" href="/static/assets/icon/favicon.ico">
 	<!--===============================================================================================-->
-	<link rel="stylesheet" type="text/css" href="../static/animate/bootstrap/css/bootstrap.min.css">
+	<link rel="stylesheet" type="text/css" href="/static/animate/bootstrap/css/bootstrap.min.css">
 	<!--===============================================================================================-->
-	<link rel="stylesheet" type="text/css" href="../static/fonts/font-awesome-4.7.0/css/font-awesome.min.css">
+	<link rel="stylesheet" type="text/css" href="/static/fonts/font-awesome-4.7.0/css/font-awesome.min.css">
 	<!--===============================================================================================-->
-	<link rel="stylesheet" type="text/css" href="../static/fonts/themify/themify-icons.css">
+	<link rel="stylesheet" type="text/css" href="/static/fonts/themify/themify-icons.css">
 	<!--===============================================================================================-->
-	<link rel="stylesheet" type="text/css" href="../static/fonts/Linearicons-Free-v1.0.0/icon-font.min.css">
+	<link rel="stylesheet" type="text/css" href="/static/fonts/Linearicons-Free-v1.0.0/icon-font.min.css">
 	<!--===============================================================================================-->
-	<link rel="stylesheet" type="text/css" href="../static/fonts/elegant-font/html-css/style.css">
+	<link rel="stylesheet" type="text/css" href="/static/fonts/elegant-font/html-css/style.css">
 	<!--===============================================================================================-->
-	<link rel="stylesheet" type="text/css" href="../static/animate/animate/animate.css">
+	<link rel="stylesheet" type="text/css" href="/static/animate/animate/animate.css">
 	<!--===============================================================================================-->
-	<link rel="stylesheet" type="text/css" href="../static/animate/css-hamburgers/hamburgers.min.css">
+	<link rel="stylesheet" type="text/css" href="/static/animate/css-hamburgers/hamburgers.min.css">
 	<!--===============================================================================================-->
-	<link rel="stylesheet" type="text/css" href="../static/animate/animsition/css/animsition.min.css">
+	<link rel="stylesheet" type="text/css" href="/static/animate/animsition/css/animsition.min.css">
 	<!--===============================================================================================-->
-	<link rel="stylesheet" type="text/css" href="../static/animate/select2/select2.min.css">
+	<link rel="stylesheet" type="text/css" href="/static/animate/select2/select2.min.css">
 	<!--===============================================================================================-->
-	<link rel="stylesheet" type="text/css" href="../static/animate/slick/slick.css">
+	<link rel="stylesheet" type="text/css" href="/static/animate/slick/slick.css">
 	<!--===============================================================================================-->
-	<link rel="stylesheet" type="text/css" href="../static/css/util.css">
-	<link rel="stylesheet" type="text/css" href="../static/css/style.css">
+	<link rel="stylesheet" type="text/css" href="/static/css/util.css">
+	<link rel="stylesheet" type="text/css" href="/static/css/style.css">
 
 </head>
 
@@ -38,63 +38,130 @@
 	{{template "menu" .Menu}}
 
 	<!-- Title Page -->
-	<section class="parallax0 parallax100 bg-title-page p-t-40 p-b-50 flex-col-c-m" style="background-image: url(../static/assets/add_product/add_product.jpg);">
+	<section class="parallax0 parallax100 bg-title-page p-t-40 p-b-50 flex-col-c-m" style="background-image: url(/static/assets/add_product/add_product.jpg);">
 		<h2 class="l-text2 t-center">
-			Add Product
+			{{if .IsAddMeat}}
+				Add
+			{{else}}
+				Edit
+			{{end}}
+			Product
 		</h2>
 	</section>
 
 	<!-- Add product -->
 	<section class="cart bgwhite p-t-70 p-b-100">
-		<form enctype="multipart/form-data" method="post" action="/regis_meat/" class="add-product">
+		<form enctype="multipart/form-data" method="post" action="
+		{{- if .IsAddMeat -}}
+			/regis_meat/
+		{{- else -}}
+			/update_meat/
+		{{- end -}}
+		" class="add-product">
 			<div class="container">
 				<div class="row">
 					<div class="col-6 p-b-30">
 						<div id="img-preview-block" class="img-circle avatar avatar-original center-block" style="background-size:cover; height: 150px; width: 185px;
-						background-image:url(https://media.giphy.com/media/gw3EiGp565rb3oOc/giphy.gif)"></div>
+						background-image:url(
+							{{- if .IsAddMeat -}}
+								https://media.giphy.com/media/gw3EiGp565rb3oOc/giphy.gif
+							{{- else -}}
+								{{.Pic}}
+							{{- end -}}
+							)"></div>
 						<br>
-						<span class="btn btn-dark btn-file">Add Product Picture<input type="file" id="upload-img" name="uploadfile"
-							 required></span>
+						<span class="btn btn-dark btn-file">
+							{{if .IsAddMeat}}
+							Add
+							{{else}}
+							Edit{{end}} Product Picture<input type="file" id="upload-img" name="uploadfile"
+							{{if .IsAddMeat}}
+								required
+							{{end}}></span>
 					</div>
 
 					<div class="col-6 p-b-30">
 						<h4 class="m-text26 p-b-36 p-t-15">
-							Add product
+							{{if .IsAddMeat}}
+								Add
+							{{else}}
+								Edit
+							{{end}}
+							Product
 						</h4>
 
+						<input value="{{.ID}}" type="hidden" name="pro_id">
+
 						<div class="bo4 of-hidden size15 m-b-20">
-							<input class="sizefull s-text7 p-l-22 p-r-22" type="text" name="name" placeholder="Product Name" required>
+							<input class="sizefull s-text7 p-l-22 p-r-22" type="text" name="name" placeholder="Product Name" required 
+							{{if not .IsAddMeat}}
+								value="{{.ProName}}"
+							{{end}}
+							>
 						</div>
 
 						<div class="bo4 of-hidden size15 m-b-20">
-							<input class="sizefull s-text7 p-l-22 p-r-22" type="text" name="type" placeholder="Category (Beef, Pork, Fish, Other)"
-							 required>
+							<input class="sizefull s-text7 p-l-22 p-r-22" type="text" name="type" placeholder="Category (Beef, Pork, Fish, Other)" required
+							{{if not .IsAddMeat}}
+								value="{{.Type}}"
+							{{end}}
+							>
 						</div>
 
 						<div class="bo4 of-hidden size15 m-b-20">
-							<input class="sizefull s-text7 p-l-22 p-r-22" type="text" name="grade" placeholder="Grade (A, B, C, D)" required>
+							<input class="sizefull s-text7 p-l-22 p-r-22" type="text" name="grade" placeholder="Grade (A, B, C, D)" required
+							{{if not .IsAddMeat}}
+								value="{{.Grade}}"
+							{{end}}
+							>
 						</div>
 
-						<textarea class="dis-block s-text7 size20 bo4 p-l-22 p-r-22 p-t-13 m-b-20" name="des" placeholder="Description"
-						 required></textarea>
+						<textarea class="dis-block s-text7 size20 bo4 p-l-22 p-r-22 p-t-13 m-b-20" name="des" placeholder="Description" required>
+						{{- if not .IsAddMeat -}}
+							{{.Description}}
+						{{- end -}}
+						</textarea>
 
 						<div class="bo4 of-hidden size15 m-b-20">
-							<input class="sizefull s-text7 p-l-22 p-r-22" type="text" name="price" placeholder="Price" required>
+							<input class="sizefull s-text7 p-l-22 p-r-22" type="text" name="price" placeholder="Price" required 
+							{{if not .IsAddMeat}}
+								value="{{.Price}}"
+							{{end}}
+							>
+						</div>
+
+                        <div class="bo4 of-hidden size15 m-b-20">
+                            <input class="sizefull s-text7 p-l-22 p-r-22" type="text" name="discount" placeholder="Discount Price"
+							{{if not .IsAddMeat}}
+								value="{{.Discount}}"
+							{{end}}
+							>
+                        </div>
+
+                        <div class="bo4 of-hidden size15 m-b-20">
+							<input class="sizefull s-text7 p-l-22 p-r-22" type="text" name="quantity" placeholder="Quantity" required
+							{{if not .IsAddMeat}}
+								value="{{.Quantity}}"
+							{{end}}
+							>
 						</div>
 
 						<div class="bo4 of-hidden size15 m-b-20">
-							<input class="sizefull s-text7 p-l-22 p-r-22" type="text" name="quantity" placeholder="Quantity" required>
-						</div>
-
-						<div class="bo4 of-hidden size15 m-b-20">
-							<input class="sizefull s-text7 p-l-22 p-r-22" type="text" name="expire" placeholder="Expire Date (DD/MM/YYYY)"
-							 required>
+							<input class="sizefull s-text7 p-l-22 p-r-22" type="text" name="expire" placeholder="Expire Date (DD/MM/YYYY)" required
+							{{if not .IsAddMeat}}
+								value="{{.Expire}}"
+							{{end}}
+							>
 						</div>
 
 						<div class="w-size25">
 							<!-- Button -->
 							<button class="flex-c-m size2 bg1 bo-rad-23 hov1 m-text3 trans-0-4">
-								Add To Stock
+								{{if .IsAddMeat}}
+									Add To Stock
+								{{else}}
+									Edit Product
+								{{end}}
 							</button>
 						</div>
 					</div>
@@ -121,14 +188,14 @@
 	{{template "register"}}
 
 	<!--===============================================================================================-->
-	<script type="text/javascript" src="../static/animate/jquery/jquery-3.2.1.min.js"></script>
+	<script type="text/javascript" src="/static/animate/jquery/jquery-3.2.1.min.js"></script>
 	<!--===============================================================================================-->
-	<script type="text/javascript" src="../static/animate/animsition/js/animsition.min.js"></script>
+	<script type="text/javascript" src="/static/animate/animsition/js/animsition.min.js"></script>
 	<!--===============================================================================================-->
-	<script type="text/javascript" src="../static/animate/bootstrap/js/popper.js"></script>
-	<script type="text/javascript" src="../static/animate/bootstrap/js/bootstrap.min.js"></script>
+	<script type="text/javascript" src="/static/animate/bootstrap/js/popper.js"></script>
+	<script type="text/javascript" src="/static/animate/bootstrap/js/bootstrap.min.js"></script>
 	<!--===============================================================================================-->
-	<script type="text/javascript" src="../static/animate/select2/select2.min.js"></script>
+	<script type="text/javascript" src="/static/animate/select2/select2.min.js"></script>
 	<script type="text/javascript">
 		$(".selection-1").select2({
 			minimumResultsForSearch: 20,
@@ -141,7 +208,7 @@
 		});
 	</script>
 	<!--===============================================================================================-->
-	<script src="../static/js/main.js"></script>
+	<script src="/static/js/main.js"></script>
 </body>
 
 </html>

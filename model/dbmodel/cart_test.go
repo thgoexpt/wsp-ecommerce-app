@@ -58,11 +58,12 @@ func MakeMeatA() Meat {
 	grade := "D"
 	des := "Fish that covered in scale"
 	price := 846.5
+	discount := 46.5
 	quantity := 5555
 	expire, _ := time.Parse(time.RFC3339, "1998-01-20T06:30:15+07:00")
 	ext := ".JPG"
 
-	meat, _ := MakeMeat(name, meattype, grade, des, price, quantity, expire, ext)
+	meat, _ := MakeMeat(name, meattype, grade, des, price, discount, quantity, expire, ext)
 	meat.ID = bson.NewObjectId()
 	return meat
 }
@@ -73,11 +74,12 @@ func MakeMeatB() Meat {
 	grade := "C"
 	des := "Jellyfish jelly-like substance"
 	price := 1354.6
+	discount := 0.0
 	quantity := 999
 	expire, _ := time.Parse("2/1/2006", "15/04/2018")
 	ext := ".JPG"
 
-	meat, _ := MakeMeat(name, meattype, grade, des, price, quantity, expire, ext)
+	meat, _ := MakeMeat(name, meattype, grade, des, price, discount, quantity, expire, ext)
 	meat.ID = bson.NewObjectId()
 	return meat
 }

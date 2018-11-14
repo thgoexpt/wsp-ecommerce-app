@@ -3,6 +3,8 @@ package dbmodel
 import (
 	"testing"
 	"time"
+
+	"github.com/globalsign/mgo/bson"
 )
 
 func TestMakeSalesHistory_NoMeat(t *testing.T) {
@@ -47,9 +49,9 @@ func TestMakeSalesHistory_NoUser(t *testing.T) {
 }
 
 func TestMakeSalesHistory_SomeMeat(t *testing.T) {
-	user := User{ID: "1"}
-	mockMeat1 := Meat{ID: "10"}
-	mockMeat2 := Meat{ID: "22"}
+	user := User{ID: bson.ObjectIdHex("cbccd007f4f2ee7cdb6314c2")}
+	mockMeat1 := Meat{ID: bson.ObjectIdHex("97a12c5313341fb31752da22")}
+	mockMeat2 := Meat{ID: bson.ObjectIdHex("d6441111b9efd95d06e76774")}
 	expectedTime := time.Now()
 	expectedMeat := []Meats{{mockMeat1.ID, 1}, {mockMeat2.ID, 3}}
 	expectedPrice := 10.25
@@ -65,14 +67,14 @@ func TestMakeSalesHistory_SomeMeat(t *testing.T) {
 		t.Fatalf("expected to have meat: 2")
 	}
 
-	val1 := sh.Meats[0]
+	val1 := sh.GetMeat(expectedMeat[0].Meat)
 	if val1 != expectedMeat[0] {
-		t.Errorf("expected quantity of meat id %s: %d, but get: %d", mockMeat1.ID, expectedMeat[0].Quatity, val1.Quatity)
+		t.Errorf("expected quantity of meat id %s: %d, but get id %s: %d", mockMeat1.ID, expectedMeat[0].Quatity, val1.Meat, val1.Quatity)
 	}
 
-	val2 := sh.Meats[1]
+	val2 := sh.GetMeat(expectedMeat[1].Meat)
 	if val2 != expectedMeat[1] {
-		t.Errorf("expected quantity of meat id %s: %d, but get: %d", mockMeat2.ID, expectedMeat[1].Quatity, val2.Quatity)
+		t.Errorf("expected quantity of meat id %s: %d, but getid %s: %d", mockMeat2.ID, expectedMeat[1].Quatity, val2.Meat, val2.Quatity)
 	}
 
 	if expectedPrice != sh.Price {

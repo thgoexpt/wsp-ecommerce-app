@@ -8,6 +8,7 @@ type MeatModel struct {
 	Grade       string
 	Description string
 	Price       float64
+	Discount    float64
 	Expire      string
 	Quantity    int
 	Total       float64
