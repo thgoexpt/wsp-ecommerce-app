@@ -19,6 +19,9 @@ var ChickWing, _ = dbmodel.MakeMeat("Chick's Wing", "Chicken", "D", "Chick's Mea
 const SortPrice = "price"
 const SortPriceReverse = "-price"
 
+var perProductPage = 10
+var perHomePage = 8
+
 func MockMeat() {
 	db, err := GetDB()
 	if err != nil {
@@ -43,6 +46,20 @@ func RegisMeat(meat dbmodel.Meat) error {
 	defer db.Session.Close()
 
 	err = db.C("Meats").Insert(meat)
+	if err != nil {
+		return err
+	}
+	return nil
+}
+
+func UpdateMeat(id bson.ObjectId, meat dbmodel.Meat) error {
+	db, err := GetDB()
+	if err != nil {
+		return err
+	}
+	defer db.Session.Close()
+
+	err = db.C("Meats").UpdateId(id, meat)
 	if err != nil {
 		return err
 	}
@@ -112,9 +129,16 @@ func GetMeatsPaging(limit, page int) ([]dbmodel.Meat, error) {
 func SortType(meattype, sorting string) ([]dbmodel.Meat, error) {
 	return SearchSort("", meattype, 0, -1, sorting, 10, 1)
 }
+func SortTypePaging(meattype string, page int, sorting string) ([]dbmodel.Meat, error) {
+	return SearchSort("", meattype, 0, -1, sorting, 10, page)
+}
 
 func Search(name string, startPrice, endPrice float64, sorting string) ([]dbmodel.Meat, error) {
 	return SearchSort(name, "", startPrice, endPrice, sorting, 10, 1)
+}
+
+func SearchPaging(name string, startPrice, endPrice float64, sorting string, page int) ([]dbmodel.Meat, error) {
+	return SearchSort(name, "", startPrice, endPrice, sorting, 10, page)
 }
 
 func SearchSort(name, meattype string, startPrice, endPrice float64, sorting string, limit, page int) ([]dbmodel.Meat, error) {
@@ -208,4 +232,92 @@ func GetRelate(id string) ([]dbmodel.Meat, error) {
 		return nil, err
 	}
 	return meats, nil
+}
+
+func CountProduct(name, meattype string, startPrice, endPrice float64) (int, error) {
+	db, err := GetDB()
+	if err != nil {
+		return 1, err
+	}
+	defer db.Session.Close()
+
+	if name == "" || name == "all" {
+		name = "."
+	}
+	if meattype == "" || meattype == "all" {
+		meattype = "."
+	}
+	if startPrice < 0 {
+		startPrice = 0
+	}
+
+	var query *mgo.Query
+	if endPrice != -1 {
+		query = db.C("Meats").Find(bson.M{
+			"name": bson.RegEx{
+				Pattern: "(" + name + ")",
+				Options: "i", //insensitive
+			},
+			"type": bson.RegEx{
+				Pattern: "(" + meattype + ")",
+				Options: "i", //insensitive
+			},
+			"quantity": bson.M{"$gt": 0},
+			"expire":   bson.M{"$gt": time.Now()},
+			"price": bson.M{
+				"$gte": startPrice,
+				"$lte": endPrice,
+			},
+		})
+	} else {
+		query = db.C("Meats").Find(bson.M{
+			"name": bson.RegEx{
+				Pattern: "(" + name + ")",
+				Options: "i", //insensitive
+			},
+			"type": bson.RegEx{
+				Pattern: "(" + meattype + ")",
+				Options: "i", //insensitive
+			},
+			"quantity": bson.M{"$gt": 0},
+			"expire":   bson.M{"$gt": time.Now()},
+			"price": bson.M{
+				"$gte": startPrice,
+			},
+		})
+	}
+
+	pageCount, err := query.Count()
+
+	if err != nil {
+		return 1, err
+	}
+	return pageCount, nil
+}
+
+func GetSaleMeat(limit, page int) ([]dbmodel.Meat, error) {
+	db, err := GetDB()
+	if err != nil {
+		return []dbmodel.Meat{}, err
+	}
+	defer db.Session.Close()
+
+	if page <= 1 {
+		page = 1
+	}
+
+	var saleMeats []dbmodel.Meat
+	var query *mgo.Query
+	query = db.C("Meats").Find(bson.M{
+		"discount": bson.M{
+			"$gt": 0.0,
+		},
+	})
+
+	err = query.Limit(limit).Skip((page - 1) * limit).Sort("price").Iter().All(&saleMeats)
+	if err != nil {
+		return []dbmodel.Meat{}, err
+	}
+
+	return saleMeats, nil
 }

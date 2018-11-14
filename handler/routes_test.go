@@ -180,3 +180,7 @@ func TestProfile(t *testing.T) {
 func TestProfileEdit(t *testing.T) {
 	pageTest(ProfileEdit, t)
 }
+
+func TestSale(t *testing.T) {
+	pageTest(Sale, t)
+}

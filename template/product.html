@@ -147,22 +147,21 @@
 
 					</div>
 
-
 					<!-- Pagination -->
 					<div class="pagination flex-m flex-w p-t-26">
-						<a href="#" class="item-pagination flex-c-m trans-0-4 active-pagination">1</a>
-					</div>
-					<div class="pagination flex-m flex-w p-t-26">
-						<a href="#" class="item-pagination flex-c-m trans-0-4">2</a>
-					</div>
-					<div class="pagination flex-m flex-w p-t-26">
-						<a href="#" class="item-pagination flex-c-m trans-0-4">2</a>
-					</div>
-					<div class="pagination flex-m flex-w p-t-26">
-						<a href="#" class="item-pagination flex-c-m trans-0-4">2</a>
-					</div>
-					<div class="pagination flex-m flex-w p-t-26">
-						<a href="#" class="item-pagination flex-c-m trans-0-4">2</a>
+						{{$link := .OldLink}}
+						{{$page := .Page}}
+						{{ range  $i,$k := Iterate .PageCount }}
+							<a href="{{$link}}page={{$k}}/" class="item-pagination flex-c-m trans-0-4
+							{{if eq $k $page}}
+							active-pagination
+							{{end}}
+							">{{$k}}</a>
+						{{ end }}
+						<!-- <a href="#" class="item-pagination flex-c-m trans-0-4 active-pagination">1</a>
+						<a href="#" class="item-pagination flex-c-m trans-0-4">1</a>
+						<a href="#" class="item-pagination flex-c-m trans-0-4">1</a>
+						<a href="#" class="item-pagination flex-c-m trans-0-4">1</a> -->
 					</div>
 
 				</div>
@@ -265,7 +264,6 @@
 	</script>
 	<!--===============================================================================================-->
 	<script src="/static/js/main.js"></script>
-	<script src="/static/js/addCart.js"></script>
 
 </body>
 
