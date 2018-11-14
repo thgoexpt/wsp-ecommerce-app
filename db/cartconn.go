@@ -67,6 +67,10 @@ func GetCart(userName string) (dbmodel.Cart, error) {
 	defer db.Session.Close()
 
 	user, err := GetUserFromName(userName)
+	err = CheckCartExist(user.ID)
+	if err != nil {
+		return dbmodel.Cart{}, err
+	}
 	if err != nil {
 		return dbmodel.Cart{}, errors.New("Unable to find user")
 	}
@@ -81,6 +85,10 @@ func GetCartID(id bson.ObjectId) (dbmodel.Cart, error) {
 	defer db.Session.Close()
 
 	var cart dbmodel.Cart
+	err = CheckCartExist(id)
+	if err != nil {
+		return dbmodel.Cart{}, err
+	}
 	err = db.C("Carts").Find(bson.M{"userID": id}).One(&cart)
 	if err != nil {
 		return dbmodel.Cart{}, NonCart
@@ -100,15 +108,9 @@ func UpdateCart(userID, meat bson.ObjectId, quantity int) error {
 		Quantity: quantity,
 	}
 
-	count, err := db.C("Carts").Find(bson.M{
-		"userID": userID,
-	}).Count()
+	err = CheckCartExist(userID)
 	if err != nil {
 		return err
-	}
-	if count == 0 {
-		cart := dbmodel.InitialCart(userID)
-		RegisCart(cart)
 	}
 
 	err = db.C("Carts").Update(bson.M{
@@ -135,6 +137,26 @@ func UpdateCart(userID, meat bson.ObjectId, quantity int) error {
 	)
 	if err != nil {
 		return err
+	}
+	return nil
+}
+
+func CheckCartExist(id bson.ObjectId) error {
+	db, err := GetDB()
+	if err != nil {
+		return err
+	}
+	defer db.Session.Close()
+
+	count, err := db.C("Carts").Find(bson.M{
+		"userID": id,
+	}).Count()
+	if err != nil {
+		return err
+	}
+	if count == 0 {
+		cart := dbmodel.InitialCart(id)
+		RegisCart(cart)
 	}
 	return nil
 }

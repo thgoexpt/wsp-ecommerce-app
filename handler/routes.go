@@ -75,17 +75,19 @@ func BuildHeader(w http.ResponseWriter, r *http.Request, v *middleware.ValueMap)
 	}
 
 	header.Cart = []pagemodel.CartMeatModel{}
-	header.CartTotal = 1.0
+	header.CartTotal = 0.0
 	cart, err := db.GetCartID(header.UserID)
 	if err == nil {
 		for _, cartMeat := range cart.Meats {
 			meat, err := db.GetMeat(cartMeat.ID.Hex())
 			if err != nil {
-				w.WriteHeader(http.StatusNotFound)
-				return
+				// w.WriteHeader(http.StatusNotFound)
+				// return
+				// header.Warning = header.Warning + ", header: unable to get meats >> " + err.Error()
+				fmt.Println("HEADER: " + meat.Name + err.Error())
 			}
 			cartMeat := GetCartMeatModel(meat, cartMeat.Quantity)
-			header.CartTotal = header.CartTotal * cartMeat.Total
+			header.CartTotal = header.CartTotal + cartMeat.Total
 			header.Cart = append(header.Cart, cartMeat)
 		}
 	}

@@ -109,6 +109,8 @@ func main() {
 		middleware.DoableFunc(handler.CheckSession),
 		middleware.DoableFunc(handler.BuildHeader),
 		middleware.DoableFunc(handler.AddCart),
+		middleware.DoableFunc(handler.CheckSession),
+		middleware.DoableFunc(handler.BuildHeader),
 		middleware.DoableFunc(handler.Cart))).
 		Methods("GET")
 
