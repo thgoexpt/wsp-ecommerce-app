@@ -111,23 +111,23 @@
 					<!--  -->
 					<div class="flex-sb-m flex-w p-b-35">
 						<div class="flex-w">
-							<div class="rs2-select2 bo4 of-hidden w-size12 m-t-5 m-b-5 m-r-10">
-								<select class="selection-2" name="sorting" onchange="location = this.value">
+							<div class="rs2-select2 bo4 of-hidden w-size12 m-t-5 m-b-5 m-r-10" id="sort-method">
+								<select class="selection-2" name="sorting-1" onchange="location = this.value">
 									<option>Default Sorting</option>
 									<option>Popularity</option>
-									<option value="/product/sort/type=all&priceSort=price/">Price: low to high</option>
-									<option value="/product/sort/type=all&priceSort=-price/">Price: high to low</option>
+									<option value="/product/sort/type=all&priceSort=price/" id="low-to-high">Price: low to high</option>
+									<option value="/product/sort/type=all&priceSort=-price/" id="high-to-low">Price: high to low</option>
 								</select>
 							</div>
 
-							<div class="rs2-select2 bo4 of-hidden w-size12 m-t-5 m-b-5 m-r-10">
-								<select class="selection-2" name="sorting" onchange="location = this.value">
+							<div class="rs2-select2 bo4 of-hidden w-size12 m-t-5 m-b-5 m-r-10" id="sort-specific">
+								<select class="selection-2" name="sorting-2" onchange="location = this.value">
 									<option value="/product/">Price</option>
-									<option value="/product/search/name=all&startPrice=0&endPrice=50&priceSort=price/">$0.00 - $50.00</option>
-									<option value="/product/search/name=all&startPrice=51&endPrice=100&priceSort=price/">$50.00 - $100.00</option>
-									<option value="/product/search/name=all&startPrice=101&endPrice=150&priceSort=price/">$100.00 - $150.00</option>
-									<option value="/product/search/name=all&startPrice=151&endPrice=200&priceSort=price/">$150.00 - $200.00</option>
-									<option value="/product/search/name=all&startPrice=201&endPrice=-1&priceSort=price/">$200.00+</option>
+									<option value="/product/search/name=all&startPrice=0&endPrice=50&priceSort=price/" id="0-to-50">$0.00 - $50.00</option>
+									<option value="/product/search/name=all&startPrice=51&endPrice=100&priceSort=price/" id="50-to-100">$50.00 - $100.00</option>
+									<option value="/product/search/name=all&startPrice=101&endPrice=150&priceSort=price/" id="100-to-150">$100.00 - $150.00</option>
+									<option value="/product/search/name=all&startPrice=151&endPrice=200&priceSort=price/" id="150-to-200">$150.00 - $200.00</option>
+									<option value="/product/search/name=all&startPrice=201&endPrice=-1&priceSort=price/" id="up-to-200">$200.00+</option>
 
 								</select>
 							</div>
