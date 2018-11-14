@@ -15,7 +15,7 @@ User select up to 200 option
 
 User can sees product with price in specific range
     Wait Until Element Is Visible    alertBox    15
-    Element Text Should Be    id:product-price   $300.10
+    Element Text Should Be    id:product-price   $299.00
 
 *** Test Cases ***
 Test sort item by specific price on PC

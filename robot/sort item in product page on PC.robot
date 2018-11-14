@@ -18,11 +18,11 @@ User select high to low option
 
 User can sees first product with lowest price
     Wait Until Element Is Visible    alertBox    15
-    Element Text Should Be    id:product-price   $300.10
+    Element Text Should Be    id:product-price   $299.00
 
 User can sees first product with highest price
     Wait Until Element Is Visible    alertBox    15
-    Element Text Should Be    id:product-price   $500.00
+    Element Text Should Be    id:product-price   $449.99
 
 *** Test Cases ***
 Test sort item by price(low to high) on PC
