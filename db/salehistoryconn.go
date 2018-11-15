@@ -1,8 +1,11 @@
 package db
 
 import (
+	"fmt"
 	"github.com/globalsign/mgo/bson"
 	"github.com/guitarpawat/wsp-ecommerce/model/dbmodel"
+	"math/rand"
+	"time"
 )
 
 var MockSalesHistory1 dbmodel.SalesHistory
@@ -90,4 +93,41 @@ func GetUserSalesHistory(userID bson.ObjectId) ([]dbmodel.SalesHistory, error) {
 		return nil, err
 	}
 	return *sales, nil
+}
+
+func CommitSalesHistory(c dbmodel.Cart) error {
+	history, err := MakeHistory(c)
+	if err != nil {
+		return err
+	}
+	err = RegisSalesHistory(history)
+	if err != nil {
+		return err
+	}
+	return nil
+}
+
+func MakeHistory(c dbmodel.Cart) (dbmodel.SalesHistory, error) {
+	history := dbmodel.SalesHistory{
+		Time: time.Now(),
+		User: c.UserID,
+		TrackingNumber: fmt.Sprintf("EA%09d%TH", rand.Int63n(999999999)),
+		Meats: []dbmodel.Meats{},
+		Price: 0.00,
+	}
+
+	for _, v := range c.Meats {
+		meatObj := dbmodel.Meats{
+			Meat:v.ID,
+			Quatity:v.Quantity,
+		}
+		history.Meats = append(history.Meats, meatObj)
+		meat, err := GetMeat(string(v.ID))
+		if err != nil {
+			return dbmodel.SalesHistory{}, err
+		}
+		history.Price += meat.Price
+	}
+
+	return history, nil
 }

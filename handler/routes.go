@@ -156,6 +156,20 @@ func Checkout(w http.ResponseWriter, r *http.Request, v *middleware.ValueMap) {
 	t.ExecuteTemplate(w, "checkout.html", model)
 }
 
+func ProceedCheckout(w http.ResponseWriter, r *http.Request, v *middleware.ValueMap) {
+	header, ok := v.Get("header").(pagemodel.Menu)
+	if !ok {
+		header = defaultHeader
+	}
+
+	model := pagemodel.Home{
+		Menu: header,
+	}
+
+	v.Set("next", false)
+	t.ExecuteTemplate(w, "checkout.html", model)
+}
+
 func Cart(w http.ResponseWriter, r *http.Request, v *middleware.ValueMap) {
 	header, ok := v.Get("header").(pagemodel.Menu)
 	if !ok {
