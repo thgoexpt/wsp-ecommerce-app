@@ -22,8 +22,7 @@ func MockCart() {
 	cart1 := dbmodel.InitialCart(mockUserID1)
 	cart2 := dbmodel.InitialCart(mockUserID2)
 
-	db.C("Carts").Remove(bson.M{"userID": cart1.UserID})
-	db.C("Carts").Remove(bson.M{"userID": cart2.UserID})
+	db.C("Carts").RemoveAll(nil)
 
 	RegisCart(cart1)
 	RegisCart(cart2)

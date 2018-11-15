@@ -6,13 +6,13 @@ import (
 )
 
 type Menu struct {
-	User      string
-	UserID    bson.ObjectId
-	UserType  int
-	Warning   string
-	Success   string
-	Cart      []CartMeatModel
-	CartTotal float64
+	User           string
+	UserID         bson.ObjectId
+	UserType       int
+	Warning        string
+	Success        string
+	MeatInCartCart []CartMeatModel
+	CartTotal      float64
 }
 
 func (m Menu) IsPermissable() bool {
@@ -23,5 +23,5 @@ func (m Menu) IsPermissable() bool {
 }
 
 func (m Menu) CountCart() int {
-	return len(m.Cart)
+	return len(m.MeatInCartCart)
 }

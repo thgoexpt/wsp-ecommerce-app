@@ -74,7 +74,7 @@ func BuildHeader(w http.ResponseWriter, r *http.Request, v *middleware.ValueMap)
 		header.Success = success
 	}
 
-	header.Cart = []pagemodel.CartMeatModel{}
+	header.MeatInCartCart = []pagemodel.CartMeatModel{}
 	header.CartTotal = 0.0
 	cart, err := db.GetCartID(header.UserID)
 	if err == nil {
@@ -88,7 +88,7 @@ func BuildHeader(w http.ResponseWriter, r *http.Request, v *middleware.ValueMap)
 			}
 			cartMeat := GetCartMeatModel(meat, cartMeat.Quantity)
 			header.CartTotal = header.CartTotal + cartMeat.Total
-			header.Cart = append(header.Cart, cartMeat)
+			header.MeatInCartCart = append(header.MeatInCartCart, cartMeat)
 		}
 	}
 
@@ -180,9 +180,7 @@ func Cart(w http.ResponseWriter, r *http.Request, v *middleware.ValueMap) {
 	}
 
 	model := pagemodel.Cart{
-		Menu:        header,
-		MeatsInCart: header.Cart,
-		CartTotal:   header.CartTotal,
+		Menu: header,
 	}
 
 	v.Set("next", false)
@@ -206,6 +204,7 @@ func AddCart(w http.ResponseWriter, r *http.Request, v *middleware.ValueMap) {
 	}
 	quantity := int(quantity64)
 
+	// TODO: Check login
 	user, err := db.GetUserFromName(header.User)
 	if err != nil {
 		fmt.Println("Get User From Name Error! >> " + err.Error())
