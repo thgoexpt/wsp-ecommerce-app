@@ -194,26 +194,29 @@ func AddCart(w http.ResponseWriter, r *http.Request, v *middleware.ValueMap) {
 	}
 
 	v.Set("next", true)
-	vars := mux.Vars(r)
+	if header.User != "" {
+		vars := mux.Vars(r)
+		quantity64, err := strconv.ParseInt(vars["quantity"], 10, 64)
+		if err != nil {
+			// w.WriteHeader(http.StatusNotFound)
+			v.Set("warning", "AddCart: quantity parameter is wrong.")
+			return
+		}
+		quantity := int(quantity64)
 
-	quantity64, err := strconv.ParseInt(vars["quantity"], 10, 64)
-	if err != nil {
-		// w.WriteHeader(http.StatusNotFound)
-		v.Set("warning", "AddCart: quantity parameter is wrong.")
-		return
+		// TODO: Check login
+		user, err := db.GetUserFromName(header.User)
+		if err != nil {
+			fmt.Println("Get User From Name Error! >> " + err.Error())
+			// w.WriteHeader(http.StatusNotFound)
+			v.Set("warning", "AddCart: unable to find user >> "+err.Error())
+			return
+		}
+
+		db.UpdateCart(user.ID, bson.ObjectIdHex(vars["meatId"]), quantity)
+	} else {
+		v.Set("warning", "AddCart: login before add cart!")
 	}
-	quantity := int(quantity64)
-
-	// TODO: Check login
-	user, err := db.GetUserFromName(header.User)
-	if err != nil {
-		fmt.Println("Get User From Name Error! >> " + err.Error())
-		// w.WriteHeader(http.StatusNotFound)
-		v.Set("warning", "AddCart: unable to find user >> "+err.Error())
-		return
-	}
-
-	db.UpdateCart(user.ID, bson.ObjectIdHex(vars["meatId"]), quantity)
 }
 
 func Product(w http.ResponseWriter, r *http.Request, v *middleware.ValueMap) {
