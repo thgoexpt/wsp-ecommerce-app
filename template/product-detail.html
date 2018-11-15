@@ -77,7 +77,11 @@
 				</h4>
 
 				{{if gt .Discount 0.0}}
-					<span class="m-text17">
+					<span class="m-text17 oldPrice">
+						${{printf "%.2f" .Price}}
+					</span>
+					&nbsp
+					<span class="m-text17 newPrice">
 						${{printf "%.2f" .Discount}}
 					</span>
 				{{else}}

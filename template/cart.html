@@ -70,7 +70,14 @@
 							<td class="column-2"><a href="/product-detail/{{.ID}}/">{{.ProName}}</a></td>
 							
 							{{if gt .Discount 0.0}}
-								<td class="column-3">${{printf "%.2f" .Discount}}</td>
+								<td class="column-3">
+									<span class="oldPrice">
+										${{printf "%.2f" .Price}}
+									</span>
+									<span class="newPrice">
+										${{printf "%.2f" .Discount}}
+									</span>
+								</td>
 							{{else}}
 								<td class="column-3">{{printf "%.2f" .Price}}</td>
 							{{end}}

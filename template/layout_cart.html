@@ -19,7 +19,14 @@
 
                 {{if gt .Discount 0.0}}
                 <span class="header-cart-item-info">
-                    {{.Quantity}} x ${{printf "%.2f" .Discount}} = ${{printf "%.2f" .Total}}
+                    {{.Quantity}} x 
+                    <span class="oldPrice">
+						${{printf "%.2f" .Price}}
+					</span>
+					<span class="newPrice">
+						${{printf "%.2f" .Discount}}
+					</span> 
+                    = ${{printf "%.2f" .Total}}
                 </span>
                 {{else}}
                 <span class="header-cart-item-info">
