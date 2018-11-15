@@ -74,6 +74,24 @@ func BuildHeader(w http.ResponseWriter, r *http.Request, v *middleware.ValueMap)
 		header.Success = success
 	}
 
+	header.MeatInCartCart = []pagemodel.CartMeatModel{}
+	header.CartTotal = 0.0
+	cart, err := db.GetCartID(header.UserID)
+	if err == nil {
+		for _, cartMeat := range cart.Meats {
+			meat, err := db.GetMeat(cartMeat.ID.Hex())
+			if err != nil {
+				// w.WriteHeader(http.StatusNotFound)
+				// return
+				// header.Warning = header.Warning + ", header: unable to get meats >> " + err.Error()
+				fmt.Println("HEADER: " + meat.Name + err.Error())
+			}
+			cartMeat := GetCartMeatModel(meat, cartMeat.Quantity)
+			header.CartTotal = header.CartTotal + cartMeat.Total
+			header.MeatInCartCart = append(header.MeatInCartCart, cartMeat)
+		}
+	}
+
 	v.Set("header", header)
 	v.Set("next", true)
 }
@@ -162,56 +180,10 @@ func Cart(w http.ResponseWriter, r *http.Request, v *middleware.ValueMap) {
 	}
 
 	model := pagemodel.Cart{
-		Menu:        header,
-		MeatsInCart: []pagemodel.CartMeatModel{},
-		CartTotal:   0,
+		Menu: header,
 	}
 
 	v.Set("next", false)
-	cart, err := db.GetCart(header.User)
-	if err != nil {
-		if err == db.NonCart {
-			user, err := db.GetUserFromName(header.User)
-			if err != nil {
-				// w.WriteHeader(http.StatusNotFound)
-				v.Set("warning", "Cart: unable to find user >> "+err.Error())
-				t.ExecuteTemplate(w, "cart.html", model)
-				return
-			}
-			cart = dbmodel.InitialCart(user.ID)
-			err = db.RegisCart(cart)
-			if err != nil {
-				v.Set("warning", "Cart: unable to regis cart >> "+err.Error())
-				t.ExecuteTemplate(w, "cart.html", model)
-				return
-			}
-		} else {
-			// w.WriteHeader(http.StatusNotFound)
-			v.Set("warning", "Cart: unable to find cart >> "+err.Error())
-			t.ExecuteTemplate(w, "cart.html", model)
-			return
-		}
-	}
-	for _, meatFromCartDB := range cart.Meats {
-		meat, err := db.GetMeat(meatFromCartDB.ID.Hex())
-		if err != nil {
-			// w.WriteHeader(http.StatusNotFound)
-			v.Set("warning", "Cart: unable to find meat >> "+err.Error())
-			t.ExecuteTemplate(w, "cart.html", model)
-			return
-		}
-		cartMeat := pagemodel.CartMeatModel{
-			ID:       meat.ID.Hex(),
-			Pic:      "/image/meat_" + meat.ID.Hex() + meat.ImageExtension,
-			ProName:  meat.Name,
-			Price:    meat.Price,
-			Quantity: meatFromCartDB.Quantity,
-			Total:    meat.Price * float64(meatFromCartDB.Quantity),
-		}
-		model.CartTotal = model.CartTotal * cartMeat.Total
-		model.MeatsInCart = append(model.MeatsInCart, cartMeat)
-	}
-
 	t.ExecuteTemplate(w, "cart.html", model)
 }
 
@@ -222,25 +194,28 @@ func AddCart(w http.ResponseWriter, r *http.Request, v *middleware.ValueMap) {
 	}
 
 	v.Set("next", true)
-	vars := mux.Vars(r)
+	if header.User != "" {
+		vars := mux.Vars(r)
+		quantity64, err := strconv.ParseInt(vars["quantity"], 10, 64)
+		if err != nil {
+			// w.WriteHeader(http.StatusNotFound)
+			v.Set("warning", "AddCart: quantity parameter is wrong.")
+			return
+		}
+		quantity := int(quantity64)
 
-	quantity64, err := strconv.ParseInt(vars["quantity"], 10, 64)
-	if err != nil {
-		// w.WriteHeader(http.StatusNotFound)
-		v.Set("warning", "AddCart: quantity parameter is wrong.")
-		return
+		user, err := db.GetUserFromName(header.User)
+		if err != nil {
+			fmt.Println("Get User From Name Error! >> " + err.Error())
+			// w.WriteHeader(http.StatusNotFound)
+			v.Set("warning", "AddCart: unable to find user >> "+err.Error())
+			return
+		}
+
+		db.UpdateCart(user.ID, bson.ObjectIdHex(vars["meatId"]), quantity)
+	} else {
+		v.Set("warning", "AddCart: login before add cart!")
 	}
-	quantity := int(quantity64)
-
-	user, err := db.GetUserFromName(header.User)
-	if err != nil {
-		fmt.Println("Get User From Name Error! >> " + err.Error())
-		// w.WriteHeader(http.StatusNotFound)
-		v.Set("warning", "AddCart: unable to find user >> "+err.Error())
-		return
-	}
-
-	db.UpdateCart(user.ID, bson.ObjectIdHex(vars["meatId"]), quantity)
 }
 
 func Product(w http.ResponseWriter, r *http.Request, v *middleware.ValueMap) {

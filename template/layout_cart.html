@@ -1,0 +1,145 @@
+{{define "layout_cart"}}
+<img src="/static/assets/icon/icon-header-02.png" class="header-icon1 js-show-header-dropdown" alt="ICON">
+<span class="header-icons-noti">{{.CountCart}}</span>
+
+<!-- Header cart noti -->
+<div class="header-cart header-dropdown">
+
+    {{range .MeatInCartCart}}
+    <ul class="header-cart-wrapitem">
+        <li class="header-cart-item">
+            <div class="header-cart-item-img">
+                <img src="{{.Pic}}" alt="IMG">
+            </div>
+
+            <div class="header-cart-item-txt">
+                <a href="/product-detail/{{.ID}}/" class="header-cart-item-name">
+                    {{.ProName}}
+                </a>
+
+                {{if gt .Discount 0.0}}
+                <span class="header-cart-item-info">
+                    {{.Quantity}} x ${{printf "%.2f" .Discount}} = ${{printf "%.2f" .Total}}
+                </span>
+                {{else}}
+                <span class="header-cart-item-info">
+                    {{.Quantity}} x ${{printf "%.2f" .Price}} = ${{printf "%.2f" .Total}}
+                </span>
+                {{end}}
+            </div>
+        </li>
+    </ul>
+    {{end}}
+
+    <div class="header-cart-total">
+        Total: ${{printf "%.2f" .CartTotal}}
+    </div>
+
+    <div class="header-cart-buttons">
+        <div class="header-cart-wrapbtn">
+            <a href="/cart/" class="flex-c-m size1 bg1 bo-rad-20 hov1 s-text1 trans-0-4">
+                View Cart
+            </a>
+        </div>
+
+        <div class="header-cart-wrapbtn">
+            <a href="/checkout/" class="flex-c-m size1 bg1 bo-rad-20 hov1 s-text1 trans-0-4">
+                Check Out
+            </a>
+        </div>
+    </div>
+</div>
+{{end}}
+
+{{/* <div class="header-wrapicon2 m-r-13">
+    <img src="/static/assets/icon/icon-header-02.png" class="header-icon1 js-show-header-dropdown" alt="ICON">
+    <span class="header-icons-noti">0</span>
+
+    <!-- Header cart noti -->
+    <div class="header-cart header-dropdown">
+
+        {{range .Cart}}
+        <ul class="header-cart-wrapitem">
+            <li class="header-cart-item">
+                <div class="header-cart-item-img">
+                    <img src="{{.Pic}}" alt="IMG">
+                </div>
+
+                <div class="header-cart-item-txt">
+                    <a href="/product-detail/{{.ID}}/" class="header-cart-item-name">
+                        {{.ProName}}
+                    </a>
+
+                    <span class="header-cart-item-info">
+                        ${{.Total}}
+                    </span>
+                </div>
+            </li>
+        </ul>
+        {{end}}
+
+        <div class="header-cart-total">
+            Total: ${{.CartTotal}}
+        </div>
+
+        <div class="header-cart-buttons">
+            <div class="header-cart-wrapbtn">
+                <a href="/cart/" class="flex-c-m size1 bg1 bo-rad-20 hov1 s-text1 trans-0-4">
+                    View Cart
+                </a>
+            </div>
+
+            <div class="header-cart-wrapbtn">
+                <a href="/checkout/" class="flex-c-m size1 bg1 bo-rad-20 hov1 s-text1 trans-0-4">
+                    Check Out
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="header-wrapicon2">
+    <img src="/static/assets/icon/icon-header-02.png" class="header-icon1 js-show-header-dropdown" alt="ICON">
+    <span class="header-icons-noti">0</span>
+
+    <!-- Header cart noti -->
+    <div class="header-cart header-dropdown">
+
+        {{range .Cart}}
+        <ul class="header-cart-wrapitem">
+            <li class="header-cart-item">
+                <div class="header-cart-item-img">
+                    <img src="{{.Pic}}" alt="IMG">
+                </div>
+                <div class="header-cart-item-txt">
+                    <a href="/product-detail/{{.ID}}/" class="header-cart-item-name">
+                        {{.ProName}}
+                    </a>
+
+                    <span class="header-cart-item-info">
+                        ${{.Total}}
+                    </span>
+                </div>
+            </li>
+        </ul>
+        {{end}}
+
+        <div class="header-cart-total">
+            Total: $0.00
+        </div>
+
+        <div class="header-cart-buttons">
+            <div class="header-cart-wrapbtn">
+                <a href="/cart/" class="flex-c-m size1 bg1 bo-rad-20 hov1 s-text1 trans-0-4">
+                    View Cart
+                </a>
+            </div>
+
+            <div class="header-cart-wrapbtn">
+                <a href="/checkout/" class="flex-c-m size1 bg1 bo-rad-20 hov1 s-text1 trans-0-4">
+                    Check Out
+                </a>
+            </div>
+        </div>
+    </div>
+</div> */}}

@@ -14,7 +14,31 @@ import (
 	"github.com/guitarpawat/wsp-ecommerce/model/pagemodel"
 )
 
+func GetCartMeatModel(meat dbmodel.Meat, quantity int) pagemodel.CartMeatModel {
+	var realPrice float64
+	if meat.Discount > 0.0 {
+		realPrice = meat.Discount
+	} else {
+		realPrice = meat.Price
+	}
+	return pagemodel.CartMeatModel{
+		ID:       meat.ID.Hex(),
+		Pic:      "/image/meat_" + meat.ID.Hex() + meat.ImageExtension,
+		ProName:  meat.Name,
+		Price:    meat.Price,
+		Discount: meat.Discount,
+		Quantity: quantity,
+		Total:    realPrice * float64(quantity),
+	}
+}
+
 func GetMeatModel(meat dbmodel.Meat) pagemodel.MeatModel {
+	var realPrice float64
+	if meat.Discount > 0.0 {
+		realPrice = meat.Discount
+	} else {
+		realPrice = meat.Price
+	}
 	return pagemodel.MeatModel{
 		ID:          meat.ID.Hex(),
 		Pic:         "/image/meat_" + meat.ID.Hex() + meat.ImageExtension,
@@ -26,7 +50,7 @@ func GetMeatModel(meat dbmodel.Meat) pagemodel.MeatModel {
 		Discount:    meat.Discount,
 		Expire:      meat.Expire.Format(dbmodel.TimeFormat),
 		Quantity:    meat.Quantity,
-		Total:       meat.Price * float64(meat.Quantity),
+		Total:       realPrice * float64(meat.Quantity),
 	}
 }
 
