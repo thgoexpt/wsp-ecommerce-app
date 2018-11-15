@@ -58,6 +58,7 @@ func BuildHeader(w http.ResponseWriter, r *http.Request, v *middleware.ValueMap)
 		header.UserID = user.ID
 		header.User = user.Username
 		header.UserType = user.Type
+		header.UserAddress = user.Address
 	}
 
 	warning, ok := v.Get("warning").(string)
@@ -208,7 +209,7 @@ func Cart(w http.ResponseWriter, r *http.Request, v *middleware.ValueMap) {
 			Quantity: meatFromCartDB.Quantity,
 			Total:    meat.Price * float64(meatFromCartDB.Quantity),
 		}
-		model.CartTotal = model.CartTotal * cartMeat.Total
+		model.CartTotal += cartMeat.Total
 		model.MeatsInCart = append(model.MeatsInCart, cartMeat)
 	}
 

@@ -6,11 +6,12 @@ import (
 )
 
 type Menu struct {
-	User     string
-	UserID   bson.ObjectId
-	UserType int
-	Warning  string
-	Success  string
+	User        string
+	UserID      bson.ObjectId
+	UserAddress string
+	UserType    int
+	Warning     string
+	Success     string
 }
 
 func (m Menu) IsPermissable() bool {
