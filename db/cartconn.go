@@ -159,3 +159,26 @@ func CheckCartExist(id bson.ObjectId) error {
 	}
 	return nil
 }
+
+func RemoveMeat(id bson.ObjectId, meatID bson.ObjectId) error {
+	db, err := GetDB()
+	if err != nil {
+		return err
+	}
+	defer db.Session.Close()
+
+	err = db.C("Carts").Update(bson.M{
+		"userID": id,
+	},
+		bson.M{
+			"$pull": bson.M{
+				"meats": bson.M{
+					"meat": meatID,
+				},
+			},
+		})
+	if err != nil {
+		return err
+	}
+	return nil
+}

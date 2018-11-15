@@ -114,6 +114,15 @@ func main() {
 		middleware.DoableFunc(handler.Cart))).
 		Methods("GET")
 
+	r.Handle("/cart_rm/{meatID}/", middleware.MakeMiddleware(nil,
+		middleware.DoableFunc(handler.CheckSession),
+		middleware.DoableFunc(handler.BuildHeader),
+		middleware.DoableFunc(handler.RemoveMeatFromCart),
+		middleware.DoableFunc(handler.CheckSession),
+		middleware.DoableFunc(handler.BuildHeader),
+		middleware.DoableFunc(handler.Cart))).
+		Methods("GET")
+
 	r.Handle("/sales_history/", handlePage(handler.SaleHistory))
 
 	r.Handle("/owner/", handlePage(handler.Owner))

@@ -68,13 +68,13 @@
 								</div>
 							</td>
 							<td class="column-2"><a href="/product-detail/{{.ID}}/">{{.ProName}}</a></td>
-							<td class="column-3">$
-							{{- if gt .Discount 0.0 -}}
-								{{printf "%.2f" .Discount}}
-							{{- else -}}
-								{{printf "%.2f" .Price}}
-							{{- end -}}
-							</td>
+							
+							{{if gt .Discount 0.0}}
+								<td class="column-3">${{printf "%.2f" .Discount}}</td>
+							{{else}}
+								<td class="column-3">{{printf "%.2f" .Price}}</td>
+							{{end}}
+							
 							<td class="column-4">
 								<div class="flex-w bo5 of-hidden w-size17">
 									<button class="btn-num-product-down color1 flex-c-m size7 bg8 eff2">
@@ -91,7 +91,7 @@
 							<td class="column-5">${{printf "%.2f" .Total}}</td>
 							<td class="column-6">
 									<!-- Button -->
-									<button class="btn btn-outline-danger">
+									<button class="btn btn-outline-danger cart_rm" value="{{.ID}}">
 										X
 									</button>
 								</td>

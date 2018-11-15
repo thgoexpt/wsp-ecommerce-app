@@ -791,3 +791,20 @@ func Owner(w http.ResponseWriter, r *http.Request, v *middleware.ValueMap) {
 	v.Set("next", false)
 	t.ExecuteTemplate(w, "owner.html", model)
 }
+
+func RemoveMeatFromCart(w http.ResponseWriter, r *http.Request, v *middleware.ValueMap) {
+	header, ok := v.Get("header").(pagemodel.Menu)
+	if !ok {
+		header = defaultHeader
+	}
+
+	v.Set("next", true)
+	vars := mux.Vars(r)
+	meatID := bson.ObjectIdHex(vars["meatID"])
+	err := db.RemoveMeat(header.UserID, meatID)
+	if err != nil {
+		v.Set("warning", "cart_rm: can't rm meat from cart >> "+err.Error())
+		return
+	}
+	v.Set("success", "Successfully rm meat from cart.")
+}
