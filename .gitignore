@@ -40,6 +40,8 @@ robot/output.xml
 
 robot/selenium-screenshot-*
 
+debug.log
+
 pabot_results
 Suites.*.png
 

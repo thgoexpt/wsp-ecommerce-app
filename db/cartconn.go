@@ -125,16 +125,7 @@ func UpdateCart(userID, meat bson.ObjectId, quantity int) error {
 		return err
 	}
 
-	err = db.C("Carts").Update(bson.M{
-		"userID": userID,
-	},
-		bson.M{
-			"$pull": bson.M{
-				"meats": bson.M{
-					"meat": meat,
-				},
-			},
-		})
+	err = RemoveMeat(userID, meat)
 	if err != nil {
 		return err
 	}

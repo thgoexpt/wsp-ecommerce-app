@@ -244,6 +244,34 @@ func AddCart(w http.ResponseWriter, r *http.Request, v *middleware.ValueMap) {
 	}
 }
 
+func UpdateCart(w http.ResponseWriter, r *http.Request, v *middleware.ValueMap) {
+	err := r.ParseForm()
+	v.Set("next", true)
+	if err != nil {
+		v.Set("warning", "UpdateCart: unable to parse form >> "+err.Error())
+		return
+	}
+	header, ok := v.Get("header").(pagemodel.Menu)
+	if !ok {
+		header = defaultHeader
+	}
+
+	cart := header.MeatInCartCart
+	for _, meat := range cart {
+		id := meat.ID
+		fmt.Println("UpdateCart >> " + "cartqty" + id)
+		// FIXME: r.PostFormValue("cartqty" + id) return an empty string
+		quantityStr := r.PostFormValue("cartqty" + id)
+		quantity64, err := strconv.ParseInt(quantityStr, 10, 64)
+		if err != nil {
+			v.Set("warning", "UpdateCart: Quantity is not an integer >> "+err.Error())
+			return
+		}
+		quantity := int(quantity64)
+		err = db.UpdateCart(header.UserID, bson.ObjectId(id), quantity)
+	}
+}
+
 func Product(w http.ResponseWriter, r *http.Request, v *middleware.ValueMap) {
 	header, ok := v.Get("header").(pagemodel.Menu)
 	if !ok {
