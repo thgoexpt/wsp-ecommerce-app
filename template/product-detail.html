@@ -76,9 +76,19 @@
 					{{.ProName}}
 				</h4>
 
-				<span class="m-text17">
-					${{printf "%.2f" .Price}}
-				</span>
+				{{if gt .Discount 0.0}}
+					<span class="m-text17 oldPrice">
+						${{printf "%.2f" .Price}}
+					</span>
+					&nbsp
+					<span class="m-text17 newPrice">
+						${{printf "%.2f" .Discount}}
+					</span>
+				{{else}}
+					<span class="m-text17">
+						${{printf "%.2f" .Price}}
+					</span>
+				{{end}}
 
 				<div class="p-t-33 p-b-60">
 					<div class="flex-r-m flex-w p-t-10">

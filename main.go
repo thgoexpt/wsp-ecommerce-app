@@ -53,7 +53,15 @@ func main() {
 
 	r.Handle("/sale-history/", handlePage(handler.SaleHistory))
 
-	r.Handle("/checkout/", handlePage(handler.Checkout))
+	r.Handle("/checkout/", handlePage(handler.Checkout)).Methods("GET")
+
+	r.Handle("/checkout/", middleware.MakeMiddleware(nil,
+		middleware.DoableFunc(handler.CheckSession),
+		middleware.DoableFunc(handler.BuildHeader),
+		middleware.DoableFunc(handler.ProceedCheckout),
+		middleware.DoableFunc(handler.BuildHeader),
+		middleware.DoableFunc(handler.Home))).
+		Methods("POST")
 
 	r.Handle("/regis/", middleware.MakeMiddleware(nil,
 		middleware.DoableFunc(handler.Regis),
@@ -109,6 +117,17 @@ func main() {
 		middleware.DoableFunc(handler.CheckSession),
 		middleware.DoableFunc(handler.BuildHeader),
 		middleware.DoableFunc(handler.AddCart),
+		middleware.DoableFunc(handler.CheckSession),
+		middleware.DoableFunc(handler.BuildHeader),
+		middleware.DoableFunc(handler.Cart))).
+		Methods("GET")
+
+	r.Handle("/cart_rm/{meatID}/", middleware.MakeMiddleware(nil,
+		middleware.DoableFunc(handler.CheckSession),
+		middleware.DoableFunc(handler.BuildHeader),
+		middleware.DoableFunc(handler.RemoveMeatFromCart),
+		middleware.DoableFunc(handler.CheckSession),
+		middleware.DoableFunc(handler.BuildHeader),
 		middleware.DoableFunc(handler.Cart))).
 		Methods("GET")
 

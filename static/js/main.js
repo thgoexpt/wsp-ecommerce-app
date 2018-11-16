@@ -234,4 +234,11 @@
         }
     })
 
+    /*[ Make 'Remove Meat From Cart' button work ]
+    ===========================================================*/
+    $(".cart_rm").on('click' ,function(e) {
+        var id = $(this).val()
+        window.location.href = "/cart_rm/"+id+"/"
+    })
+
 })(jQuery);
