@@ -100,10 +100,17 @@ func CommitSalesHistory(c dbmodel.Cart) error {
 	if err != nil {
 		return err
 	}
+
 	err = RegisSalesHistory(history)
 	if err != nil {
 		return err
 	}
+
+	err = ClearCard(c.UserID)
+	if err != nil {
+		return err
+	}
+
 	return nil
 }
 
@@ -111,7 +118,7 @@ func MakeHistory(c dbmodel.Cart) (dbmodel.SalesHistory, error) {
 	history := dbmodel.SalesHistory{
 		Time: time.Now(),
 		User: c.UserID,
-		TrackingNumber: fmt.Sprintf("EA%09d%TH", rand.Int63n(999999999)),
+		TrackingNumber: fmt.Sprintf("EA%09dTH", rand.Int63n(999999999)),
 		Meats: []dbmodel.Meats{},
 		Price: 0.00,
 	}

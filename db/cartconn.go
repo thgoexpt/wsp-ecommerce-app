@@ -59,6 +59,19 @@ func SetCart(id bson.ObjectId, cart dbmodel.Cart) error {
 	return nil
 }
 
+func ClearCard(id bson.ObjectId) error {
+	db, err := GetDB()
+	if err != nil {
+		return err
+	}
+	defer db.Session.Close()
+	_, err = db.C("Carts").RemoveAll(bson.M{"userID": id})
+	if err != nil {
+		return err
+	}
+	return nil
+}
+
 func GetCart(userName string) (dbmodel.Cart, error) {
 	db, err := GetDB()
 	if err != nil {

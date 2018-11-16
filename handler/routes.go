@@ -176,6 +176,8 @@ func ProceedCheckout(w http.ResponseWriter, r *http.Request, v *middleware.Value
 		v.Set("next", true)
 		return
 	}
+
+	v.Set("success", "Thank you for your purchase, please come again.")
 	v.Set("next", true)
 }
 
