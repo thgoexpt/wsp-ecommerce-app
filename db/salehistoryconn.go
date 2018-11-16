@@ -118,7 +118,7 @@ func MakeHistory(c dbmodel.Cart) (dbmodel.SalesHistory, error) {
 	history := dbmodel.SalesHistory{
 		Time: time.Now(),
 		User: c.UserID,
-		TrackingNumber: fmt.Sprintf("EA%09dTH", rand.Int63n(999999999)),
+		TrackingNumber: fmt.Sprintf("EA%09dTH", rand.Intn(1000000000)),
 		Meats: []dbmodel.Meats{},
 		Price: 0.00,
 	}
