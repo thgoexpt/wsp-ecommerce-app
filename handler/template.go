@@ -1,6 +1,8 @@
 package handler
 
-import "html/template"
+import (
+	"html/template"
+)
 
 var t *template.Template
 var e error
