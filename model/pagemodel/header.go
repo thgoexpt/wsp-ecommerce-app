@@ -10,10 +10,10 @@ type Menu struct {
 	UserID         bson.ObjectId
 	UserType       int
 	UserAddress    string
-	MeatInCartCart []CartMeatModel
-	CartTotal      float64
 	Warning        string
 	Success        string
+	MeatInCartCart []CartMeatModel
+	CartTotal      float64
 }
 
 func (m Menu) IsPermissable() bool {

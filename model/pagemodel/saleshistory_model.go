@@ -4,6 +4,8 @@ import (
 	"fmt"
 	"github.com/guitarpawat/wsp-ecommerce/db"
 	"github.com/guitarpawat/wsp-ecommerce/model/dbmodel"
+	"log"
+	"time"
 )
 
 type SalesHistoryPageModel struct {
@@ -51,9 +53,14 @@ func ToSalesHistoryModel(sh dbmodel.SalesHistory) (SalesHistoryModel, error) {
 
 	shm.ID = sh.ID.Hex()
 
-	year, month, day := sh.Time.Date()
+	loc, err := time.LoadLocation("Asia/Bangkok")
+	if err != nil {
+		log.Println(err)
+		return SalesHistoryModel{}, nil
+	}
+	year, month, day := sh.Time.In(loc).Date()
 	shm.Date = fmt.Sprintf("%02d/%02d/%04d", day, month, year)
-	shm.Time = fmt.Sprintf("%02d:%02d", sh.Time.Hour(), sh.Time.Minute())
+	shm.Time = fmt.Sprintf("%02d:%02d", sh.Time.In(loc).Hour(), sh.Time.In(loc).Minute())
 
 	shm.Price = fmt.Sprintf("%.2f", sh.Price)
 	shm.TrackingNumber = sh.TrackingNumber
