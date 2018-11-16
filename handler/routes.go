@@ -251,7 +251,6 @@ func Cart(w http.ResponseWriter, r *http.Request, v *middleware.ValueMap) {
 			Total:    meat.Price * float64(meatFromCartDB.Quantity),
 		}
 		model.CartTotal += cartMeat.Total
-		model.MeatsInCart = append(model.MeatsInCart, cartMeat)
 	}
 	t.ExecuteTemplate(w, "cart.html", model)
 }
