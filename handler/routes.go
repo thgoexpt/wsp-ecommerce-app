@@ -161,13 +161,22 @@ func ProceedCheckout(w http.ResponseWriter, r *http.Request, v *middleware.Value
 	if !ok {
 		header = defaultHeader
 	}
-
-	model := pagemodel.Home{
-		Menu: header,
+	cart, err := db.GetCart(header.User)
+	if err != nil {
+		v.Set("warning", "error: "+err.Error())
+		v.Set("next", true)
+		return
 	}
 
+	err = db.CommitSalesHistory(cart)
+
 	v.Set("next", false)
-	t.ExecuteTemplate(w, "checkout.html", model)
+	if err != nil {
+		v.Set("warning", "error: "+err.Error())
+		v.Set("next", true)
+		return
+	}
+	v.Set("next", true)
 }
 
 func Cart(w http.ResponseWriter, r *http.Request, v *middleware.ValueMap) {

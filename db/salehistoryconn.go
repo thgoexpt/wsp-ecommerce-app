@@ -122,7 +122,7 @@ func MakeHistory(c dbmodel.Cart) (dbmodel.SalesHistory, error) {
 			Quatity:v.Quantity,
 		}
 		history.Meats = append(history.Meats, meatObj)
-		meat, err := GetMeat(string(v.ID))
+		meat, err := GetMeat(v.ID.Hex())
 		if err != nil {
 			return dbmodel.SalesHistory{}, err
 		}
