@@ -60,7 +60,7 @@
 							<th class="column-6"></th>
 						</tr>
 
-						{{range .MeatsInCart}}
+						{{range .Menu.MeatInCartCart}}
 						<tr class="table-row">
 							<td class="column-1">
 								<div class="cart-img-product b-rad-4 o-f-hidden">
@@ -68,7 +68,13 @@
 								</div>
 							</td>
 							<td class="column-2"><a href="/product-detail/{{.ID}}/">{{.ProName}}</a></td>
-							<td class="column-3">${{printf "%.2f" .Price}}</td>
+							<td class="column-3">$
+							{{- if gt .Discount 0.0 -}}
+								{{printf "%.2f" .Discount}}
+							{{- else -}}
+								{{printf "%.2f" .Price}}
+							{{- end -}}
+							</td>
 							<td class="column-4">
 								<div class="flex-w bo5 of-hidden w-size17">
 									<button class="btn-num-product-down color1 flex-c-m size7 bg8 eff2">
@@ -131,7 +137,11 @@
 					</span>
 
 					<span class="m-text21 w-size20 w-full-sm">
+<<<<<<< HEAD
 						${{printf "%.2f" .CartTotal}}
+=======
+						${{.Menu.CartTotal}}
+>>>>>>> origin/master
 					</span>
 				</div>
 
