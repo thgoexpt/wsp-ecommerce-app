@@ -9,7 +9,7 @@ type Menu struct {
 	User           string
 	UserID         bson.ObjectId
 	UserType       int
-	UserAddress string
+	UserAddress    string
 	Warning        string
 	Success        string
 	MeatInCartCart []CartMeatModel

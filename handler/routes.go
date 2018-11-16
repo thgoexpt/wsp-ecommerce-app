@@ -210,48 +210,6 @@ func Cart(w http.ResponseWriter, r *http.Request, v *middleware.ValueMap) {
 	}
 
 	v.Set("next", false)
-	cart, err := db.GetCart(header.User)
-	if err != nil {
-		if err == db.NonCart {
-			user, err := db.GetUserFromName(header.User)
-			if err != nil {
-				// w.WriteHeader(http.StatusNotFound)
-				v.Set("warning", "Cart: unable to find user >> "+err.Error())
-				t.ExecuteTemplate(w, "cart.html", model)
-				return
-			}
-			cart = dbmodel.InitialCart(user.ID)
-			err = db.RegisCart(cart)
-			if err != nil {
-				v.Set("warning", "Cart: unable to regis cart >> "+err.Error())
-				t.ExecuteTemplate(w, "cart.html", model)
-				return
-			}
-		} else {
-			// w.WriteHeader(http.StatusNotFound)
-			v.Set("warning", "Cart: unable to find cart >> "+err.Error())
-			t.ExecuteTemplate(w, "cart.html", model)
-			return
-		}
-	}
-	for _, meatFromCartDB := range cart.Meats {
-		meat, err := db.GetMeat(meatFromCartDB.ID.Hex())
-		if err != nil {
-			// w.WriteHeader(http.StatusNotFound)
-			v.Set("warning", "Cart: unable to find meat >> "+err.Error())
-			t.ExecuteTemplate(w, "cart.html", model)
-			return
-		}
-		cartMeat := pagemodel.CartMeatModel{
-			ID:       meat.ID.Hex(),
-			Pic:      "/image/meat_" + meat.ID.Hex() + meat.ImageExtension,
-			ProName:  meat.Name,
-			Price:    meat.Price,
-			Quantity: meatFromCartDB.Quantity,
-			Total:    meat.Price * float64(meatFromCartDB.Quantity),
-		}
-		model.CartTotal += cartMeat.Total
-	}
 	t.ExecuteTemplate(w, "cart.html", model)
 }
 
@@ -858,4 +816,21 @@ func Owner(w http.ResponseWriter, r *http.Request, v *middleware.ValueMap) {
 
 	v.Set("next", false)
 	t.ExecuteTemplate(w, "owner.html", model)
+}
+
+func RemoveMeatFromCart(w http.ResponseWriter, r *http.Request, v *middleware.ValueMap) {
+	header, ok := v.Get("header").(pagemodel.Menu)
+	if !ok {
+		header = defaultHeader
+	}
+
+	v.Set("next", true)
+	vars := mux.Vars(r)
+	meatID := bson.ObjectIdHex(vars["meatID"])
+	err := db.RemoveMeat(header.UserID, meatID)
+	if err != nil {
+		v.Set("warning", "cart_rm: can't rm meat from cart >> "+err.Error())
+		return
+	}
+	v.Set("success", "Successfully rm meat from cart.")
 }
