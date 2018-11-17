@@ -106,6 +106,18 @@ func CommitSalesHistory(c dbmodel.Cart) error {
 		return err
 	}
 
+	for _, v := range c.Meats {
+		meat, err := GetMeat(v.ID.Hex())
+		if err != nil {
+			return err
+		}
+		meat.Quantity -= v.Quantity
+		err = UpdateMeat(meat.ID, meat)
+		if err != nil {
+			return err
+		}
+	}
+
 	err = ClearCard(c.UserID)
 	if err != nil {
 		return err
