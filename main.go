@@ -131,6 +131,15 @@ func main() {
 		middleware.DoableFunc(handler.Cart))).
 		Methods("GET")
 
+	r.Handle("/update_cart/", middleware.MakeMiddleware(nil,
+		middleware.DoableFunc(handler.CheckSession),
+		middleware.DoableFunc(handler.BuildHeader),
+		middleware.DoableFunc(handler.UpdateCart),
+		middleware.DoableFunc(handler.CheckSession),
+		middleware.DoableFunc(handler.BuildHeader),
+		middleware.DoableFunc(handler.Cart))).
+		Methods("POST")
+
 	r.Handle("/sales_history/", handlePage(handler.SaleHistory))
 
 	r.Handle("/owner/", handlePage(handler.Owner))
