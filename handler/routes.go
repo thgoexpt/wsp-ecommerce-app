@@ -489,12 +489,19 @@ func ProductStock(w http.ResponseWriter, r *http.Request, v *middleware.ValueMap
 	}
 
 	v.Set("next", false)
+
+	if header.UserType != dbmodel.TypeEmployee && header.UserType != dbmodel.TypeOwner {
+		w.WriteHeader(http.StatusForbidden)
+		return
+	}
+
+
 	model := pagemodel.Stock{
 		Menu:  header,
 		Meats: []pagemodel.MeatModel{},
 	}
 
-	meats, err := db.GetAllMeats()
+	meats, err := db.GetAllMeatsNoFilter()
 	if err != nil {
 		w.WriteHeader(http.StatusNotFound)
 		return
