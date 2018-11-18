@@ -244,6 +244,37 @@ func AddCart(w http.ResponseWriter, r *http.Request, v *middleware.ValueMap) {
 	}
 }
 
+func UpdateCart(w http.ResponseWriter, r *http.Request, v *middleware.ValueMap) {
+	err := r.ParseMultipartForm(32 << 20)
+	if err != nil {
+		w.WriteHeader(http.StatusInternalServerError)
+		return
+	}
+	v.Set("next", true)
+
+	header, ok := v.Get("header").(pagemodel.Menu)
+	if !ok {
+		header = defaultHeader
+	}
+
+	cart := header.MeatInCartCart
+	for _, meat := range cart {
+		id := meat.ID
+		quantityStr := r.PostFormValue("cartqty" + id)
+		quantity64, err := strconv.ParseInt(quantityStr, 10, 64)
+		if err != nil {
+			v.Set("warning", "UpdateCart: Quantity is not an integer >> "+err.Error())
+			return
+		}
+		quantity := int(quantity64)
+		err = db.UpdateCart(header.UserID, bson.ObjectIdHex(id), quantity)
+		if err != nil {
+			v.Set("warning", "UpdateCart: unable to update cart >> "+err.Error())
+			return
+		}
+	}
+}
+
 func Product(w http.ResponseWriter, r *http.Request, v *middleware.ValueMap) {
 	header, ok := v.Get("header").(pagemodel.Menu)
 	if !ok {
@@ -458,12 +489,19 @@ func ProductStock(w http.ResponseWriter, r *http.Request, v *middleware.ValueMap
 	}
 
 	v.Set("next", false)
+
+	if header.UserType != dbmodel.TypeEmployee && header.UserType != dbmodel.TypeOwner {
+		w.WriteHeader(http.StatusForbidden)
+		return
+	}
+
+
 	model := pagemodel.Stock{
 		Menu:  header,
 		Meats: []pagemodel.MeatModel{},
 	}
 
-	meats, err := db.GetAllMeats()
+	meats, err := db.GetAllMeatsNoFilter()
 	if err != nil {
 		w.WriteHeader(http.StatusNotFound)
 		return

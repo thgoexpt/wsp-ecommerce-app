@@ -241,4 +241,10 @@
         window.location.href = "/cart_rm/"+id+"/"
     })
 
+    /*[ Submit from in cart page ]
+    ===========================================================*/
+    $("#fake-update-cart").on('click' ,function(e) {
+        $('#real-update-cart').click()
+    })
+
 })(jQuery);
