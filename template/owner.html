@@ -2,7 +2,7 @@
 <html lang="en">
 
 <head>
-	<title>Contact</title>
+	<title>Product Analyze</title>
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<!--===============================================================================================-->
@@ -38,16 +38,51 @@
 	{{template "menu" .Menu}}
 
 	<!-- Title Page -->
-	<section class="bg-title-page p-t-40 p-b-50 flex-col-c-m parallax0 parallax100" style="background-image: url(../static/assets/contact.jpg);">
+	<section class="parallax0 parallax100 bg-title-page p-t-40 p-b-50 flex-col-c-m" style="background-image: url(../static/assets/cart/cart_wall.jpg);">
 		<h2 class="l-text2 t-center">
-			Contact
+			Product Analyze
 		</h2>
 	</section>
 
-	<!-- content page -->
-	<section class="bgwhite p-t-66 p-b-60">
+	<!-- Stock -->
+	<section class="cart bgwhite p-t-70 p-b-100">
 		<div class="container">
-			<canvas id="myChart" style="max-width: 500px;"></canvas>
+			<!-- Item in stock -->
+			<div class="container-table-cart pos-relative">
+				<div class="wrap-table-shopping-cart bgwhite">
+					<table class="table-shopping-cart">
+						<tr class="table-head">
+							<th class="column-1"></th>
+							<th class="column-2">Product</th>
+							<th class="column-3">Price</th>
+							<th class="column-4 p-l-70">Total Quantity</th>
+							<th class="column-5">Total Price</th>
+							<th class="column-6"></th>
+						</tr>
+
+						{{range .Meats}}
+							<tr class="table-row">
+								<td class="column-1">
+									<div class="cart-img-product b-rad-4 o-f-hidden">
+										<img src="{{.Pic}}" alt="IMG-PRODUCT">
+									</div>
+								</td>
+								<td class="column-2"><a href="/product-detail/{{.ID}}/">{{.ProName}}</a></td>
+								<td class="column-3">${{printf "%.2f" .Price}}</td>
+								<td class="column-4 p-l-70">{{.Quantity}}</td>
+								<td class="column-5">${{printf "%.2f" .Total}}</td>
+								<td class="column-6">
+									<!-- Button -->
+									<button class="btn btn-outline-danger">
+										X
+									</button>
+								</td>
+							</tr>
+						{{end}}
+
+					</table>
+				</div>
+			</div>
 		</div>
 	</section>
 
@@ -71,11 +106,6 @@
 	<!--===============================================================================================-->
 	<script type="text/javascript" src="../static/animate/jquery/jquery-3.2.1.min.js"></script>
 	<!--===============================================================================================-->
-  <script type="text/javascript" src="../static/animate/Chart.js/Chart.js"></script>
-  <script type="text/javascript" src="../static/animate/Chart.js/Chart.min.js"></script>
-  <script type="text/javascript" src="../static/animate/Chart.js/Chart.bundle.js"></script>
-  <script type="text/javascript" src="../static/animate/Chart.js/Chart.bundle.min.js"></script>
-	<!--===============================================================================================-->
 	<script type="text/javascript" src="../static/animate/animsition/js/animsition.min.js"></script>
 	<!--===============================================================================================-->
 	<script type="text/javascript" src="../static/animate/bootstrap/js/popper.js"></script>
@@ -93,50 +123,6 @@
 			dropdownParent: $('#dropDownSelect2')
 		});
 	</script>
-	<!--===============================================================================================-->
-    <script>
-    var ctx = document.getElementById("myChart").getContext('2d');
-    var myChart = new Chart(ctx, {
-      type: 'bar',
-      data: {
-        labels: ["Red", "Blue", "Yellow", "Green", "Purple", "Orange"],
-        datasets: [{
-          label: '# of Votes',
-          data: [12, 19, 3, 5, 2, 3],
-          backgroundColor: [
-            'rgba(255, 99, 132, 0.2)',
-            'rgba(54, 162, 235, 0.2)',
-            'rgba(255, 206, 86, 0.2)',
-            'rgba(75, 192, 192, 0.2)',
-            'rgba(153, 102, 255, 0.2)',
-            'rgba(255, 159, 64, 0.2)'
-          ],
-          borderColor: [
-            'rgba(255,99,132,1)',
-            'rgba(54, 162, 235, 1)',
-            'rgba(255, 206, 86, 1)',
-            'rgba(75, 192, 192, 1)',
-            'rgba(153, 102, 255, 1)',
-            'rgba(255, 159, 64, 1)'
-          ],
-          borderWidth: 1
-        }]
-      },
-      options: {
-        scales: {
-          yAxes: [{
-            ticks: {
-              beginAtZero: true
-            }
-          }]
-        }
-      }
-    });
-
-  </script>
-	<!--===============================================================================================-->
-	<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAKFWBqlKAGCeS1rMVoaNlwyayu0e0YRes"></script>
-	<script src="../static/js/map-custom.js"></script>
 	<!--===============================================================================================-->
 	<script src="../static/js/main.js"></script>
 
