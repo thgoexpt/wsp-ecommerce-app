@@ -809,7 +809,7 @@ func Owner(w http.ResponseWriter, r *http.Request, v *middleware.ValueMap) {
 		header = defaultHeader
 	}
 
-	model := pagemodel.ProductDetail{
+	model := pagemodel.Stock{
 		Menu: header,
 	}
 
