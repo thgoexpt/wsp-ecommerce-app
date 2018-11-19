@@ -22,8 +22,7 @@ func MockCart() {
 	cart1 := dbmodel.InitialCart(mockUserID1)
 	cart2 := dbmodel.InitialCart(mockUserID2)
 
-	db.C("Carts").Remove(bson.M{"userID": cart1.UserID})
-	db.C("Carts").Remove(bson.M{"userID": cart2.UserID})
+	db.C("Carts").RemoveAll(nil)
 
 	RegisCart(cart1)
 	RegisCart(cart2)
@@ -59,6 +58,19 @@ func SetCart(id bson.ObjectId, cart dbmodel.Cart) error {
 	return nil
 }
 
+func ClearCard(id bson.ObjectId) error {
+	db, err := GetDB()
+	if err != nil {
+		return err
+	}
+	defer db.Session.Close()
+	_, err = db.C("Carts").RemoveAll(bson.M{"userID": id})
+	if err != nil {
+		return err
+	}
+	return nil
+}
+
 func GetCart(userName string) (dbmodel.Cart, error) {
 	db, err := GetDB()
 	if err != nil {
@@ -67,6 +79,10 @@ func GetCart(userName string) (dbmodel.Cart, error) {
 	defer db.Session.Close()
 
 	user, err := GetUserFromName(userName)
+	err = CheckCartExist(user.ID)
+	if err != nil {
+		return dbmodel.Cart{}, err
+	}
 	if err != nil {
 		return dbmodel.Cart{}, errors.New("Unable to find user")
 	}
@@ -81,6 +97,10 @@ func GetCartID(id bson.ObjectId) (dbmodel.Cart, error) {
 	defer db.Session.Close()
 
 	var cart dbmodel.Cart
+	err = CheckCartExist(id)
+	if err != nil {
+		return dbmodel.Cart{}, err
+	}
 	err = db.C("Carts").Find(bson.M{"userID": id}).One(&cart)
 	if err != nil {
 		return dbmodel.Cart{}, NonCart
@@ -100,27 +120,12 @@ func UpdateCart(userID, meat bson.ObjectId, quantity int) error {
 		Quantity: quantity,
 	}
 
-	count, err := db.C("Carts").Find(bson.M{
-		"userID": userID,
-	}).Count()
+	err = CheckCartExist(userID)
 	if err != nil {
 		return err
 	}
-	if count == 0 {
-		cart := dbmodel.InitialCart(userID)
-		RegisCart(cart)
-	}
 
-	err = db.C("Carts").Update(bson.M{
-		"userID": userID,
-	},
-		bson.M{
-			"$pull": bson.M{
-				"meats": bson.M{
-					"meat": meat,
-				},
-			},
-		})
+	err = RemoveMeat(userID, meat)
 	if err != nil {
 		return err
 	}
@@ -133,6 +138,49 @@ func UpdateCart(userID, meat bson.ObjectId, quantity int) error {
 			"$push": bson.M{"meats": cartMeat},
 		},
 	)
+	if err != nil {
+		return err
+	}
+	return nil
+}
+
+func CheckCartExist(id bson.ObjectId) error {
+	db, err := GetDB()
+	if err != nil {
+		return err
+	}
+	defer db.Session.Close()
+
+	count, err := db.C("Carts").Find(bson.M{
+		"userID": id,
+	}).Count()
+	if err != nil {
+		return err
+	}
+	if count == 0 {
+		cart := dbmodel.InitialCart(id)
+		RegisCart(cart)
+	}
+	return nil
+}
+
+func RemoveMeat(id bson.ObjectId, meatID bson.ObjectId) error {
+	db, err := GetDB()
+	if err != nil {
+		return err
+	}
+	defer db.Session.Close()
+
+	err = db.C("Carts").Update(bson.M{
+		"userID": id,
+	},
+		bson.M{
+			"$pull": bson.M{
+				"meats": bson.M{
+					"meat": meatID,
+				},
+			},
+		})
 	if err != nil {
 		return err
 	}

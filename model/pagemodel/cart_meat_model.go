@@ -5,6 +5,7 @@ type CartMeatModel struct {
 	Pic      string
 	ProName  string
 	Price    float64
+	Discount float64
 	Quantity int
 	Total    float64
 }

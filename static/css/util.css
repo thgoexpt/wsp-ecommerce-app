@@ -4137,3 +4137,11 @@ RESPONSIVE  RESPONSIVE  RESPONSIVE  RESPONSIVE   RESPONSIVE
 		width: 100%;
 	}
 }
+
+.oldPrice {
+	text-decoration: line-through;
+}
+
+.newPrice {
+	color: rgb(255, 68, 68);
+}
