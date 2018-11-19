@@ -18,8 +18,12 @@ User can sees product
     Element Text Should Be    id:product-in-cart-name   ${PRODUCT_NAME}
 
 *** Test Cases ***
-Test sort item by price(low to high) on PC
+Test add product to cart PC
     User opens a home page on PC
+    User opens a login page on PC
+    User types valid username
+    User types valid password
+    User clicks login button
     User opens a product page
     Wait Until Element Is Visible    alertBox    30
     User select product
