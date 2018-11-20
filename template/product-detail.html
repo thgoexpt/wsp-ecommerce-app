@@ -77,17 +77,17 @@
 				</h4>
 
 				{{if gt .Discount 0.0}}
-					<span class="m-text17 oldPrice">
-						${{printf "%.2f" .Price}}
-					</span>
-					&nbsp
-					<span class="m-text17 newPrice">
-						${{printf "%.2f" .Discount}}
-					</span>
+				<span class="m-text17 oldPrice">
+					${{printf "%.2f" .Price}}
+				</span>
+				&nbsp
+				<span class="m-text17 newPrice">
+					${{printf "%.2f" .Discount}}
+				</span>
 				{{else}}
-					<span class="m-text17">
-						${{printf "%.2f" .Price}}
-					</span>
+				<span class="m-text17">
+					${{printf "%.2f" .Price}}
+				</span>
 				{{end}}
 
 				<div class="p-t-33 p-b-60">
@@ -252,7 +252,7 @@
 		$('.btn-addcart-product-detail').each(function () {
 			var nameProduct = $('.product-detail-name').html();
 			$(this).on('click', function () {
-				swal(nameProduct, "is added to wishlist !", "success");
+				swal(nameProduct, "is added to cart !", "success");
 			});
 		});
 	</script>
