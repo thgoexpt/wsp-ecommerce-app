@@ -19,7 +19,7 @@ var ChickWing, _ = dbmodel.MakeMeat("Chick's Wing", "Chicken", "D", "Chick's Mea
 const SortPrice = "price"
 const SortPriceReverse = "-price"
 
-var perProductPage = 10
+var perProductPage = 12
 var perHomePage = 8
 
 func MockMeat() {
@@ -143,18 +143,18 @@ func GetMeatsPaging(limit, page int) ([]dbmodel.Meat, error) {
 }
 
 func SortType(meattype, sorting string) ([]dbmodel.Meat, error) {
-	return SearchSort("", meattype, 0, -1, sorting, 10, 1)
+	return SearchSort("", meattype, 0, -1, sorting, perProductPage, 1)
 }
 func SortTypePaging(meattype string, page int, sorting string) ([]dbmodel.Meat, error) {
-	return SearchSort("", meattype, 0, -1, sorting, 10, page)
+	return SearchSort("", meattype, 0, -1, sorting, perProductPage, page)
 }
 
 func Search(name string, startPrice, endPrice float64, sorting string) ([]dbmodel.Meat, error) {
-	return SearchSort(name, "", startPrice, endPrice, sorting, 10, 1)
+	return SearchSort(name, "", startPrice, endPrice, sorting, perProductPage, 1)
 }
 
 func SearchPaging(name string, startPrice, endPrice float64, sorting string, page int) ([]dbmodel.Meat, error) {
-	return SearchSort(name, "", startPrice, endPrice, sorting, 10, page)
+	return SearchSort(name, "", startPrice, endPrice, sorting, perProductPage, page)
 }
 
 func SearchSort(name, meattype string, startPrice, endPrice float64, sorting string, limit, page int) ([]dbmodel.Meat, error) {
@@ -330,7 +330,7 @@ func GetSaleMeat(limit, page int) ([]dbmodel.Meat, error) {
 		},
 	})
 
-	err = query.Limit(limit).Skip((page - 1) * limit).Sort("price").Iter().All(&saleMeats)
+	err = query.Limit(limit).Skip((page - 1) * limit).Sort("discount").Iter().All(&saleMeats)
 	if err != nil {
 		return []dbmodel.Meat{}, err
 	}
