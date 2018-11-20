@@ -289,7 +289,7 @@ func Product(w http.ResponseWriter, r *http.Request, v *middleware.ValueMap) {
 	)
 
 	v.Set("next", false)
-	meats, err := db.GetAllMeats()
+	meats, err := db.GetMeatsPaging(db.GetPerProductPage(), model.Page)
 	if err != nil {
 		// meats = []dbmodel.Meat{}
 		v.Set("warning", "Product: unable to get all meats >> "+err.Error())
