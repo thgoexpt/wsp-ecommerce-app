@@ -495,7 +495,6 @@ func ProductStock(w http.ResponseWriter, r *http.Request, v *middleware.ValueMap
 		return
 	}
 
-
 	model := pagemodel.Stock{
 		Menu:  header,
 		Meats: []pagemodel.MeatModel{},
@@ -870,5 +869,5 @@ func RemoveMeatFromCart(w http.ResponseWriter, r *http.Request, v *middleware.Va
 		v.Set("warning", "cart_rm: can't rm meat from cart >> "+err.Error())
 		return
 	}
-	v.Set("success", "Successfully rm meat from cart.")
+	v.Set("success", "Successfully remove meat from cart.")
 }
