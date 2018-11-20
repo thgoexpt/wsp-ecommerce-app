@@ -116,7 +116,7 @@ func GetAllMeatsNoFilter() ([]dbmodel.Meat, error) {
 }
 
 func GetAllMeats() ([]dbmodel.Meat, error) {
-	return GetMeatsPaging(0, 1)
+	return GetMeatsPaging(perProductPage, 1)
 }
 
 func GetMeatsPaging(limit, page int) ([]dbmodel.Meat, error) {
