@@ -179,7 +179,7 @@ func ProceedCheckout(w http.ResponseWriter, r *http.Request, v *middleware.Value
 	if !ok {
 		header = defaultHeader
 	}
-	cart, err := db.GetCart(header.User)
+	cart, err := db.GetCartID(header.UserID)
 	if err != nil {
 		v.Set("warning", "error: "+err.Error())
 		v.Set("next", true)
@@ -230,7 +230,7 @@ func AddCart(w http.ResponseWriter, r *http.Request, v *middleware.ValueMap) {
 		}
 		quantity := int(quantity64)
 
-		user, err := db.GetUserFromName(header.User)
+		user, err := db.GetUser(header.UserID)
 		if err != nil {
 			fmt.Println("Get User From Name Error! >> " + err.Error())
 			// w.WriteHeader(http.StatusNotFound)
@@ -239,6 +239,7 @@ func AddCart(w http.ResponseWriter, r *http.Request, v *middleware.ValueMap) {
 		}
 
 		db.UpdateCart(user.ID, bson.ObjectIdHex(vars["meatId"]), quantity)
+		v.Set("success", "successfully add to cart!")
 	} else {
 		v.Set("warning", "AddCart: login before add cart!")
 	}
@@ -272,6 +273,7 @@ func UpdateCart(w http.ResponseWriter, r *http.Request, v *middleware.ValueMap) 
 			v.Set("warning", "UpdateCart: unable to update cart >> "+err.Error())
 			return
 		}
+		v.Set("success", "successfully update cart!")
 	}
 }
 

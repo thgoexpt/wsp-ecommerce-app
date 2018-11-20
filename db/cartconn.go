@@ -115,6 +115,14 @@ func UpdateCart(userID, meat bson.ObjectId, quantity int) error {
 	}
 	defer db.Session.Close()
 
+	permission, err := IsQuantityAllow(meat, quantity)
+	if err != nil {
+		return errors.New("unable to check quantity:: " + err.Error())
+	}
+	if !permission {
+		return errors.New("does not have enough quantity in inventory")
+	}
+
 	cartMeat := dbmodel.CartMeats{
 		ID:       meat,
 		Quantity: quantity,
