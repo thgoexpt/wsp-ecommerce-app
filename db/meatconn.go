@@ -337,3 +337,11 @@ func GetSaleMeat(limit, page int) ([]dbmodel.Meat, error) {
 
 	return saleMeats, nil
 }
+
+func GetPerProductPage() int {
+	return perProductPage
+}
+
+func GetPerHomePage() int {
+	return perHomePage
+}
