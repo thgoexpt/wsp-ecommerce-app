@@ -128,17 +128,17 @@ func CommitSalesHistory(c dbmodel.Cart) error {
 
 func MakeHistory(c dbmodel.Cart) (dbmodel.SalesHistory, error) {
 	history := dbmodel.SalesHistory{
-		Time: time.Now(),
-		User: c.UserID,
+		Time:           time.Now(),
+		User:           c.UserID,
 		TrackingNumber: fmt.Sprintf("EA%09dTH", rand.Intn(1000000000)),
-		Meats: []dbmodel.Meats{},
-		Price: 0.00,
+		Meats:          []dbmodel.Meats{},
+		Price:          0.00,
 	}
 
 	for _, v := range c.Meats {
 		meatObj := dbmodel.Meats{
-			Meat:v.ID,
-			Quatity:v.Quantity,
+			Meat:    v.ID,
+			Quatity: v.Quantity,
 		}
 		history.Meats = append(history.Meats, meatObj)
 		meat, err := GetMeat(v.ID.Hex())
