@@ -8,8 +8,28 @@ import (
 )
 
 var mockUserID = bson.ObjectIdHex("c8eccf23ec86cef2dc20b97e")
-var mockMeatID = bson.ObjectIdHex("73cad0cd912f21387873132b")
-var mockMeatID2 = bson.ObjectIdHex("d7fffd5cea0895fdb1e19208")
+
+var mockMeatID bson.ObjectId
+var mockMeatID2 bson.ObjectId
+
+var mockMeat, _ = dbmodel.MakeMeat("MockMeat1", "Other", "A", "This is a mockery!", 18, -1, 50, TestTime, ".png")
+var mockMeat2, _ = dbmodel.MakeMeat("MockMeat2", "Other", "B", "I'm just a copy! hump!", 15, 10, 45, TestTime2, ".jpg")
+
+func ResetCartTest() {
+	db, err := GetDB()
+	if err != nil {
+		panic("cannot connect to db")
+	}
+	defer db.Session.Close()
+
+	RegisMeat(mockMeat)
+	RegisMeat(mockMeat2)
+
+	mockMeatIDStr, _ := GetMeatId(mockMeat)
+	mockMeatID2Str, _ := GetMeatId(mockMeat2)
+	mockMeatID = bson.ObjectIdHex(mockMeatIDStr)
+	mockMeatID2 = bson.ObjectIdHex(mockMeatID2Str)
+}
 
 func RemoveMockCart() {
 	db, err := GetDB()
@@ -19,16 +39,20 @@ func RemoveMockCart() {
 	defer db.Session.Close()
 
 	db.C("Carts").Remove(bson.M{"userID": mockUserID})
+
+	db.C("Meats").Remove(mockMeat)
+	db.C("Meats").Remove(mockMeat2)
 }
 
 func TestRegisCart(t *testing.T) {
+	ResetCartTest()
 	cart := dbmodel.InitialCart(mockUserID)
 	meatQty := 3
 
 	cart.SetMeat(mockMeatID, meatQty)
 	meatVal := cart.GetQuantity(mockMeatID)
 	if meatQty != meatVal {
-		t.Errorf("expected meat qty: %d, but get: %d", meatQty, meatVal)
+		t.Errorf("expected set meat qty: %d, but get: %d", meatQty, meatVal)
 	}
 
 	RegisCart(cart)
@@ -46,6 +70,7 @@ func TestRegisCart(t *testing.T) {
 }
 
 func TestUpdateCart(t *testing.T) {
+	ResetCartTest()
 	// cart := dbmodel.InitialCart(mockUserID)
 	qty := 5
 	qty2 := 6
@@ -84,6 +109,7 @@ func TestUpdateCart(t *testing.T) {
 }
 
 func TestUpdateAfterRegisCart(t *testing.T) {
+	ResetCartTest()
 	cart := dbmodel.InitialCart(mockUserID)
 	meatQty := 4
 	meatQty2 := 10
@@ -91,7 +117,10 @@ func TestUpdateAfterRegisCart(t *testing.T) {
 	cart.SetMeat(mockMeatID, meatQty)
 	RegisCart(cart)
 
-	UpdateCart(mockUserID, mockMeatID, meatQty2)
+	err := UpdateCart(mockUserID, mockMeatID, meatQty2)
+	if err != nil {
+		t.Errorf("UpdateCart error :" + err.Error())
+	}
 
 	dbCart, _ := GetCartID(mockUserID)
 	dbVal := dbCart.GetQuantity(mockMeatID)
