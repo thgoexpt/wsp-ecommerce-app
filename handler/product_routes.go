@@ -159,8 +159,9 @@ func ProductSearchPaging(w http.ResponseWriter, r *http.Request, v *middleware.V
 }
 
 func PrepareProductPageModel(header pagemodel.Menu, oldLink string, productCount int, page int) pagemodel.Product {
-	pageCount := productCount / 10
-	if productCount%10 > 0 {
+	perPage := 12
+	pageCount := productCount / perPage
+	if productCount%perPage > 0 {
 		pageCount++
 	}
 
