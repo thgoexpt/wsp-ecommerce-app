@@ -71,24 +71,6 @@ func ClearCard(id bson.ObjectId) error {
 	return nil
 }
 
-func GetCart(userName string) (dbmodel.Cart, error) {
-	db, err := GetDB()
-	if err != nil {
-		return dbmodel.Cart{}, err
-	}
-	defer db.Session.Close()
-
-	user, err := GetUserFromName(userName)
-	err = CheckCartExist(user.ID)
-	if err != nil {
-		return dbmodel.Cart{}, err
-	}
-	if err != nil {
-		return dbmodel.Cart{}, errors.New("Unable to find user")
-	}
-	return GetCartID(user.ID)
-}
-
 func GetCartID(id bson.ObjectId) (dbmodel.Cart, error) {
 	db, err := GetDB()
 	if err != nil {
@@ -114,6 +96,14 @@ func UpdateCart(userID, meat bson.ObjectId, quantity int) error {
 		return err
 	}
 	defer db.Session.Close()
+
+	permission, err := IsQuantityAllow(meat, quantity)
+	if err != nil {
+		return errors.New("unable to check quantity:: " + err.Error())
+	}
+	if !permission {
+		return errors.New("does not have enough quantity in inventory")
+	}
 
 	cartMeat := dbmodel.CartMeats{
 		ID:       meat,

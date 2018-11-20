@@ -345,3 +345,17 @@ func GetPerProductPage() int {
 func GetPerHomePage() int {
 	return perHomePage
 }
+
+func IsQuantityAllow(meat bson.ObjectId, quantity int) (bool, error) {
+	db, err := GetDB()
+	if err != nil {
+		return false, err
+	}
+	defer db.Session.Close()
+
+	meatObject, err := GetMeat(meat.Hex())
+	if err != nil {
+		return false, err
+	}
+	return meatObject.Quantity >= quantity, nil
+}
