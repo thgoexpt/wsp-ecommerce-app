@@ -17,10 +17,7 @@ type Menu struct {
 }
 
 func (m Menu) IsPermissable() bool {
-	if m.UserType == dbmodel.TypeEmployee || m.UserType == dbmodel.TypeOwner {
-		return true
-	}
-	return false
+	return m.UserType == dbmodel.TypeEmployee || m.UserType == dbmodel.TypeOwner
 }
 
 func (m Menu) CountCart() int {

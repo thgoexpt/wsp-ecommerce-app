@@ -16,10 +16,6 @@ func ProductPaging(w http.ResponseWriter, r *http.Request, v *middleware.ValueMa
 		header = defaultHeader
 	}
 
-	// model := pagemodel.Product{
-	// 	Menu:  header,
-	// 	Meats: []pagemodel.MeatModel{},
-	// }
 	vars := mux.Vars(r)
 
 	page := 1
@@ -39,7 +35,7 @@ func ProductPaging(w http.ResponseWriter, r *http.Request, v *middleware.ValueMa
 	)
 
 	v.Set("next", false)
-	meats, err := db.GetAllMeats()
+	meats, err := db.GetMeatsPaging(db.GetPerProductPage(), model.Page)
 	if err != nil {
 		// meats = []dbmodel.Meat{}
 		v.Set("warning", "Product: unable to get all meats >> "+err.Error())
@@ -60,10 +56,6 @@ func ProductSortTypePaging(w http.ResponseWriter, r *http.Request, v *middleware
 		header = defaultHeader
 	}
 
-	// model := pagemodel.Product{
-	// 	Menu:  header,
-	// 	Meats: []pagemodel.MeatModel{},
-	// }
 	vars := mux.Vars(r)
 
 	page := 1
@@ -104,11 +96,6 @@ func ProductSearchPaging(w http.ResponseWriter, r *http.Request, v *middleware.V
 	if !ok {
 		header = defaultHeader
 	}
-
-	// model := pagemodel.Product{
-	// 	Menu:  header,
-	// 	Meats: []pagemodel.MeatModel{},
-	// }
 
 	vars := mux.Vars(r)
 
@@ -159,15 +146,11 @@ func ProductSearchPaging(w http.ResponseWriter, r *http.Request, v *middleware.V
 }
 
 func PrepareProductPageModel(header pagemodel.Menu, oldLink string, productCount int, page int) pagemodel.Product {
-	pageCount := productCount / 10
-	if productCount%10 > 0 {
+	perPage := db.GetPerProductPage()
+	pageCount := productCount / perPage
+	if productCount%perPage > 0 {
 		pageCount++
 	}
-
-	// var count []int
-	// for i := 1; i <= len(count); i++ {
-	// 	count[i] = i
-	// }
 
 	return pagemodel.Product{
 		Menu:      header,
