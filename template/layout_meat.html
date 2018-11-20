@@ -9,14 +9,10 @@
             <img src="{{.Pic}}" alt="IMG-PRODUCT">
 
             <div class="block2-overlay trans-0-4">
-                <a href="#" class="block2-btn-addwishlist hov-pointer trans-0-4">
-                    <i class="icon-wishlist icon_heart_alt" aria-hidden="true"></i>
-                    <i class="icon-wishlist icon_heart dis-none" aria-hidden="true"></i>
-                </a>
-
                 <div class="block2-btn-addcart w-size1 trans-0-4">
                     <!-- Button -->
-                    <button class="flex-c-m size1 bg4 bo-rad-23 hov1 s-text1 trans-0-4 addCart" value="{{.ID}}"  type="submit" id="product-add-button">
+                    <button class="flex-c-m size1 bg4 bo-rad-23 hov1 s-text1 trans-0-4 addCart" value="{{.ID}}" type="submit"
+                        id="product-add-button">
                         Add to Cart
                     </button>
                 </div>
@@ -29,17 +25,17 @@
             </a>
 
             {{if gt .Discount 0.0}}
-                <span class="block2-oldprice m-text7 p-r-5">
-                    ${{printf "%.2f" .Price}}
-                </span>
+            <span class="block2-oldprice m-text7 p-r-5">
+                ${{printf "%.2f" .Price}}
+            </span>
 
-                <span class="block2-newprice m-text8 p-r-5" id="product-price">
-                    ${{printf "%.2f" .Discount}}
-                </span>
+            <span class="block2-newprice m-text8 p-r-5" id="product-price">
+                ${{printf "%.2f" .Discount}}
+            </span>
             {{else}}
-                <span class="block2-price m-text6 p-r-5" id="product-price">
-                    ${{printf "%.2f" .Price}}
-                </span>
+            <span class="block2-price m-text6 p-r-5" id="product-price">
+                ${{printf "%.2f" .Price}}
+            </span>
             {{end}}
         </div>
     </div>
