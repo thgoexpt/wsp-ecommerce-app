@@ -826,6 +826,7 @@ func SaleHistory(w http.ResponseWriter, r *http.Request, v *middleware.ValueMap)
 	sh, err := db.GetUserSalesHistory(header.UserID)
 	if err != nil {
 		w.WriteHeader(http.StatusInternalServerError)
+		w.Write([]byte(err.Error()))
 		return
 	}
 
@@ -836,6 +837,7 @@ func SaleHistory(w http.ResponseWriter, r *http.Request, v *middleware.ValueMap)
 	model, err := pagemodel.ToSalesHistoryPageModel(sh, header)
 	if err != nil {
 		w.WriteHeader(http.StatusInternalServerError)
+		w.Write([]byte(err.Error()))
 		return
 	}
 
