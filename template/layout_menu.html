@@ -33,6 +33,16 @@
                 <li>
                     <a href="/contact/" id="Contact-BTN-Bar">Contact</a>
                 </li>
+                {{if ge .UserType 4}}
+                <li class="sale-noti">
+                    <a style="color: tomato">Admin Action</a>
+                    <ul class="sub_menu">
+                        <li><a href="/add_meat/">Add Product</a></li>
+                        <li><a href="/product-stock/">Stock</a></li>
+                        <li><a href="/sales_history/">Sales History</a></li>
+                    </ul>
+                </li>
+                {{end}}
             </ul>
         </nav>
     </div>
@@ -251,7 +261,7 @@
                         </li>
 
                         <li class="item-menu-mobile">
-                            <a href="/product/" id="Sale-BTN-Mobile">Sale</a>
+                            <a href="/product/sale/" id="Sale-BTN-Mobile">Sale</a>
                         </li>
 
                         <li class="item-menu-mobile">
