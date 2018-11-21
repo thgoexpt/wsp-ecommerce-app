@@ -51,7 +51,7 @@ func main() {
 
 	r.Handle("/product-stock/", handlePage(handler.ProductStock))
 
-	r.Handle("/sale-history/", handlePage(handler.SaleHistory))
+	r.Handle("/sales-history/", handlePage(handler.SaleHistory))
 
 	r.Handle("/checkout/", handlePage(handler.Checkout)).Methods("GET")
 

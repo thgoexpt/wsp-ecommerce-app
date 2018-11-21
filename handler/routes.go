@@ -170,6 +170,19 @@ func Checkout(w http.ResponseWriter, r *http.Request, v *middleware.ValueMap) {
 		Menu: header,
 	}
 
+	cart, err := db.GetCartID(header.UserID)
+	if err != nil {
+		model.Warning = err.Error()
+		t.ExecuteTemplate(w, "home.html", model)
+		return
+	}
+
+	if len(cart.Meats) == 0 {
+		model.Warning = "the cart is empty"
+		t.ExecuteTemplate(w, "home.html", model)
+		return
+	}
+
 	v.Set("next", false)
 	t.ExecuteTemplate(w, "checkout.html", model)
 }
@@ -179,7 +192,7 @@ func ProceedCheckout(w http.ResponseWriter, r *http.Request, v *middleware.Value
 	if !ok {
 		header = defaultHeader
 	}
-	cart, err := db.GetCart(header.User)
+	cart, err := db.GetCartID(header.UserID)
 	if err != nil {
 		v.Set("warning", "error: "+err.Error())
 		v.Set("next", true)
@@ -230,7 +243,7 @@ func AddCart(w http.ResponseWriter, r *http.Request, v *middleware.ValueMap) {
 		}
 		quantity := int(quantity64)
 
-		user, err := db.GetUserFromName(header.User)
+		user, err := db.GetUser(header.UserID)
 		if err != nil {
 			fmt.Println("Get User From Name Error! >> " + err.Error())
 			// w.WriteHeader(http.StatusNotFound)
@@ -239,6 +252,7 @@ func AddCart(w http.ResponseWriter, r *http.Request, v *middleware.ValueMap) {
 		}
 
 		db.UpdateCart(user.ID, bson.ObjectIdHex(vars["meatId"]), quantity)
+		v.Set("success", "successfully add to cart!")
 	} else {
 		v.Set("warning", "AddCart: login before add cart!")
 	}
@@ -272,6 +286,7 @@ func UpdateCart(w http.ResponseWriter, r *http.Request, v *middleware.ValueMap) 
 			v.Set("warning", "UpdateCart: unable to update cart >> "+err.Error())
 			return
 		}
+		v.Set("success", "successfully update cart!")
 	}
 }
 
@@ -289,7 +304,7 @@ func Product(w http.ResponseWriter, r *http.Request, v *middleware.ValueMap) {
 	)
 
 	v.Set("next", false)
-	meats, err := db.GetAllMeats()
+	meats, err := db.GetMeatsPaging(db.GetPerProductPage(), model.Page)
 	if err != nil {
 		// meats = []dbmodel.Meat{}
 		v.Set("warning", "Product: unable to get all meats >> "+err.Error())
@@ -824,6 +839,7 @@ func SaleHistory(w http.ResponseWriter, r *http.Request, v *middleware.ValueMap)
 	sh, err := db.GetUserSalesHistory(header.UserID)
 	if err != nil {
 		w.WriteHeader(http.StatusInternalServerError)
+		w.Write([]byte(err.Error()))
 		return
 	}
 
@@ -834,6 +850,7 @@ func SaleHistory(w http.ResponseWriter, r *http.Request, v *middleware.ValueMap)
 	model, err := pagemodel.ToSalesHistoryPageModel(sh, header)
 	if err != nil {
 		w.WriteHeader(http.StatusInternalServerError)
+		w.Write([]byte(err.Error()))
 		return
 	}
 
