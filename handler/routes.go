@@ -187,6 +187,9 @@ func ProceedCheckout(w http.ResponseWriter, r *http.Request, v *middleware.Value
 	}
 
 	err = db.CommitSalesHistory(cart)
+	for _, cartMeat := range cart.Meats {
+		db.SoldMeat(cartMeat.ID, cartMeat.Quantity)
+	}
 
 	v.Set("next", false)
 	if err != nil {
@@ -411,6 +414,7 @@ func ProductDetail(w http.ResponseWriter, r *http.Request, v *middleware.ValueMa
 		return
 	}
 	model.MeatModel = GetMeatModel(meat)
+	db.ViewMeat(meat.ID)
 
 	t.ExecuteTemplate(w, "product-detail.html", model)
 }
@@ -841,20 +845,6 @@ func SaleHistory(w http.ResponseWriter, r *http.Request, v *middleware.ValueMap)
 
 	v.Set("next", false)
 	t.ExecuteTemplate(w, "sale-history.html", model)
-}
-
-func Owner(w http.ResponseWriter, r *http.Request, v *middleware.ValueMap) {
-	header, ok := v.Get("header").(pagemodel.Menu)
-	if !ok {
-		header = defaultHeader
-	}
-
-	model := pagemodel.Stock{
-		Menu: header,
-	}
-
-	v.Set("next", false)
-	t.ExecuteTemplate(w, "owner.html", model)
 }
 
 func RemoveMeatFromCart(w http.ResponseWriter, r *http.Request, v *middleware.ValueMap) {
