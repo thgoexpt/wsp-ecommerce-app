@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"github.com/guitarpawat/wsp-ecommerce/db"
 	"github.com/guitarpawat/wsp-ecommerce/model/dbmodel"
+	"github.com/pkg/errors"
 	"log"
 	"time"
 )
@@ -29,7 +30,7 @@ func ToSalesHistoryPageModel(sh []dbmodel.SalesHistory, menu Menu) (SalesHistory
 	for _, v := range sh {
 		shm, err := ToSalesHistoryModel(v)
 		if err != nil {
-			return SalesHistoryPageModel{}, err
+			return SalesHistoryPageModel{}, errors.New(err.Error() + ":" + v.ID.String())
 		}
 
 		*shms = append(*shms, shm)
@@ -46,7 +47,10 @@ func ToSalesHistoryModel(sh dbmodel.SalesHistory) (SalesHistoryModel, error) {
 	for _, v := range sh.Meats {
 		meat, err := db.GetMeat(v.Meat.Hex())
 		if err != nil {
-			return SalesHistoryModel{}, err
+			meat = dbmodel.Meat{
+				Name:  "<Unknown>",
+				Grade: "?",
+			}
 		}
 		shm.Meats[meat] = v.Quatity
 	}

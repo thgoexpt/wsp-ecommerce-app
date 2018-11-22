@@ -56,6 +56,14 @@
   revision = "7fe79abc1e2e12d04f00c3a0031a6f6379d0bdee"
 
 [[projects]]
+  digest = "1:40e195917a951a8bf867cd05de2a46aaf1806c50cf92eebf4c16f78cd196f747"
+  name = "github.com/pkg/errors"
+  packages = ["."]
+  pruneopts = "UT"
+  revision = "645ef00459ed84a119197bfb8d8205042c6df63d"
+  version = "v0.8.0"
+
+[[projects]]
   branch = "master"
   digest = "1:1ecf2a49df33be51e757d0033d5d51d5f784f35f68e5a38f797b2d3f03357d71"
   name = "golang.org/x/crypto"
@@ -75,6 +83,7 @@
     "github.com/gorilla/mux",
     "github.com/gorilla/sessions",
     "github.com/guitarpawat/middleware",
+    "github.com/pkg/errors",
     "golang.org/x/crypto/bcrypt",
   ]
   solver-name = "gps-cdcl"

@@ -170,6 +170,19 @@ func Checkout(w http.ResponseWriter, r *http.Request, v *middleware.ValueMap) {
 		Menu: header,
 	}
 
+	cart, err := db.GetCartID(header.UserID)
+	if err != nil {
+		model.Warning = err.Error()
+		t.ExecuteTemplate(w, "home.html", model)
+		return
+	}
+
+	if len(cart.Meats) == 0 {
+		model.Warning = "the cart is empty"
+		t.ExecuteTemplate(w, "home.html", model)
+		return
+	}
+
 	v.Set("next", false)
 	t.ExecuteTemplate(w, "checkout.html", model)
 }
@@ -830,6 +843,7 @@ func SaleHistory(w http.ResponseWriter, r *http.Request, v *middleware.ValueMap)
 	sh, err := db.GetUserSalesHistory(header.UserID)
 	if err != nil {
 		w.WriteHeader(http.StatusInternalServerError)
+		w.Write([]byte(err.Error()))
 		return
 	}
 
@@ -840,6 +854,7 @@ func SaleHistory(w http.ResponseWriter, r *http.Request, v *middleware.ValueMap)
 	model, err := pagemodel.ToSalesHistoryPageModel(sh, header)
 	if err != nil {
 		w.WriteHeader(http.StatusInternalServerError)
+		w.Write([]byte(err.Error()))
 		return
 	}
 
