@@ -862,6 +862,43 @@ func SaleHistory(w http.ResponseWriter, r *http.Request, v *middleware.ValueMap)
 	t.ExecuteTemplate(w, "sale-history.html", model)
 }
 
+func Owner(w http.ResponseWriter, r *http.Request, v *middleware.ValueMap) {
+	header, ok := v.Get("header").(pagemodel.Menu)
+	if !ok {
+		header = defaultHeader
+	}
+	v.Set("next", false)
+
+	if header.UserType != dbmodel.TypeEmployee && header.UserType != dbmodel.TypeOwner {
+		w.WriteHeader(http.StatusForbidden)
+		return
+	}
+
+	model := pagemodel.Owner{
+		Menu:     header,
+		SoldMeat: []pagemodel.CartMeatModel{},
+	}
+
+	soldMeat, err := db.GetSoldMeats()
+	if err != nil {
+		v.Set("warning", "Owner: unable to get data >> "+err.Error())
+		t.ExecuteTemplate(w, "owner.html", model)
+		return
+	}
+	for _, meatState := range soldMeat {
+		meat, err := db.GetMeat(meatState.Meat.Hex())
+		if err != nil {
+			v.Set("warning", "Owner: unable to get meat >> "+err.Error())
+			t.ExecuteTemplate(w, "owner.html", model)
+			return
+		}
+		soldMeatModel := GetCartMeatModel(meat, meatState.Sold)
+		model.SoldMeat = append(model.SoldMeat, soldMeatModel)
+	}
+
+	t.ExecuteTemplate(w, "owner.html", model)
+}
+
 func RemoveMeatFromCart(w http.ResponseWriter, r *http.Request, v *middleware.ValueMap) {
 	header, ok := v.Get("header").(pagemodel.Menu)
 	if !ok {
