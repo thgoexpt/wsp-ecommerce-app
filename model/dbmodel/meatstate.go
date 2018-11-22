@@ -6,15 +6,15 @@ import (
 
 type MeatState struct {
 	ID    bson.ObjectId `bson:"_id,omitempty"`
-	Meats bson.ObjectId `bson:"meat"`
+	Meat  bson.ObjectId `bson:"meat"`
 	Views int           `bson:"views"`
-	Solds int           `bson:"solds"`
+	Sold  int           `bson:"sold"`
 }
 
 func CreateMeatState(meat bson.ObjectId) MeatState {
 	return MeatState{
-		Meats: meat,
+		Meat:  meat,
 		Views: 0,
-		Solds: 0,
+		Sold:  0,
 	}
 }

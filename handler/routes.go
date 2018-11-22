@@ -248,7 +248,7 @@ func AddCart(w http.ResponseWriter, r *http.Request, v *middleware.ValueMap) {
 
 		user, err := db.GetUser(header.UserID)
 		if err != nil {
-			fmt.Println("Get User From Name Error! >> " + err.Error())
+			fmt.Println("Get User From ID Error! >> " + err.Error())
 			// w.WriteHeader(http.StatusNotFound)
 			v.Set("warning", "AddCart: unable to find user >> "+err.Error())
 			return

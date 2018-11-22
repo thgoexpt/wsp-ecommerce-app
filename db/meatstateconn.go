@@ -22,19 +22,23 @@ func RegisMeatState(meat bson.ObjectId) error {
 	return nil
 }
 
-func GetMeatState(meat bson.ObjectId) (*dbmodel.MeatState, error) {
+func GetSoldMeats() ([]dbmodel.MeatState, error) {
 	db, err := GetDB()
 	if err != nil {
 		panic("cannot connect to db")
 	}
 	defer db.Session.Close()
 
-	meatState := dbmodel.MeatState{}
-	err = db.C("MeatState").Find(bson.M{"meat": meat}).One(&meatState)
+	meatState := []dbmodel.MeatState{}
+	err = db.C("MeatState").Find(bson.M{
+		"sold": bson.M{
+			"$gt": 0,
+		},
+	}).Sort("-sold").All(&meatState)
 	if err != nil {
 		return nil, err
 	}
-	return &meatState, nil
+	return meatState, nil
 }
 
 func checkMeatStateExist(db *mgo.Database, meat bson.ObjectId) error {
@@ -77,7 +81,7 @@ func SoldMeat(meat bson.ObjectId, sold int) error {
 
 	err = db.C("MeatState").Update(bson.M{"meat": meat}, bson.M{
 		"$inc": bson.M{
-			"solds": sold,
+			"sold": sold,
 		},
 	})
 	return err

@@ -16,8 +16,12 @@ type Menu struct {
 	CartTotal      float64
 }
 
-func (m Menu) IsPermissable() bool {
-	return m.UserType == dbmodel.TypeEmployee || m.UserType == dbmodel.TypeOwner
+func (m Menu) IsAdmin() bool {
+	return m.UserType == dbmodel.TypeEmployee || m.IsOwner()
+}
+
+func (m Menu) IsOwner() bool {
+	return m.UserType == dbmodel.TypeOwner
 }
 
 func (m Menu) CountCart() int {
