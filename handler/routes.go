@@ -881,6 +881,7 @@ func Owner(w http.ResponseWriter, r *http.Request, v *middleware.ValueMap) {
 
 	soldMeat, err := db.GetSoldMeats()
 	if err != nil {
+		fmt.Println("not found")
 		v.Set("warning", "Owner: unable to get data >> "+err.Error())
 		t.ExecuteTemplate(w, "owner.html", model)
 		return
