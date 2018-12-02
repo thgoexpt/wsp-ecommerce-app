@@ -5,35 +5,67 @@ import (
 	"testing"
 )
 
-func TestMenu_IsPermissable_NonUser(t *testing.T) {
+func TestMenu_IsOwner_NonUser(t *testing.T) {
 	menu := Menu{}
 	expected := false
-	if expected != menu.IsPermissable() {
-		t.Errorf("expected: %t, but get: %t", expected, menu.IsPermissable())
+	if expected != menu.IsOwner() {
+		t.Errorf("expected: %t, but get: %t", expected, menu.IsOwner())
 	}
 }
 
-func TestMenu_IsPermissable_User(t *testing.T) {
+func TestMenu_IsOwner_User(t *testing.T) {
 	menu := Menu{UserType:dbmodel.TypeUser}
 	expected := false
-	if expected != menu.IsPermissable() {
-		t.Errorf("expected: %t, but get: %t", expected, menu.IsPermissable())
+	if expected != menu.IsOwner() {
+		t.Errorf("expected: %t, but get: %t", expected, menu.IsOwner())
 	}
 }
 
-func TestMenu_IsPermissable_Employee(t *testing.T) {
+func TestMenu_IsOwner_Employee(t *testing.T) {
 	menu := Menu{UserType:dbmodel.TypeEmployee}
-	expected := true
-	if expected != menu.IsPermissable() {
-		t.Errorf("expected: %t, but get: %t", expected, menu.IsPermissable())
+	expected := false
+	if expected != menu.IsOwner() {
+		t.Errorf("expected: %t, but get: %t", expected, menu.IsOwner())
 	}
 }
 
-func TestMenu_IsPermissable_Owner(t *testing.T) {
+func TestMenu_IsOwner_Owner(t *testing.T) {
 	menu := Menu{UserType:dbmodel.TypeOwner}
 	expected := true
-	if expected != menu.IsPermissable() {
-		t.Errorf("expected: %t, but get: %t", expected, menu.IsPermissable())
+	if expected != menu.IsOwner() {
+		t.Errorf("expected: %t, but get: %t", expected, menu.IsOwner())
+	}
+}
+
+func TestMenu_IsAdmin_NonUser(t *testing.T) {
+	menu := Menu{}
+	expected := false
+	if expected != menu.IsAdmin() {
+		t.Errorf("expected: %t, but get: %t", expected, menu.IsAdmin())
+	}
+}
+
+func TestMenu_IsAdmin_User(t *testing.T) {
+	menu := Menu{UserType:dbmodel.TypeUser}
+	expected := false
+	if expected != menu.IsAdmin() {
+		t.Errorf("expected: %t, but get: %t", expected, menu.IsAdmin())
+	}
+}
+
+func TestMenu_IsAdmin_Employee(t *testing.T) {
+	menu := Menu{UserType:dbmodel.TypeEmployee}
+	expected := true
+	if expected != menu.IsAdmin() {
+		t.Errorf("expected: %t, but get: %t", expected, menu.IsAdmin())
+	}
+}
+
+func TestMenu_IsAdmin_Owner(t *testing.T) {
+	menu := Menu{UserType:dbmodel.TypeOwner}
+	expected := true
+	if expected != menu.IsAdmin() {
+		t.Errorf("expected: %t, but get: %t", expected, menu.IsAdmin())
 	}
 }
 
