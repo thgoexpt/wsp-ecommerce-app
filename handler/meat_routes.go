@@ -7,7 +7,6 @@ import (
 	"time"
 
 	"github.com/globalsign/mgo/bson"
-	"github.com/gorilla/mux"
 	"github.com/guitarpawat/middleware"
 	"github.com/guitarpawat/wsp-ecommerce/db"
 	"github.com/guitarpawat/wsp-ecommerce/model/dbmodel"
@@ -52,36 +51,6 @@ func GetMeatModel(meat dbmodel.Meat) pagemodel.MeatModel {
 		Quantity:    meat.Quantity,
 		Total:       realPrice * float64(meat.Quantity),
 	}
-}
-
-func EditMeat(w http.ResponseWriter, r *http.Request, v *middleware.ValueMap) {
-	header, ok := v.Get("header").(pagemodel.Menu)
-	if !ok {
-		w.WriteHeader(http.StatusUnauthorized)
-		return
-	}
-
-	if header.UserType != dbmodel.TypeEmployee && header.UserType != dbmodel.TypeOwner {
-		w.WriteHeader(http.StatusForbidden)
-		return
-	}
-
-	model := pagemodel.MeatEdit{
-		Menu:  header,
-		State: pagemodel.EditMeatTxt,
-	}
-
-	vars := mux.Vars(r)
-	meat, err := db.GetMeat(vars["meatID"])
-	if err != nil {
-		v.Set("warning", "EditMeat: unable to get all meats >> "+err.Error())
-		t.ExecuteTemplate(w, "add-product.html", model)
-		return
-	}
-	model.MeatModel = GetMeatModel(meat)
-
-	v.Set("next", false)
-	t.ExecuteTemplate(w, "add-product.html", model)
 }
 
 func UpdateMeat(w http.ResponseWriter, r *http.Request, v *middleware.ValueMap) {
