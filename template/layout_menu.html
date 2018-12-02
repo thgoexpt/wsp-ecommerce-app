@@ -39,7 +39,9 @@
                     <ul class="sub_menu">
                         <li><a href="/add_meat/">Add Product</a></li>
                         <li><a href="/product-stock/">Stock</a></li>
-                        <li><a href="/sales_history/">Sales History</a></li>
+                        {{if .IsOwner}}
+                        <li><a href="/owner/">Owner</a></li>
+                        {{end}}
                     </ul>
                 </li>
                 {{end}}
@@ -148,13 +150,15 @@
                         <li>
                             <a href="/contact/" id="Contact-BTN">Contact</a>
                         </li>
-                        {{if ge .UserType 4}}
+                        {{if .IsAdmin}}
                         <li class="sale-noti">
                             <a style="color: tomato">Admin Action</a>
                             <ul class="sub_menu">
                                 <li><a href="/add_meat/">Add Product</a></li>
                                 <li><a href="/product-stock/">Stock</a></li>
-                                <li><a href="/sales_history/">Sales History</a></li>
+                                {{if .IsOwner}}
+                                <li><a href="/owner/">Owner</a></li>
+                                {{end}}
                             </ul>
                         </li>
                         {{end}}
@@ -276,13 +280,15 @@
                             <a href="/contact/" id="lastDropdownMenuItem">Contact</a>
                         </li>
 
-                        {{if ge .UserType 4}}
+                        {{if .IsAdmin}}
                         <li class="item-menu-mobile">
                             <a style="color: white">Admin Action</a>
                             <ul class="sub-menu">
                                 <li><a href="/add_meat/">Add Product</a></li>
                                 <li><a href="/product-stock/">Stock</a></li>
-                                <li><a href="/sales_history/">Sales History</a></li>
+                                {{if .IsOwner}}
+                                <li><a href="/owner/">Owner</a></li>
+                                {{end}}
                             </ul>
                             <i class="arrow-main-menu fa fa-angle-right" aria-hidden="true"></i>
                         </li>

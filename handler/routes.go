@@ -200,6 +200,9 @@ func ProceedCheckout(w http.ResponseWriter, r *http.Request, v *middleware.Value
 	}
 
 	err = db.CommitSalesHistory(cart)
+	for _, cartMeat := range cart.Meats {
+		db.SoldMeat(cartMeat.ID, cartMeat.Quantity)
+	}
 
 	v.Set("next", false)
 	if err != nil {
@@ -245,7 +248,7 @@ func AddCart(w http.ResponseWriter, r *http.Request, v *middleware.ValueMap) {
 
 		user, err := db.GetUser(header.UserID)
 		if err != nil {
-			fmt.Println("Get User From Name Error! >> " + err.Error())
+			fmt.Println("Get User From ID Error! >> " + err.Error())
 			// w.WriteHeader(http.StatusNotFound)
 			v.Set("warning", "AddCart: unable to find user >> "+err.Error())
 			return
@@ -424,6 +427,7 @@ func ProductDetail(w http.ResponseWriter, r *http.Request, v *middleware.ValueMa
 		return
 	}
 	model.MeatModel = GetMeatModel(meat)
+	db.ViewMeat(meat.ID)
 
 	t.ExecuteTemplate(w, "product-detail.html", model)
 }
@@ -863,12 +867,35 @@ func Owner(w http.ResponseWriter, r *http.Request, v *middleware.ValueMap) {
 	if !ok {
 		header = defaultHeader
 	}
+	v.Set("next", false)
 
-	model := pagemodel.Stock{
-		Menu: header,
+	if header.UserType != dbmodel.TypeEmployee && header.UserType != dbmodel.TypeOwner {
+		w.WriteHeader(http.StatusForbidden)
+		return
 	}
 
-	v.Set("next", false)
+	model := pagemodel.Owner{
+		Menu:     header,
+		SoldMeat: []pagemodel.CartMeatModel{},
+	}
+
+	soldMeat, err := db.GetSoldMeats()
+	if err != nil {
+		v.Set("warning", "Owner: unable to get data >> "+err.Error())
+		t.ExecuteTemplate(w, "owner.html", model)
+		return
+	}
+	for _, meatState := range soldMeat {
+		meat, err := db.GetMeat(meatState.Meat.Hex())
+		if err != nil {
+			v.Set("warning", "Owner: unable to get meat >> "+err.Error())
+			t.ExecuteTemplate(w, "owner.html", model)
+			return
+		}
+		soldMeatModel := GetCartMeatModel(meat, meatState.Sold)
+		model.SoldMeat = append(model.SoldMeat, soldMeatModel)
+	}
+
 	t.ExecuteTemplate(w, "owner.html", model)
 }
 
