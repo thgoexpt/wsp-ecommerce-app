@@ -1,10 +1,10 @@
-package handler
+package template
 
 import (
 	"html/template"
 )
 
-var t *template.Template
+var T *template.Template
 var e error
 
 func init() {
@@ -18,7 +18,7 @@ func init() {
 			return Items
 		},
 	}
-	t, e = template.New("default").Funcs(fm).ParseGlob("template/*")
+	T, e = template.New("default").Funcs(fm).ParseGlob("template/*")
 }
 
 func Validate() {
