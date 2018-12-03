@@ -35,12 +35,12 @@
                 </li>
                 {{if ge .UserType 4}}
                 <li class="sale-noti">
-                    <a style="color: tomato">Admin Action</a>
+                    <a style="color: tomato" id="adminAction-BTN-Bar">Admin Action</a>
                     <ul class="sub_menu">
-                        <li><a href="/add_meat/">Add Product</a></li>
-                        <li><a href="/product-stock/">Stock</a></li>
+                        <li><a href="/add_meat/" id="add-BTN-Bar">Add Product</a></li>
+                        <li><a href="/product-stock/" id="Stock-BTN-Bar">Stock</a></li>
                         {{if .IsOwner}}
-                        <li><a href="/owner/">Sales Report</a></li>
+                        <li><a href="/owner/" id="owner-BTN-Bar">Sales Report</a></li>
                         {{end}}
                     </ul>
                 </li>
@@ -152,12 +152,12 @@
                         </li>
                         {{if .IsAdmin}}
                         <li class="sale-noti">
-                            <a style="color: tomato">Admin Action</a>
+                            <a style="color: tomato" id="adminAction-BTN">Admin Action</a>
                             <ul class="sub_menu">
-                                <li><a href="/add_meat/">Add Product</a></li>
-                                <li><a href="/product-stock/">Stock</a></li>
+                                <li><a href="/add_meat/" id="add-BTN">Add Product</a></li>
+                                <li><a href="/product-stock/" id="stock-BTN">Stock</a></li>
                                 {{if .IsOwner}}
-                                <li><a href="/owner/">Sales Report</a></li>
+                                <li><a href="/owner/" id="owner-BTN">Sales Report</a></li>
                                 {{end}}
                             </ul>
                         </li>
@@ -282,12 +282,12 @@
 
                         {{if .IsAdmin}}
                         <li class="item-menu-mobile">
-                            <a style="color: white">Admin Action</a>
+                            <a style="color: white" id="adminAction-BTN-Mobile">Admin Action</a>
                             <ul class="sub-menu">
-                                <li><a href="/add_meat/">Add Product</a></li>
-                                <li><a href="/product-stock/">Stock</a></li>
+                                <li><a href="/add_meat/" id="add-BTN-Mobile">Add Product</a></li>
+                                <li><a href="/product-stock/" id="stock-BTN-Mobile">Stock</a></li>
                                 {{if .IsOwner}}
-                                <li><a href="/owner/">Sales Report</a></li>
+                                <li><a href="/owner/" id="owner-BTN-Mobile">Sales Report</a></li>
                                 {{end}}
                             </ul>
                             <i class="arrow-main-menu fa fa-angle-right" aria-hidden="true"></i>
