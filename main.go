@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"github.com/guitarpawat/wsp-ecommerce/handler/template"
 	"log"
 	"net/http"
 
@@ -147,7 +148,7 @@ func main() {
 	httpr := mux.NewRouter()
 	httpr.PathPrefix("/").HandlerFunc(handler.RedirectToHTTPS)
 
-	handler.Validate()
+	template.Validate()
 
 	if env == solidenv.Production {
 		log.Fatalln(http.ListenAndServe(":"+solidenv.GetPort(), forceSslHeroku(r)))
