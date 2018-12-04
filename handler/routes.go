@@ -109,6 +109,12 @@ func ProceedCheckout(w http.ResponseWriter, r *http.Request, v *middleware.Value
 		return
 	}
 
+	if len(cart.Meats) == 0 {
+		v.Set("warning", "error: you have no item in the cart")
+		v.Set("next", true)
+		return
+	}
+
 	err = db.CommitSalesHistory(cart)
 	for _, cartMeat := range cart.Meats {
 		db.SoldMeat(cartMeat.ID, cartMeat.Quantity)
