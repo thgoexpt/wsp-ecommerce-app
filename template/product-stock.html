@@ -67,7 +67,7 @@
 										<img src="{{.Pic}}" alt="IMG-PRODUCT">
 									</div>
 								</td>
-								<td class="column-2"><a href="/product-detail/{{.ID}}/" id="name-in-stock">{{.ProName}}</a></td>
+								<td class="column-2"><a href="/product-detail/{{.ID}}/" id="name-in-stock-{{.ID}}">{{.ProName}}</a></td>
 								<td class="column-3">${{printf "%.2f" .Price}}</td>
 								<td class="column-4 p-l-70" id="amount-in-stock">{{.Quantity}}</td>
 								<td class="column-5">${{printf "%.2f" .Total}}</td>
