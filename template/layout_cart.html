@@ -1,6 +1,6 @@
 {{define "layout_cart"}}
-<img src="/static/assets/icon/icon-header-02.png" class="header-icon1 js-show-header-dropdown" alt="ICON">
-<span class="header-icons-noti">{{.CountCart}}</span>
+<img src="/static/assets/icon/icon-header-02.png" id="cart-icon" class="header-icon1 js-show-header-dropdown" alt="ICON">
+<span class="header-icons-noti" id="cartNumber">{{.CountCart}}</span>
 
 <!-- Header cart noti -->
 <div class="header-cart header-dropdown">
@@ -13,19 +13,19 @@
             </div>
 
             <div class="header-cart-item-txt">
-                <a href="/product-detail/{{.ID}}/" class="header-cart-item-name">
+                <a href="/product-detail/{{.ID}}/" class="header-cart-item-name" id="productName-cartModal">
                     {{.ProName}}
                 </a>
 
                 {{if gt .Discount 0.0}}
                 <span class="header-cart-item-info">
-                    {{.Quantity}} x 
+                    {{.Quantity}} x
                     <span class="oldPrice">
 						${{printf "%.2f" .Price}}
 					</span>
 					<span class="newPrice">
 						${{printf "%.2f" .Discount}}
-					</span> 
+					</span>
                     = ${{printf "%.2f" .Total}}
                 </span>
                 {{else}}

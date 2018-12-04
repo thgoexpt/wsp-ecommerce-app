@@ -80,6 +80,9 @@ User types valid username
 User types valid password
     Input Text    name:password    ${VALID_PASSWORD}
 
+User types new password
+    Input Text    name:password    test1
+
 User clicks login button
     Click Element    id:loginBtn
 
@@ -93,7 +96,7 @@ User clicks search button
 # PC
 User opens a home page on PC
     Open Browser    http://localhost:8000/    ${browser}
-    Set Window Size    1920    1080
+    Set Window Size    1920    1600
     Wait Until Element Is Visible    alertBox    15
 
 User opens a login page on PC
